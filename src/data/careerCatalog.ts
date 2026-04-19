@@ -1,4 +1,4 @@
-import raw from '@/Assets/dataset/career_tables.json';
+import raw from '@/assets/dataset/career_tables.json';
 import { nameUuidFromUtf8String } from '@/utils/nameUuid';
 
 export type CareerTagEnum = 'ROLE' | 'MAJOR' | 'SKILL';
