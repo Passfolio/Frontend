@@ -6,7 +6,7 @@ const PrivateRoute = () => {
     const isAuthenticated = user?.id || localStorage.getItem('userId');
 
     if (!isAuthenticated) {
-        return <Navigate to="/403" replace />;
+        return <Navigate to="/" replace />;
     }
 
     return <Outlet />;
