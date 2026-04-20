@@ -1,27 +1,17 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo, ReactNode } from 'react';
+import type { UserType, AuthContextType } from '@/types/auth.type';
+import { AUTH_STORAGE_KEYS } from '@/utils/Auth/localStorageKeys';
 
-export type UserType = {
-    id: string;
-    nickname: string;
-    profileImageUrl: string;
-    githubLogin: string;
-    role: string; // TODO: 나중에 Role 필드 뺄 것.
-};
-
-interface AuthContextType {
-    user: UserType | null;
-    loginUser: (userData: UserType) => void;
-    logoutUser: () => void;
-}
+export type { UserType };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const getInitialUser = (): UserType | null => {
-    const storedId = localStorage.getItem('userId');
-    const storedNickname = localStorage.getItem('nickname');
-    const storedGithubLogin = localStorage.getItem('githubLogin');
-    const storedProfileUrl = localStorage.getItem('profileImageUrl');
-    const storedRole = localStorage.getItem('role');
+    const storedId = localStorage.getItem(AUTH_STORAGE_KEYS.USER_ID);
+    const storedNickname = localStorage.getItem(AUTH_STORAGE_KEYS.NICKNAME);
+    const storedGithubLogin = localStorage.getItem(AUTH_STORAGE_KEYS.GITHUB_LOGIN);
+    const storedProfileUrl = localStorage.getItem(AUTH_STORAGE_KEYS.PROFILE_IMAGE_URL);
+    const storedRole = localStorage.getItem(AUTH_STORAGE_KEYS.ROLE);
 
     if (storedId && storedNickname && storedGithubLogin && storedProfileUrl && storedRole) {
         return {
@@ -29,7 +19,7 @@ const getInitialUser = (): UserType | null => {
             nickname: storedNickname,
             githubLogin: storedGithubLogin,
             profileImageUrl: storedProfileUrl,
-            role: storedRole
+            role: storedRole,
         };
     }
     return null;
@@ -38,11 +28,8 @@ const getInitialUser = (): UserType | null => {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<UserType | null>(getInitialUser);
 
-    // 다른 탭에서의 로그인/로그아웃 동기화
     useEffect(() => {
-        const handleStorageChange = () => {
-            setUser(getInitialUser());
-        };
+        const handleStorageChange = () => setUser(getInitialUser());
         window.addEventListener('storage', handleStorageChange);
 
         const handleAuthChange = (e: Event) => {
@@ -58,12 +45,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const loginUser = useCallback((userData: UserType) => {
-        localStorage.setItem('userId', userData.id);
-        localStorage.setItem('nickname', userData.nickname);
-        localStorage.setItem('githubLogin', userData.githubLogin);
-        localStorage.setItem('profileImageUrl', userData.profileImageUrl);
-        localStorage.setItem('role', userData.role);
-
+        localStorage.setItem(AUTH_STORAGE_KEYS.USER_ID, userData.id);
+        localStorage.setItem(AUTH_STORAGE_KEYS.NICKNAME, userData.nickname);
+        localStorage.setItem(AUTH_STORAGE_KEYS.GITHUB_LOGIN, userData.githubLogin);
+        localStorage.setItem(AUTH_STORAGE_KEYS.PROFILE_IMAGE_URL, userData.profileImageUrl);
+        localStorage.setItem(AUTH_STORAGE_KEYS.ROLE, userData.role);
         setUser(userData);
         window.dispatchEvent(new CustomEvent('auth-change', { detail: userData }));
     }, []);
@@ -74,11 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         window.dispatchEvent(new CustomEvent('auth-change', { detail: null }));
     }, []);
 
-    const contextValue = useMemo(() => ({
-        user,
-        loginUser,
-        logoutUser
-    }), [user, loginUser, logoutUser]);
+    const contextValue = useMemo(() => ({ user, loginUser, logoutUser }), [user, loginUser, logoutUser]);
 
     return (
         <AuthContext.Provider value={contextValue}>

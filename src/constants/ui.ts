@@ -1,0 +1,11 @@
+export const SCROLL_THRESHOLD_PX = 20;
+export const SEARCH_DEBOUNCE_MS = 380;
+export const MAX_EDUCATION = 5;
+export const MAX_CAREER_PICKS = 200;
+export const JOB_KEYWORD_PREVIEW_MAX = 3;
+export const PREVIEW_CHIP_COUNT = 5;
+export const COMPETENCY_PREVIEW_MAX = 12;
+export const MOBILE_MEDIA_QUERY = '(max-width: 767.98px)';
+export const ACTIVITY_THROTTLE_MS = 3000;
+export const REFRESH_BUFFER_MS = 60_000;
+export const MIN_VALIDITY_MS = 15_000;
