@@ -1,18 +1,18 @@
-import type { EducationHistoryItem } from '@/apis/specApi';
+import type { EducationHistoryItemType } from '@/api/Spec/specApi';
 
 type EducationHistoryOverlayProps = {
   open: boolean;
-  items: EducationHistoryItem[];
+  items: EducationHistoryItemType[];
   onClose: () => void;
   titleId?: string;
 };
 
-export function EducationHistoryOverlay({
+export const EducationHistoryOverlay = ({
   open,
   items,
   onClose,
   titleId = 'education-overlay-title',
-}: EducationHistoryOverlayProps) {
+}: EducationHistoryOverlayProps) => {
   if (!open) return null;
 
   return (
@@ -80,4 +80,4 @@ export function EducationHistoryOverlay({
       </div>
     </div>
   );
-}
+};

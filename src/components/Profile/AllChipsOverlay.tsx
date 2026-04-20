@@ -12,14 +12,14 @@ type AllChipsOverlayProps = {
   titleId?: string;
 };
 
-export function AllChipsOverlay({
+export const AllChipsOverlay = ({
   open,
   sectionLabel,
   chips,
   onClose,
   chipClassName = defaultChipClass,
   titleId = 'all-chips-overlay-title',
-}: AllChipsOverlayProps) {
+}: AllChipsOverlayProps) => {
   if (!open) return null;
 
   return (
@@ -64,4 +64,4 @@ export function AllChipsOverlay({
       </div>
     </div>
   );
-}
+};
