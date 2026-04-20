@@ -1,4 +1,4 @@
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { FAQ_LIST } from '@/data/faq';
 import '@/pages/Lander/landerPage.css';
 

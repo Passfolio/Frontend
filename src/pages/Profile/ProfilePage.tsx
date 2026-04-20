@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { UpdateProfileModal } from '@/components/Profile/UpdateProfileModal';
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { UpdateProfileModal } from '@/components/Profile/UpdateProfileModal/UpdateProfileModal';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { ProfileSidebar } from '@/components/Profile/ProfileSidebar';
 import { TechStackSection } from '@/components/Profile/TechStackSection';
 import { MyCompetenciesSection } from '@/components/Profile/MyCompetenciesSection';
@@ -15,19 +15,17 @@ import {
   MENU_LIST,
   MENU_SECTION_SLUG,
   SECTION_SLUG_TO_MENU,
-  type ProfileMenuItem,
+  type ProfileMenuItemType,
 } from '@/constants/profile';
+import { JOB_KEYWORD_PREVIEW_MAX } from '@/constants/ui';
 import type {
-  CareerInfo,
-  CareerReadResponse,
-  DevSpecUpdateResponse,
-  EducationHistoryItem,
-} from '@/apis/specApi';
-import { getMyCareer, getMyEducationHistory } from '@/apis/specApi';
+  CareerInfoType,
+  CareerReadResponseType,
+  DevSpecUpdateResponseType,
+  EducationHistoryItemType,
+} from '@/api/Spec/specApi';
+import { getMyCareer, getMyEducationHistory } from '@/api/Spec/specApi';
 import '@/pages/Lander/landerPage.css';
-
-/** 사이드바·모바일 헤더 직무 한 줄: 상위 N개만 표시, 나머지는 (외 M개) */
-const JOB_KEYWORD_PREVIEW_MAX = 3;
 
 function formatJobKeywordsPreview(keywords: string[]): string {
   const list = keywords.filter(Boolean);
@@ -44,7 +42,7 @@ const EMPTY_SPEC = {
   educationDepartment: undefined as string | undefined,
   educationDegree: undefined as string | undefined,
   educationDuration: undefined as string | undefined,
-  educationHistory: [] as EducationHistoryItem[],
+  educationHistory: [] as EducationHistoryItemType[],
   careerYearsLabel: '경력 0년',
   techRoles: [] as string[],
   techMajors: [] as string[],
@@ -53,8 +51,8 @@ const EMPTY_SPEC = {
 
 function buildProfileSpecState(
   experience: number,
-  career: Pick<CareerReadResponse, 'careerKeywords' | 'careerMajors' | 'careerSkills'>,
-  educationHistory: EducationHistoryItem[],
+  career: Pick<CareerReadResponseType, 'careerKeywords' | 'careerMajors' | 'careerSkills'>,
+  educationHistory: EducationHistoryItemType[],
 ) {
   const jobLine = formatJobKeywordsPreview(career.careerKeywords ?? []);
   const firstEdu = educationHistory[0];
@@ -76,13 +74,13 @@ function buildProfileSpecState(
   };
 }
 
-const EMPTY_CAREER: CareerInfo = {
+const EMPTY_CAREER: CareerInfoType = {
   careerKeywords: [],
   careerMajors: [],
   careerSkills: [],
 };
 
-function pickCareerFromPatch(patch: DevSpecUpdateResponse): CareerInfo {
+function pickCareerFromPatch(patch: DevSpecUpdateResponseType): CareerInfoType {
   const list = patch.careers;
   if (!Array.isArray(list) || list.length === 0) return EMPTY_CAREER;
   const first = list[0];
@@ -94,7 +92,7 @@ function pickCareerFromPatch(patch: DevSpecUpdateResponse): CareerInfo {
 }
 
 /** PATCH 직후 GET 전에 화면에 반영 (서버 응답 본문 기준) */
-function specFromPatch(patch: DevSpecUpdateResponse) {
+function specFromPatch(patch: DevSpecUpdateResponseType) {
   return buildProfileSpecState(
     patch.experience,
     pickCareerFromPatch(patch),
@@ -108,20 +106,20 @@ export const ProfilePage = () => {
   const [spec, setSpec] = useState(EMPTY_SPEC);
   const [updateProfileOpen, setUpdateProfileOpen] = useState(false);
 
-  const activeMenu: ProfileMenuItem = useMemo(() => {
+  const activeMenu: ProfileMenuItemType = useMemo(() => {
     const slug = searchParams.get('section');
     if (slug && SECTION_SLUG_TO_MENU[slug]) return SECTION_SLUG_TO_MENU[slug];
     return MENU_LIST[0];
   }, [searchParams]);
 
   const setActiveMenu = useCallback(
-    (menu: ProfileMenuItem) => {
+    (menu: ProfileMenuItemType) => {
       setSearchParams({ section: MENU_SECTION_SLUG[menu] }, { replace: true });
     },
     [setSearchParams],
   );
 
-  const refreshProfileSpec = useCallback(async (patchResult?: DevSpecUpdateResponse) => {
+  const refreshProfileSpec = useCallback(async (patchResult?: DevSpecUpdateResponseType) => {
     if (!user?.id) {
       setSpec(EMPTY_SPEC);
       return;
@@ -143,6 +141,8 @@ export const ProfilePage = () => {
   useEffect(() => {
     void refreshProfileSpec();
   }, [refreshProfileSpec]);
+
+  const openUpdateProfile = () => setUpdateProfileOpen(true);
 
   return (
       <div
@@ -173,7 +173,7 @@ export const ProfilePage = () => {
                 jobLine={spec.jobLine}
                 educationSchool={spec.educationSchool}
                 careerYearsLabel={spec.careerYearsLabel}
-                onUpdateProfile={() => setUpdateProfileOpen(true)}
+                onUpdateProfile={openUpdateProfile}
             />
             <ProfileMobileSectionTabs activeMenu={activeMenu} onSelect={setActiveMenu} />
             <div className="flex flex-col gap-10">
@@ -208,7 +208,7 @@ export const ProfilePage = () => {
               careerYearsLabel={spec.careerYearsLabel}
               activeMenu={activeMenu}
               setActiveMenu={setActiveMenu}
-              onUpdateProfile={() => setUpdateProfileOpen(true)}
+              onUpdateProfile={openUpdateProfile}
           />
 
           <section className="hidden min-h-0 w-full flex-1 flex-col gap-11 lg:flex lg:min-h-0">

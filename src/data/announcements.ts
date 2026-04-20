@@ -1,5 +1,5 @@
 /** 공지사항 (추후 CMS/API 연동 시 교체) */
-export type AnnouncementItem = {
+export type AnnouncementItemType = {
   id: string;
   /** 표시용 날짜 YYYY-MM-DD */
   date: string;
@@ -12,7 +12,7 @@ export type AnnouncementItem = {
   pinned?: boolean;
 };
 
-export const ANNOUNCEMENT_LIST: AnnouncementItem[] = [
+export const ANNOUNCEMENT_LIST: AnnouncementItemType[] = [
   {
     id: '2026-04-01-service',
     date: '2026-04-01',

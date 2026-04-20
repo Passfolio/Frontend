@@ -1,4 +1,4 @@
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { PRIVACY_EFFECTIVE_DATE, PRIVACY_SECTION_LIST } from '@/data/privacyPolicy';
 import '@/pages/Lander/landerPage.css';
 

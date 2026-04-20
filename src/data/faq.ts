@@ -1,12 +1,12 @@
 /** 자주 묻는 질문 (추후 CMS/API 연동 시 교체) */
-export type FaqItem = {
+export type FaqItemType = {
   id: string;
   question: string;
   /** 본문 단락 */
   paragraphs: string[];
 };
 
-export const FAQ_LIST: FaqItem[] = [
+export const FAQ_LIST: FaqItemType[] = [
   {
     id: 'what-is-passfolio',
     question: 'Passfolio는 어떤 서비스인가요?',

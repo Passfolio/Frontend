@@ -1,16 +1,16 @@
 import raw from '@/assets/dataset/career_tables.json';
 import { nameUuidFromUtf8String } from '@/utils/nameUuid';
 
-export type CareerTagEnum = 'ROLE' | 'MAJOR' | 'SKILL';
+export type CareerTagEnumType = 'ROLE' | 'MAJOR' | 'SKILL';
 
-export type CareerCatalogEntry = {
+export type CareerCatalogEntryType = {
   id: string;
   name: string;
   code: number;
-  tag: CareerTagEnum;
+  tag: CareerTagEnumType;
 };
 
-const TAG_MAP: Record<string, CareerTagEnum> = {
+const TAG_MAP: Record<string, CareerTagEnumType> = {
   직무: 'ROLE',
   전문분야: 'MAJOR',
   기술스택: 'SKILL',
@@ -21,15 +21,15 @@ export function normalizeCareerKeyword(raw: string): string {
 }
 
 function buildCatalog(): {
-  byTag: Record<CareerTagEnum, CareerCatalogEntry[]>;
-  byId: Map<string, CareerCatalogEntry>;
+  byTag: Record<CareerTagEnumType, CareerCatalogEntryType[]>;
+  byId: Map<string, CareerCatalogEntryType>;
 } {
-  const byTag: Record<CareerTagEnum, CareerCatalogEntry[]> = {
+  const byTag: Record<CareerTagEnumType, CareerCatalogEntryType[]> = {
     ROLE: [],
     MAJOR: [],
     SKILL: [],
   };
-  const byId = new Map<string, CareerCatalogEntry>();
+  const byId = new Map<string, CareerCatalogEntryType>();
   const seen = new Set<string>();
 
   const root = raw as Record<string, Array<{ code: number; name: string; count: number }>>;
@@ -42,7 +42,7 @@ function buildCatalog(): {
       const id = nameUuidFromUtf8String(`${tag}:${keyword}`);
       if (seen.has(id)) continue;
       seen.add(id);
-      const entry: CareerCatalogEntry = {
+      const entry: CareerCatalogEntryType = {
         id,
         name: row.name.trim(),
         code: row.code,
@@ -58,7 +58,7 @@ function buildCatalog(): {
 export const careerCatalog = buildCatalog();
 
 /** GET /dev-spec/career 로 받은 표시용 문자열을 카탈로그 id로 환산 (서버와 동일 정규화 가정). */
-export function careerNamesToIds(names: string[] | undefined, tag: CareerTagEnum): string[] {
+export function careerNamesToIds(names: string[] | undefined, tag: CareerTagEnumType): string[] {
   const list = careerCatalog.byTag[tag];
   const normToId = new Map(list.map((e) => [normalizeCareerKeyword(e.name), e.id] as const));
   const out: string[] = [];

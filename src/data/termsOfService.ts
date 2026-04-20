@@ -1,6 +1,6 @@
 /** 이용약관 본문 (추후 법무 검토·CMS 연동 시 교체) */
 
-export type TermsSection = {
+export type TermsSectionType = {
   id: string;
   /** 표시 제목, 예: 제1조 (목적) */
   title: string;
@@ -10,7 +10,7 @@ export type TermsSection = {
 /** 시행일 YYYY-MM-DD */
 export const TERMS_EFFECTIVE_DATE = '2026-06-04';
 
-export const TERMS_SECTION_LIST: TermsSection[] = [
+export const TERMS_SECTION_LIST: TermsSectionType[] = [
   {
     id: 'purpose',
     title: '제1조 (목적)',
