@@ -11,6 +11,8 @@ type MobileMenuDrawerProps = {
     navLinkList: LandingNavLinkType[];
     user: UserType | null;
     onLogout: (e: React.MouseEvent) => void;
+    showProfileSection?: boolean;
+    mobileMenuBreakpoint?: 'md' | 'lg';
 };
 
 export const MobileMenuDrawer = ({
@@ -21,12 +23,16 @@ export const MobileMenuDrawer = ({
     navLinkList,
     user,
     onLogout,
+    showProfileSection = true,
+    mobileMenuBreakpoint = 'lg',
 }: MobileMenuDrawerProps) => {
+    const hideClass = mobileMenuBreakpoint === 'md' ? 'md:hidden' : 'lg:hidden';
+
     return (
         <>
             {/* 배경 오버레이 */}
             <div
-                className={`fixed inset-0 z-[1001] transition-opacity duration-300 lg:hidden ${
+                className={`fixed inset-0 z-[1001] transition-opacity duration-300 ${hideClass} ${
                     isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
                 }`}
                 style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
@@ -35,7 +41,7 @@ export const MobileMenuDrawer = ({
 
             {/* ── Liquid Glass 드로어 패널 ── */}
             <aside
-                className={`fixed left-0 top-0 z-[1002] flex h-full w-72 flex-col transition-transform duration-300 ease-in-out lg:hidden ${
+                className={`fixed left-0 top-0 z-[1002] flex h-full w-72 flex-col transition-transform duration-300 ease-in-out ${hideClass} ${
                     isOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
                 style={{
@@ -89,25 +95,26 @@ export const MobileMenuDrawer = ({
                     ))}
                 </div>
 
-                {/* 프로필 섹션 메뉴 */}
-                <div className="flex flex-col px-4 py-3">
-                    <p className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-600">
-                        프로필
-                    </p>
-                    {MENU_LIST.map((menuItem) => (
-                        <Link
-                            key={menuItem}
-                            to={`/profile?section=${MENU_SECTION_SLUG[menuItem]}`}
-                            onClick={onClose}
-                            className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
-                        >
-                            {menuItem}
-                        </Link>
-                    ))}
-                </div>
+                {showProfileSection && (
+                    <div className="flex flex-col px-4 py-3">
+                        <p className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-600">
+                            프로필
+                        </p>
+                        {MENU_LIST.map((menuItem) => (
+                            <Link
+                                key={menuItem}
+                                to={`/profile?section=${MENU_SECTION_SLUG[menuItem]}`}
+                                onClick={onClose}
+                                className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
+                            >
+                                {menuItem}
+                            </Link>
+                        ))}
+                    </div>
+                )}
 
                 {/* 로그아웃 */}
-                {user && (
+                {user && showProfileSection && (
                     <div
                         className="mt-auto px-4 py-4"
                         style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}

@@ -1,7 +1,9 @@
-import { useState, useRef, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { MOBILE_MEDIA_QUERY } from '@/constants/ui';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/Auth/AuthContext';
-import { logout, revokeSession, deleteAccount } from '@/apis/authApi';
+import { logout, revokeSession, deleteAccount } from '@/api/Auth/authApi';
 import { useNavbarScroll } from '@/hooks/Layout/useNavbarScroll';
 import { useNavUnderline } from '@/hooks/Layout/useNavUnderline';
 import { NavigationBar } from './NavigationBar';
@@ -15,19 +17,27 @@ import {
 } from '@/constants/landingPage';
 import menuIconSrc from '@/assets/ui/menu.png';
 
-export function Header() {
+export const Header = () => {
     const { isNavScrolled } = useNavbarScroll();
     const { underline, handleLinkMouseEnter, handleLinksMouseLeave } = useNavUnderline();
     const { user, logoutUser } = useAuth();
     const navigate = useNavigate();
-    const { pathname } = useLocation();
 
-    const isProfilePage = pathname === '/profile';
+    const isAuthenticated = Boolean(user?.id || localStorage.getItem('userId'));
+    const isNarrowViewport = useMediaQuery(MOBILE_MEDIA_QUERY);
+    const useCompactHeaderLayout = isNarrowViewport;
+    const mobileMenuBreakpoint: 'md' | 'lg' = 'md';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const profileButtonRef = useRef<HTMLButtonElement>(null);
     const mobileProfileButtonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        if (!isNarrowViewport) setIsMenuOpen(false);
+    }, [isNarrowViewport]);
+
+    const openMenu = () => setIsMenuOpen(true);
 
     const handleScrollToTop = () => {
         if (window.location.pathname === '/') {
@@ -77,8 +87,10 @@ export function Header() {
                 navLinkList={LANDING_NAV_LINK_LIST}
                 defaultProfileImageUrl={LANDING_DEFAULT_PROFILE_IMAGE_URL}
                 user={user}
-                enableMobileMenu={isProfilePage}
-                onMenuOpen={() => setIsMenuOpen(true)}
+                enableMobileMenu={useCompactHeaderLayout}
+                showProfileControls={isAuthenticated}
+                mobileMenuBreakpoint={mobileMenuBreakpoint}
+                onMenuOpen={openMenu}
                 menuIconSrc={menuIconSrc}
                 profileButtonRef={profileButtonRef}
                 mobileProfileButtonRef={mobileProfileButtonRef}
@@ -86,7 +98,7 @@ export function Header() {
                 isDropdownOpen={isDropdownOpen}
             />
 
-            {isProfilePage && (
+            {useCompactHeaderLayout && (
                 <MobileMenuDrawer
                     isOpen={isMenuOpen}
                     onClose={() => setIsMenuOpen(false)}
@@ -95,6 +107,8 @@ export function Header() {
                     navLinkList={LANDING_NAV_LINK_LIST}
                     user={user}
                     onLogout={handleLogout}
+                    showProfileSection={isAuthenticated}
+                    mobileMenuBreakpoint={mobileMenuBreakpoint}
                 />
             )}
 

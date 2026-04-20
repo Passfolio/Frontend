@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
+import { SCROLL_THRESHOLD_PX } from '@/constants/ui';
 
-const SCROLL_THRESHOLD_PX = 20;
-
-export function useNavbarScroll() {
+export const useNavbarScroll = () => {
   const [isNavScrolled, setIsNavScrolled] = useState(false);
 
   useEffect(() => {
