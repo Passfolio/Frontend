@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '@/context/Auth/AuthContext';
+import { getStoredUserId } from '@/utils/Auth/localStorageKeys';
 
-const PrivateRoute = () => {
+export const PrivateRoute = () => {
     const { user } = useAuth();
-    const isAuthenticated = user?.id || localStorage.getItem('userId');
+    const isAuthenticated = user?.id || getStoredUserId();
 
     if (!isAuthenticated) {
         return <Navigate to="/" replace />;
@@ -11,5 +12,3 @@ const PrivateRoute = () => {
 
     return <Outlet />;
 };
-
-export default PrivateRoute;

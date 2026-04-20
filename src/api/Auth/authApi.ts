@@ -1,8 +1,9 @@
-import { axiosInstance } from '@/utils/Auth/axiosInstance';
-import { clearTokenExpiresInfo, refreshTokenOnce } from '@/utils/Auth/tokenRefreshManager';
+import { axiosInstance } from '@/api/Http/axiosInstance';
+import { clearTokenExpiresInfo, refreshTokenOnce } from '@/api/Auth/tokenRefreshManager';
+import { API_ENDPOINTS } from '@/api/Http/apiEndpoints';
 
 export const fetchMe = async () => {
-    const { data } = await axiosInstance.get('/api/v1/users/me'); // TODO: Env로 뺄 것
+    const { data } = await axiosInstance.get(API_ENDPOINTS.auth.me);
     return data;
 };
 
@@ -16,7 +17,7 @@ export const socialMe = async () => {
 
 export const logout = async () => {
     try {
-        await axiosInstance.post('/api/v1/auth/logout').catch(() => {}); // TODO: Env로 뺄 것
+        await axiosInstance.post(API_ENDPOINTS.auth.logout).catch(() => {});
         clearTokenExpiresInfo();
         return true;
     } catch (error) {
@@ -27,7 +28,7 @@ export const logout = async () => {
 
 export const revokeSession = async () => {
     try {
-        await axiosInstance.post('/api/v1/auth/revoke-session');
+        await axiosInstance.post(API_ENDPOINTS.auth.revokeSession);
         clearTokenExpiresInfo();
         return true;
     } catch (error) {
@@ -38,7 +39,7 @@ export const revokeSession = async () => {
 
 export const deleteAccount = async () => {
     try {
-        await axiosInstance.delete('/api/v1/auth/delete');
+        await axiosInstance.delete(API_ENDPOINTS.auth.delete);
         clearTokenExpiresInfo();
         return true;
     } catch (error) {

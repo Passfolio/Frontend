@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { socialMe } from '@/apis/authApi';
+import { socialMe } from '@/api/Auth/authApi';
 import { useAuth } from '@/context/Auth/AuthContext';
+import { extractErrorMessage } from '@/utils/errorMessage';
 
-export default function OAuthCallback() {
+export const OAuthCallback = () => {
     const navigate = useNavigate();
     const { loginUser } = useAuth();
     const [error, setError] = useState<string | null>(null);
@@ -27,9 +28,9 @@ export default function OAuthCallback() {
                 } else {
                     throw new Error('사용자 정보를 가져올 수 없습니다.');
                 }
-            } catch (error: any) {
+            } catch (error: unknown) {
                 console.error('OAuth 콜백 처리 실패:', error);
-                setError(error.message || '로그인 처리 중 오류가 발생했습니다.');
+                setError(extractErrorMessage(error, '로그인 처리 중 오류가 발생했습니다.'));
 
                 setTimeout(() => {
                     navigate('/');
