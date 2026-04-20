@@ -19,8 +19,15 @@ function runNetworkCanvasAnimation(
 
   function computeNodeCount() {
     if (!netW || !netH) return 80;
-    const n = Math.round(netW * netH * 0.0001);
-    return Math.min(165, Math.max(78, n));
+    // area 기반으로 계산해 어떤 화면에서도 체감 조밀도를 비슷하게 유지
+    const n = Math.round(netW * netH * 0.00012);
+    return Math.min(170, Math.max(26, n));
+  }
+
+  function viewportScale() {
+    if (!netW || !netH) return 1;
+    const s = Math.min(netW, netH) / 720;
+    return Math.min(1.15, Math.max(0.72, s));
   }
 
   function visibilityFactorAtX(x: number) {
@@ -79,14 +86,17 @@ function runNetworkCanvasAnimation(
     netCtx.fill();
   }
 
-  const maxD = 160;
-
   function animateNetwork() {
     if (!netW || !netH) {
       animationFrameId = requestAnimationFrame(animateNetwork);
       return;
     }
     netCtx.clearRect(0, 0, netW, netH);
+    const scale = viewportScale();
+    const baseMaxD = 160 * scale;
+    const leftMaxD = 188 * scale;
+    const lineWidth = 1.24 * scale;
+
     for (let i = 0; i < netNodeList.length; i++) {
       for (let j = i + 1; j < netNodeList.length; j++) {
         const a = netNodeList[i];
@@ -96,13 +106,13 @@ function runNetworkCanvasAnimation(
         const d = Math.sqrt(dx * dx + dy * dy);
         const midX = (a.x + b.x) * 0.5;
         const midT = netW ? midX / netW : 0.5;
-        const localMaxD = midT < 0.45 ? 188 : maxD;
+        const localMaxD = midT < 0.45 ? leftMaxD : baseMaxD;
         if (d < localMaxD) {
           netCtx.beginPath();
           const op = 1 - d / localMaxD;
           const vis = visibilityFactorAtX(midX);
           netCtx.strokeStyle = `rgba(255, 255, 255, ${op * 0.23 * vis})`;
-          netCtx.lineWidth = 1.24;
+          netCtx.lineWidth = lineWidth;
           netCtx.moveTo(a.x, a.y);
           netCtx.lineTo(b.x, b.y);
           netCtx.stroke();

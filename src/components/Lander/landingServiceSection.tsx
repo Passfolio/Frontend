@@ -5,10 +5,10 @@ type LandingServiceSectionProps = {
   networkCanvasRef: React.RefObject<HTMLCanvasElement | null>;
 };
 
-export function LandingServiceSection({
+export const LandingServiceSection = ({
   cvStageRef,
   networkCanvasRef,
-}: LandingServiceSectionProps) {
+}: LandingServiceSectionProps) => {
   return (
     <section className="sliding-section" id="service" aria-labelledby="landing-service-title">
       <div className="sliding-container">
@@ -43,4 +43,4 @@ export function LandingServiceSection({
       </div>
     </section>
   );
-}
+};

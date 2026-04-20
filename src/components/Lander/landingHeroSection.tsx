@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LANDING_HERO_SECTION } from '@/constants/landingPage';
 
-export function LandingHeroSection() {
+export const LandingHeroSection = () => {
   const [isHeroReady, setIsHeroReady] = useState(false);
 
   useEffect(() => {
@@ -52,4 +52,4 @@ export function LandingHeroSection() {
       </div>
     </section>
   );
-}
+};
