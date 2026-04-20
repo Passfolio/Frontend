@@ -1,4 +1,4 @@
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { ANNOUNCEMENT_LIST } from '@/data/announcements';
 import '@/pages/Lander/landerPage.css';
 

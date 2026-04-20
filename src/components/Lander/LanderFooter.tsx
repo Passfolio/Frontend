@@ -19,7 +19,7 @@ function renderFooterSegmentRow(segmentList: string[]) {
   ));
 }
 
-export function LanderFooter() {
+export const LanderFooter = () => {
   const { firstLineList, secondLineList } = getLandingFooterInfoSegments();
   const hasFooterInfo = firstLineList.length > 0 || secondLineList.length > 0;
 
@@ -70,4 +70,4 @@ export function LanderFooter() {
       </div>
     </footer>
   );
-}
+};

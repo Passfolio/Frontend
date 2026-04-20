@@ -11,13 +11,13 @@ import { LandingHeroSection } from '@/components/Lander/landingHeroSection';
 import { LandingHowSection } from '@/components/Lander/landingHowSection';
 import { LandingResultSection } from '@/components/Lander/landingResultSection';
 import { LandingServiceSection } from '@/components/Lander/landingServiceSection';
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { useCvTypingOverlay } from '@/hooks/Lander/useCvTypingOverlay';
 import { useNetworkCanvas } from '@/hooks/Lander/useNetworkCanvas';
 import { useRevealOnScroll } from '@/hooks/Layout/useRevealOnScroll';
 import './landerPage.css';
 
-export function LanderPage() {
+export const LanderPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
@@ -59,4 +59,4 @@ export function LanderPage() {
             <LanderFooter />
         </div>
     );
-}
+};

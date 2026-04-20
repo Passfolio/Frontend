@@ -1,4 +1,4 @@
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { TERMS_EFFECTIVE_DATE, TERMS_SECTION_LIST } from '@/data/termsOfService';
 import '@/pages/Lander/landerPage.css';
 

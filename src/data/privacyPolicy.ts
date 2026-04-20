@@ -1,6 +1,6 @@
 /** 개인정보 처리방침 (법무 검토 후 확정 권장) */
 
-export type PrivacySection = {
+export type PrivacySectionType = {
   id: string;
   title: string;
   paragraphs: string[];
@@ -9,7 +9,7 @@ export type PrivacySection = {
 /** 시행일 YYYY-MM-DD */
 export const PRIVACY_EFFECTIVE_DATE = '2026-06-04';
 
-export const PRIVACY_SECTION_LIST: PrivacySection[] = [
+export const PRIVACY_SECTION_LIST: PrivacySectionType[] = [
   {
     id: 'art1',
     title: '제1조(목적)',
