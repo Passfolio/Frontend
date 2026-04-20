@@ -20,9 +20,11 @@ type NavigationBarProps = {
     mobileProfileButtonRef?: React.RefObject<HTMLButtonElement | null>;
     onProfileAvatarClick?: () => void;
     isDropdownOpen?: boolean;
+    showProfileControls?: boolean;
+    mobileMenuBreakpoint?: 'md' | 'lg';
 };
 
-export function NavigationBar({
+export const NavigationBar = ({
     handleLinkMouseEnter,
     handleLinksMouseLeave,
     handleScrollToTop,
@@ -39,7 +41,17 @@ export function NavigationBar({
     mobileProfileButtonRef,
     onProfileAvatarClick,
     isDropdownOpen,
-}: NavigationBarProps) {
+    showProfileControls = true,
+    mobileMenuBreakpoint = 'lg',
+}: NavigationBarProps) => {
+    const hideOnMobileClass = mobileMenuBreakpoint === 'md' ? 'md:hidden' : 'lg:hidden';
+    const showDesktopClass = mobileMenuBreakpoint === 'md' ? 'md:flex' : 'lg:flex';
+    const logoDesktopWidthClass = mobileMenuBreakpoint === 'md' ? 'md:w-[180px]' : 'lg:w-[180px]';
+    const logoDesktopStateClass =
+        mobileMenuBreakpoint === 'md'
+            ? 'md:relative md:left-auto md:translate-x-0'
+            : 'lg:relative lg:left-auto lg:translate-x-0';
+
     return (
         <nav id="navbar" className={isNavScrolled ? 'scrolled' : ''}>
             <div className={`nav-container${enableMobileMenu ? ' relative !px-4 md:!px-10' : ''}`}>
@@ -50,7 +62,7 @@ export function NavigationBar({
                         type="button"
                         onClick={onMenuOpen}
                         aria-label="메뉴 열기"
-                        className="z-[2] flex items-center border-none bg-transparent p-1 lg:hidden"
+                        className={`z-[2] flex items-center border-none bg-transparent p-1 ${hideOnMobileClass}`}
                     >
                         <img src={menuIconSrc} alt="" className="h-6 w-6" />
                     </button>
@@ -61,7 +73,7 @@ export function NavigationBar({
                     type="button"
                     className={
                         enableMobileMenu
-                            ? 'logo-group absolute left-1/2 -translate-x-1/2 lg:relative lg:left-auto lg:translate-x-0'
+                            ? `logo-group absolute left-1/2 -translate-x-1/2 ${logoDesktopStateClass}`
                             : 'logo-group'
                     }
                     onClick={handleScrollToTop}
@@ -71,14 +83,14 @@ export function NavigationBar({
                         alt="Passfolio Logo"
                         height={50}
                         width={180}
-                        className={enableMobileMenu ? 'w-28 rounded object-contain lg:w-[180px]' : 'rounded object-contain'}
+                        className={enableMobileMenu ? `w-28 rounded object-contain ${logoDesktopWidthClass}` : 'rounded object-contain'}
                         fetchPriority="high"
                         decoding="async"
                     />
                 </button>
 
                 {/* 네비 링크 + 프로필 아바타: 프로필 모바일에서는 lg 이상만 표시, 그 외는 항상 표시 */}
-                <div className={`nav-right${enableMobileMenu ? ' hidden lg:flex' : ''}`}>
+                <div className={`nav-right${enableMobileMenu ? ` hidden ${showDesktopClass}` : ''}`}>
                     <div className="nav-links" onMouseLeave={handleLinksMouseLeave}>
                         {navLinkList.map((link) => (
                             <a key={link.href} href={link.href} onMouseEnter={handleLinkMouseEnter}>
@@ -118,7 +130,7 @@ export function NavigationBar({
                 </div>
 
                 {/* 프로필 페이지 모바일: 프로필 이미지 아바타 버튼 */}
-                {enableMobileMenu && (
+                {enableMobileMenu && showProfileControls && (
                     <button
                         ref={mobileProfileButtonRef}
                         type="button"
@@ -126,7 +138,7 @@ export function NavigationBar({
                         aria-expanded={isDropdownOpen}
                         aria-label="프로필 메뉴 열기"
                         onClick={onProfileAvatarClick}
-                        className="z-[2] inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-transparent p-0 transition-colors hover:border-white/40 lg:hidden"
+                        className={`z-[2] inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-transparent p-0 transition-colors hover:border-white/40 ${hideOnMobileClass}`}
                     >
                         <img
                             src={user?.profileImageUrl || defaultProfileImageUrl}
@@ -140,4 +152,4 @@ export function NavigationBar({
             </div>
         </nav>
     );
-}
+};

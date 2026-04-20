@@ -15,7 +15,7 @@ type ProfileDropdownMenuProps = {
     onDeleteAccount: () => void;
 };
 
-export function ProfileDropdownMenu({
+export const ProfileDropdownMenu = ({
     user,
     anchorRef,
     mobileAnchorRef,
@@ -25,7 +25,7 @@ export function ProfileDropdownMenu({
     onLogout,
     onRevokeSession,
     onDeleteAccount,
-}: ProfileDropdownMenuProps) {
+}: ProfileDropdownMenuProps) => {
     const menuRef = useRef<HTMLDivElement>(null);
     useClickOutside(menuRef, onClose, isOpen);
 
@@ -132,7 +132,7 @@ export function ProfileDropdownMenu({
             <div className="pb-1" />
         </div>
     );
-}
+};
 
 function Divider() {
     return <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '0 0' }} />;

@@ -4,11 +4,11 @@ type DeleteAccountConfirmModalProps = {
     onCancel: () => void;
 };
 
-export function DeleteAccountConfirmModal({
+export const DeleteAccountConfirmModal = ({
     isOpen,
     onConfirm,
     onCancel,
-}: DeleteAccountConfirmModalProps) {
+}: DeleteAccountConfirmModalProps) => {
     if (!isOpen) return null;
 
     return (
@@ -70,4 +70,4 @@ export function DeleteAccountConfirmModal({
             </div>
         </div>
     );
-}
+};
