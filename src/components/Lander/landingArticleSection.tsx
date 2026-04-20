@@ -6,7 +6,7 @@ type LandingArticleSectionProps = {
   insightList: LandingInsightArticleType[];
 };
 
-export function LandingArticleSection({ insightList }: LandingArticleSectionProps) {
+export const LandingArticleSection = ({ insightList }: LandingArticleSectionProps) => {
   return (
     <section className="article-section" id="article" aria-labelledby="landing-article-title">
       <div className="landing-shell">
@@ -39,4 +39,4 @@ export function LandingArticleSection({ insightList }: LandingArticleSectionProp
       </div>
     </section>
   );
-}
+};

@@ -1,7 +1,7 @@
 import { LANDING_FEATURE_CARD_LIST, LANDING_SERVICE_SECTION } from '@/constants/landingPage';
 import { getRevealDelayClassName } from './landingSectionUtils';
 
-export function LandingHowSection() {
+export const LandingHowSection = () => {
   return (
     <section className="how-section" id="documentation" aria-labelledby="landing-how-title">
       <div className="how-title reveal-left-how">
@@ -35,4 +35,4 @@ export function LandingHowSection() {
       </div>
     </section>
   );
-}
+};

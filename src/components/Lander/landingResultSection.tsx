@@ -5,7 +5,7 @@ import {
 } from '@/constants/landingPage';
 import { getRevealDelayClassName } from './landingSectionUtils';
 
-export function LandingResultSection() {
+export const LandingResultSection = () => {
   return (
     <section className="result-section" id="result" aria-labelledby="landing-result-title">
       <div className="landing-shell">
@@ -33,7 +33,7 @@ export function LandingResultSection() {
       </div>
     </section>
   );
-}
+};
 
 type LandingResultCardProps = {
   card: LandingBentoCardType;
