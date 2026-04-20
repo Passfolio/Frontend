@@ -282,7 +282,7 @@ export function getLandingFooterInfoSegments(): LandingFooterInfoSegmentsType {
   ].filter(Boolean);
 
   const contactBody = [phone, email].filter(Boolean).join(' / ');
-  const contactLine = contactBody ? `문의 ${contactBody}` : '';
+  const contactLine = contactBody ? `문의\u00A0${contactBody}` : '';
   const secondLineList = [withAddressLabel(address), contactLine].filter(Boolean);
 
   return { firstLineList, secondLineList };
