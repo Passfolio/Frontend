@@ -1065,7 +1065,7 @@
     display: none;
   }
 
-  .footer-info span {
+  .footer-info .footer-segment {
     display: block;
     margin-bottom: 4px;
   }

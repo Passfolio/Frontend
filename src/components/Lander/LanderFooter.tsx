@@ -8,7 +8,7 @@ import {
 
 function renderFooterSegmentRow(segmentList: string[]) {
   return segmentList.map((segment, index) => (
-    <span key={`${segment}-${index}`}>
+    <span key={`${segment}-${index}`} className="footer-segment">
       {index > 0 ? (
         <span className="divider" aria-hidden>
           |
