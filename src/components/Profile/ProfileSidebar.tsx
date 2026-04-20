@@ -1,6 +1,6 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { ProfileJobLinksSection } from './ProfileJobLinksSection';
-import { MENU_LIST, type ProfileMenuItem } from '@/constants/profile';
+import { MENU_LIST, type ProfileMenuItemType } from '@/constants/profile';
 import type { UserType } from '@/context/Auth/AuthContext';
 
 type ProfileSidebarProps = {
@@ -10,8 +10,8 @@ type ProfileSidebarProps = {
     /** 첫 번째 학력의 학교명만 */
     educationSchool: string;
     careerYearsLabel: string;
-    activeMenu: ProfileMenuItem;
-    setActiveMenu: (menu: ProfileMenuItem) => void;
+    activeMenu: ProfileMenuItemType;
+    setActiveMenu: (menu: ProfileMenuItemType) => void;
     onUpdateProfile: () => void;
 };
 

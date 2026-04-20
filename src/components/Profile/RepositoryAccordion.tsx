@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { RepositoryColumn } from './RepositorySection';
-import type { GitHubRepoType } from '@/apis/githubApi';
+import { RepositoryColumn } from './RepositoryColumn';
+import type { GitHubRepoType } from '@/api/GitHub/githubApi';
 
 type AccordionItem = {
     label: string;

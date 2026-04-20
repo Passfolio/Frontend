@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { PROFILE_CHIP_SURFACE_CLASS } from '@/constants/profile';
 import { AllChipsOverlay } from '@/components/Profile/AllChipsOverlay';
 import { EducationHistoryOverlay } from '@/components/Profile/EducationHistoryOverlay';
-import type { EducationHistoryItem } from '@/apis/specApi';
+import type { EducationHistoryItemType } from '@/api/Spec/specApi';
 
 export type MyCompetenciesSectionProps = {
-  educationHistory: EducationHistoryItem[];
+  educationHistory: EducationHistoryItemType[];
   /** 직무 키워드 요약 한 줄 */
   jobLine: string;
   careerYearsLabel: string;

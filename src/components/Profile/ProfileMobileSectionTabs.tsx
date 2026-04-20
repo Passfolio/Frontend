@@ -1,9 +1,9 @@
-import type { ProfileMenuItem } from '@/constants/profile';
+import type { ProfileMenuItemType } from '@/constants/profile';
 import { MENU_LIST } from '@/constants/profile';
 
 type ProfileMobileSectionTabsProps = {
-  activeMenu: ProfileMenuItem;
-  onSelect: (menu: ProfileMenuItem) => void;
+  activeMenu: ProfileMenuItemType;
+  onSelect: (menu: ProfileMenuItemType) => void;
 };
 
 export const ProfileMobileSectionTabs = ({ activeMenu, onSelect }: ProfileMobileSectionTabsProps) => {
