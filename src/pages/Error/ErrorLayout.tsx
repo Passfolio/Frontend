@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { LanderFooter } from '@/components/Lander/landerFooter';
+import { LanderFooter } from '@/components/Lander/LanderFooter';
 
 type ErrorLayoutProps = {
     code: string;
