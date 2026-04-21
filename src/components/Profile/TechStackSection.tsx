@@ -61,10 +61,10 @@ export const TechStackSection = ({ roles, majors, skills, className }: TechStack
               key={key}
               className="flex flex-col gap-2 border-l border-white/[0.08] pl-3 sm:pl-4 lg:flex-row lg:items-start lg:gap-2.5 lg:border-l-0 lg:pl-0"
             >
-              <div className="w-auto shrink-0 text-[11px] font-semibold uppercase tracking-widest text-zinc-500 lg:w-[4.75rem] lg:text-left">
-                <span className="block">{label}</span>
+              <div className="flex w-auto shrink-0 items-baseline gap-2 text-[11px] font-semibold uppercase tracking-widest text-zinc-500 lg:block lg:w-[4.75rem] lg:text-left">
+                <span className="lg:block">{label}</span>
                 {chips.length > 0 && (
-                  <span className="mt-0.5 block text-[0.65rem] font-medium tabular-nums normal-case tracking-normal text-zinc-600">
+                  <span className="text-[0.65rem] font-medium tabular-nums normal-case tracking-normal text-zinc-600 lg:mt-0.5 lg:block">
                     {chips.length}개
                   </span>
                 )}

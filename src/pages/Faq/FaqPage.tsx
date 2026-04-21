@@ -41,15 +41,13 @@ export function FaqPage() {
                 className="group rounded-2xl border border-white/[0.09] px-5 py-4 md:px-6 md:py-5 open:shadow-[inset_0_1px_0_rgba(255,255,255,0.09),0_4px_24px_-6px_rgba(0,0,0,0.5)]"
                 style={{ background: 'rgba(18,18,22,0.92)' }}
               >
-                <summary className="cursor-pointer list-none pr-8 text-base font-semibold tracking-tight text-white marker:content-none [&::-webkit-details-marker]:hidden">
-                  <span className="relative block">
-                    {item.question}
-                    <span
-                      className="pointer-events-none absolute right-0 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] text-zinc-400 transition-transform duration-200 group-open:rotate-180"
-                      aria-hidden
-                    >
-                      <i className="fa-solid fa-chevron-down text-[0.65rem]" />
-                    </span>
+                <summary className="flex cursor-pointer list-none items-center gap-4 text-base font-semibold tracking-tight text-white marker:content-none [&::-webkit-details-marker]:hidden">
+                  <span className="min-w-0 flex-1">{item.question}</span>
+                  <span
+                    className="pointer-events-none inline-flex size-6 shrink-0 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] text-zinc-400 transition-transform duration-200 group-open:rotate-180"
+                    aria-hidden
+                  >
+                    <i className="fa-solid fa-chevron-down text-[0.65rem]" />
                   </span>
                 </summary>
                 <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
