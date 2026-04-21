@@ -55,30 +55,39 @@
 
   nav {
     @apply fixed top-0 z-[1000] w-full py-6;
-    background: rgba(13, 13, 15, 0);
     border-bottom: 1px solid rgba(255, 255, 255, 0);
     box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0);
-    /* Chrome: explicit start value prevents backdrop-filter transition failure */
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    /* Chrome: own compositing layer lets backdrop sampling work past GPU-promoted siblings */
-    transform: translateZ(0);
     transition:
       padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-      background 0.4s ease,
       border-color 0.4s ease,
-      box-shadow 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+
+  /* Chrome: backdrop-filter on position:fixed fails due to GPU layer tree compositing issues.
+     Applying it to a position:absolute ::before inside the fixed nav sidesteps this bug.
+     Note: do NOT add -webkit-backdrop-filter manually — Lightning CSS auto-adds the prefix
+     when only the unprefixed declaration is present, keeping both in the production bundle. */
+  nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(13, 13, 15, 0);
+    backdrop-filter: blur(0px);
+    transition:
+      background 0.4s ease,
       backdrop-filter 0.4s ease;
   }
 
   nav.scrolled {
     @apply py-4;
-    background: linear-gradient(180deg, rgba(18,18,22,0.75) 0%, rgba(13,13,15,0.65) 100%);
-    backdrop-filter: blur(32px) saturate(200%);
-    -webkit-backdrop-filter: blur(32px) saturate(200%);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    will-change: backdrop-filter;
+  }
+
+  nav.scrolled::before {
+    background: linear-gradient(180deg, rgba(18,18,22,0.75) 0%, rgba(13,13,15,0.65) 100%);
+    backdrop-filter: blur(32px) saturate(200%);
   }
 
   .nav-container,
