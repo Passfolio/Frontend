@@ -1,5 +1,6 @@
 import landingJdAnalysisImageSrc from '@/assets/image/jd-analysis-optimized.png';
 import landingPortfolioImageSrc from '@/assets/image/portfolio-optimized.png';
+import landingProjectReportImageSrc from '@/assets/image/project-report.png';
 
 function trimEnv(value: string | undefined): string {
   return value?.trim() ?? '';
@@ -58,7 +59,7 @@ export const LANDING_BENTO_JD_IMAGE_URL =
 
 export const LANDING_BENTO_REPORT_IMAGE_URL =
   trimEnv(import.meta.env.VITE_LANDING_BENTO_REPORT_IMAGE_URL) ||
-  'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=600&auto=format&fit=crop';
+  landingProjectReportImageSrc;
 
 export type LandingNavLinkType = {
   href: string;
@@ -224,9 +225,10 @@ export const LANDING_RESULT_CARD_LIST: LandingBentoCardType[] = [
     variant: 'bento-sub',
     title: '프로젝트 및 기여도 분석 리포트',
     description:
-      '프로젝트를 다각도로 분석하고, 실제 코드 기여와 역할을 정량적으로 식별합니다. 이를 통해 기술 선택, 구현 범위, 문제 해결 과정이 드러나는 분석 리포트를 생성합니다.',
+      '사용자의 프로젝트를 분석하고, 코드 기여 범위를 식별하여 기술 선택, 문제 해결 과정이 드러나는 분석 리포트를 생성합니다.',
     imageUrl: LANDING_BENTO_REPORT_IMAGE_URL,
     imageAlt: '코드 구조 그래픽 이미지',
+    imageClassName: 'bento-img-bottom',
     imageWrapperClassName: 'min-h-[180px]',
   },
 ];

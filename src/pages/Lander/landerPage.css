@@ -58,6 +58,11 @@
     background: rgba(13, 13, 15, 0);
     border-bottom: 1px solid rgba(255, 255, 255, 0);
     box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0);
+    /* Chrome: explicit start value prevents backdrop-filter transition failure */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    /* Chrome: own compositing layer lets backdrop sampling work past GPU-promoted siblings */
+    transform: translateZ(0);
     transition:
       padding 0.4s cubic-bezier(0.16, 1, 0.3, 1),
       background 0.4s ease,
@@ -873,11 +878,29 @@
 
   .bento-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    align-items: start;
   }
 
   .bento-main {
     grid-column: span 2;
     grid-row: span 1;
+    min-height: 420px;
+  }
+
+  .bento-sub {
+    align-self: start;
+    height: auto;
+  }
+
+  .bento-sub .bento-card {
+    height: auto;
+  }
+
+  .bento-sub .bento-img-wrapper {
+    flex: 1 1 auto;
+    min-height: 180px;
+    height: auto;
   }
 
   .article-grid {
@@ -944,6 +967,7 @@
   .bento-main {
     grid-column: span 1;
     grid-row: span 1;
+    min-height: 0;
   }
 
   .bento-grid {
