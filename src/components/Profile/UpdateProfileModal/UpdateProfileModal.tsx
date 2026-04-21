@@ -14,7 +14,7 @@ export const UpdateProfileModal = ({ open, onClose, userId, onProfileUpdated }: 
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:p-6"
+      className="fixed inset-0 z-[1100] flex items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(4.5rem,calc(60px+env(safe-area-inset-top)))] sm:p-6 sm:pt-[max(1rem,env(safe-area-inset-top))]"
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
@@ -26,7 +26,7 @@ export const UpdateProfileModal = ({ open, onClose, userId, onProfileUpdated }: 
         onClick={onClose}
       />
       <div
-        className="relative z-[201] flex max-h-[min(92dvh,880px)] w-full max-w-[560px] flex-col overflow-hidden rounded-2xl border border-white/[0.12] shadow-[0_16px_64px_-8px_rgba(0,0,0,0.55)]"
+        className="relative z-[1101] flex max-h-[min(92dvh,880px)] w-full max-w-[560px] flex-col overflow-hidden rounded-2xl border border-white/[0.12] shadow-[0_16px_64px_-8px_rgba(0,0,0,0.55)]"
         style={{ background: 'linear-gradient(165deg, rgba(28,28,32,0.98) 0%, rgba(12,12,14,0.99) 100%)' }}
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
