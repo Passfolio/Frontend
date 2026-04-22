@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { PROFILE_CHIP_SURFACE_CLASS } from '@/constants/profile';
 
 const defaultChipClass = `${PROFILE_CHIP_SURFACE_CLASS} shrink-0 rounded-full px-3 py-1 text-xs font-medium text-zinc-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]`;
@@ -22,7 +23,7 @@ export const AllChipsOverlay = ({
 }: AllChipsOverlayProps) => {
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[300] flex items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:p-6"
       role="dialog"
@@ -62,6 +63,7 @@ export const AllChipsOverlay = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };

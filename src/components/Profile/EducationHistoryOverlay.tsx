@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import type { EducationHistoryItemType } from '@/api/Spec/specApi';
 
 type EducationHistoryOverlayProps = {
@@ -15,7 +16,7 @@ export const EducationHistoryOverlay = ({
 }: EducationHistoryOverlayProps) => {
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[300] flex items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] sm:p-6"
       role="dialog"
@@ -78,6 +79,7 @@ export const EducationHistoryOverlay = ({
           </ul>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
