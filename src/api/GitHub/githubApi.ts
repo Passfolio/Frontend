@@ -9,6 +9,7 @@ export type GitHubRepoItemType = {
   language: string | null;
   htmlUrl: string | null;
   fullName?: string | null;
+  size: number | null;
 };
 
 export type GitHubRepoListResponseType = {
@@ -29,6 +30,7 @@ const normalizeRepoItem = (r: GitHubRepoItemWire): GitHubRepoItemType => ({
   language: r.language,
   htmlUrl: r.htmlUrl ?? r.html_url ?? null,
   fullName: r.fullName ?? r.full_name ?? null,
+  size: r.size ?? null,
 });
 
 export const fetchGitHubRepos = async (
