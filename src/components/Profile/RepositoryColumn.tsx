@@ -65,6 +65,15 @@ const LANGUAGE_DOT_CLASS_MAP: Record<string, string> = {
 const getLanguageDotClass = (language: string | null) =>
     LANGUAGE_DOT_CLASS_MAP[(language ?? '').toLowerCase()] ?? 'bg-zinc-600';
 
+const formatRepoSize = (sizeInKb: number | null): string | null => {
+    if (sizeInKb == null || sizeInKb < 0) return null;
+    if (sizeInKb < 1024) return `${sizeInKb} KB`;
+    const mb = sizeInKb / 1024;
+    if (mb < 1024) return `${mb.toFixed(mb < 10 ? 1 : 0)} MB`;
+    const gb = mb / 1024;
+    return `${gb.toFixed(gb < 10 ? 2 : 1)} GB`;
+};
+
 export const RepositoryColumn = ({ chipLabel, type }: RepositoryColumnConfigType) => {
     const { user } = useAuth();
     const [repos, setRepos] = useState<GitHubRepoItemType[]>([]);
@@ -168,7 +177,15 @@ export const RepositoryColumn = ({ chipLabel, type }: RepositoryColumnConfigType
                                 </p>
                                 <div className="flex items-center gap-1.5 text-[0.72rem] font-medium text-zinc-300">
                                     <span className={`h-2 w-2 rounded-full ${getLanguageDotClass(repo.language)}`} />
-                                    {repo.language ?? 'Unknown'}
+                                    <span>{repo.language ?? 'Unknown'}</span>
+                                    {formatRepoSize(repo.size) && (
+                                        <>
+                                            <span aria-hidden className="text-zinc-600">·</span>
+                                            <span className="text-zinc-400" title="저장소 크기">
+                                                {formatRepoSize(repo.size)}
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
                             </>
                         );
