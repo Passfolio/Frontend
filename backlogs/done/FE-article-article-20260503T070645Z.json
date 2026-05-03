@@ -1,0 +1,830 @@
+{
+  "backlog_id": "FE-article-article-20260503T070645Z",
+  "part": "frontend",
+  "domain": "Article",
+  "owner": "harness-state-machine",
+  "title": "Article 페이지",
+  "user_story": "Visitor/User는 Article을 조회만 할 수 있다.\nAdmin은 Article은 작성/수정/조회/삭제할 수 있다. \n텍스트 중간에 파일을 임베드할 수 있다.",
+  "sp": 6,
+  "requirements": [
+    "user.type에 따라 UI가 달라야한다. Admin에는 작성/수정/삭제 버튼이 발생한다.",
+    "AWS S3 Multipart Upload (presignedURL) 방식으로 업로드한다.",
+    "파일 업로드 즉시, 바로 업로드 시작하며, UX를 위해 로딩스패너를 적용한다. /Users/hooby/Project/Sample/social-login-fe/src 참조",
+    "AWS S3 Multipart Upload (PresignedURL) 을 구현하기 위해, uploading-s3-multipart 스킬을 활용한다.",
+    "AWS S3 Multipart Upload (PresignedURL) 을 구현할 때, references/에 있는 file_security.md를 분석해서 적용한다.",
+    "Article 페이지는 페이지사이즈가 9이다.",
+    "Thumbnail은 이미지 중 첫번째 이미지를 사용한다.",
+    "UI/UX 설계 이전에 백엔드 설계와 API 사양을 분석 후 진행한다. 이는 /Users/hooby/Project/Passfolio/Backend을 참조한다.",
+    "fe에서는 별도로 unit test가 없고, e2e에서 test한다.",
+    "test에선, react-test 스킬을 활용한다."
+  ],
+  "constraints": [
+    "UI/UX는 다른 페이지와 그에 해당하는 컴포넌트들을 참조하여, UI/UX 일관성을 확보한다.",
+    "파일 업로드 보안을 준수한다.",
+    "requirements에 명시한 레포들을 참조 및 Skills 활용해서 구현한다.",
+    "반응형에 따른 UI/UX를 검토한다.",
+    "브라우저 호환성을 고려한다."
+  ],
+  "stage": "DONE",
+  "stage_status": "PASSED",
+  "stage_attempts": {
+    "design": 0,
+    "dev": 0,
+    "validate": 0,
+    "unit_test": 0,
+    "e2e_test": 0,
+    "merge": 0,
+    "report": 0
+  },
+  "tasks": [
+    {
+      "task_id": "T01",
+      "title": "types/article.type.ts 추가 (BE ArticleDto 1:1 미러 + PageInfo)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [],
+      "files_plan": [
+        "src/types/article.type.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:22:48Z",
+      "ended_at": "2026-05-03T07:24:09Z"
+    },
+    {
+      "task_id": "T02",
+      "title": "types/file.type.ts 추가 (FileDto 미러 + MediaItemType 상태머신 타입)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [],
+      "files_plan": [
+        "src/types/file.type.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:25:30Z",
+      "ended_at": "2026-05-03T07:27:40Z"
+    },
+    {
+      "task_id": "T03",
+      "title": "apiEndpoints.ts에 articles + files.multipart 키 추가",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [],
+      "files_plan": [
+        "src/api/Http/apiEndpoints.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:29:38Z",
+      "ended_at": "2026-05-03T07:31:03Z"
+    },
+    {
+      "task_id": "T04",
+      "title": "api/Article/articleApi.ts (5개 함수",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T01",
+        "T03"
+      ],
+      "files_plan": [
+        "src/api/Article/articleApi.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:33:17Z",
+      "ended_at": "2026-05-03T07:34:40Z"
+    },
+    {
+      "task_id": "T05",
+      "title": "api/File/fileApi.ts (4개 함수 + 별도 axios.create + ETag 따옴표 제거)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T02",
+        "T03"
+      ],
+      "files_plan": [
+        "src/api/File/fileApi.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "complex",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:35:31Z",
+      "ended_at": "2026-05-03T07:38:37Z"
+    },
+    {
+      "task_id": "T06",
+      "title": "utils/Article/fileType.ts (isImageUrl/isVideoUrl/isPdfUrl 판별)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [],
+      "files_plan": [
+        "src/utils/Article/fileType.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:40:06Z",
+      "ended_at": "2026-05-03T07:41:54Z"
+    },
+    {
+      "task_id": "T07",
+      "title": "hooks/useS3Upload.ts (PENDING→UPLOADING→COMPLETED/ERROR/ABORTED 상태머신, AbortController+서버 abort, Promise.all 파트 PUT)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T02",
+        "T05"
+      ],
+      "files_plan": [
+        "src/hooks/useS3Upload.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "complex",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:43:15Z",
+      "ended_at": "2026-05-03T07:45:48Z"
+    },
+    {
+      "task_id": "T08",
+      "title": "hooks/useArticleList.ts (page/size 변화 감지 + refetch + loading/error)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T01",
+        "T04"
+      ],
+      "files_plan": [
+        "src/hooks/useArticleList.ts"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:47:20Z",
+      "ended_at": "2026-05-03T07:48:25Z"
+    },
+    {
+      "task_id": "T09",
+      "title": "components/Auth/AdminRoute.tsx (PrivateRoute 패턴 + role 가드)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [],
+      "files_plan": [
+        "src/components/Auth/AdminRoute.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:49:49Z",
+      "ended_at": "2026-05-03T07:51:01Z"
+    },
+    {
+      "task_id": "T10",
+      "title": "components/Article/ArticleCard.tsx (thumbnail/title/createdAt 카드)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T01"
+      ],
+      "files_plan": [
+        "src/components/Article/ArticleCard.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:52:25Z",
+      "ended_at": "2026-05-03T07:54:07Z"
+    },
+    {
+      "task_id": "T11",
+      "title": "components/Article/ArticleListGrid.tsx (9-카드 반응형 grid + 빈 상태)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T01",
+        "T10"
+      ],
+      "files_plan": [
+        "src/components/Article/ArticleListGrid.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:55:32Z",
+      "ended_at": "2026-05-03T07:56:54Z"
+    },
+    {
+      "task_id": "T12",
+      "title": "components/Article/ArticlePagination.tsx (0-based ↔ 1-based 변환, ‹ 1 2 … N ›)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [],
+      "files_plan": [
+        "src/components/Article/ArticlePagination.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T07:58:30Z",
+      "ended_at": "2026-05-03T08:00:05Z"
+    },
+    {
+      "task_id": "T13",
+      "title": "components/Article/ArticleAdminToolbar.tsx (role 가드 + mode list/detail 분기, 삭제 confirm)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T04"
+      ],
+      "files_plan": [
+        "src/components/Article/ArticleAdminToolbar.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:01:56Z",
+      "ended_at": "2026-05-03T08:03:20Z"
+    },
+    {
+      "task_id": "T14",
+      "title": "components/Article/ArticleContentRenderer.tsx (whitespace-pre-wrap + image/video/pdf 분기, XSS 방지 텍스트 노드)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T01",
+        "T06"
+      ],
+      "files_plan": [
+        "src/components/Article/ArticleContentRenderer.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:05:44Z",
+      "ended_at": "2026-05-03T08:07:29Z"
+    },
+    {
+      "task_id": "T15",
+      "title": "components/Article/MediaUploaderInput.tsx (input[type=file] + accept 화이트리스트)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T02"
+      ],
+      "files_plan": [
+        "src/components/Article/MediaUploaderInput.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:08:54Z",
+      "ended_at": "2026-05-03T08:10:31Z"
+    },
+    {
+      "task_id": "T16",
+      "title": "components/Article/MediaUploaderItem.tsx (useS3Upload 호출 + 미리보기 + cleanup + 부모 통지)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T02",
+        "T06",
+        "T07"
+      ],
+      "files_plan": [
+        "src/components/Article/MediaUploaderItem.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "complex",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:11:30Z",
+      "ended_at": "2026-05-03T08:14:29Z"
+    },
+    {
+      "task_id": "T17",
+      "title": "components/Article/MediaUploaderList.tsx (controlled mediaItems + 첫 항목 PREVIEW 라벨)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T02",
+        "T15",
+        "T16"
+      ],
+      "files_plan": [
+        "src/components/Article/MediaUploaderList.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:15:58Z",
+      "ended_at": "2026-05-03T08:17:36Z"
+    },
+    {
+      "task_id": "T18",
+      "title": "components/Article/ArticleEditorForm.tsx (title/contents textarea + MediaUploaderList + isFormValid + onSubmit fileUrls 매핑)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T01",
+        "T02",
+        "T17"
+      ],
+      "files_plan": [
+        "src/components/Article/ArticleEditorForm.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "complex",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:18:32Z",
+      "ended_at": "2026-05-03T08:22:02Z"
+    },
+    {
+      "task_id": "T19",
+      "title": "pages/Articles/ArticleListPage.tsx (useSearchParams page 동기화 + useArticleList + Grid + Pagination + AdminToolbar)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T08",
+        "T11",
+        "T12",
+        "T13"
+      ],
+      "files_plan": [
+        "src/pages/Articles/ArticleListPage.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:23:52Z",
+      "ended_at": "2026-05-03T08:25:47Z"
+    },
+    {
+      "task_id": "T20",
+      "title": "pages/Articles/ArticleDetailPage.tsx (useParams + 로딩/404 분기 + ContentRenderer + AdminToolbar)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T04",
+        "T13",
+        "T14"
+      ],
+      "files_plan": [
+        "src/pages/Articles/ArticleDetailPage.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:27:19Z",
+      "ended_at": "2026-05-03T08:28:58Z"
+    },
+    {
+      "task_id": "T21",
+      "title": "pages/Articles/ArticleCreatePage.tsx (EditorForm mode='create' + createArticle + navigate)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T04",
+        "T18"
+      ],
+      "files_plan": [
+        "src/pages/Articles/ArticleCreatePage.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:30:45Z",
+      "ended_at": "2026-05-03T08:32:55Z"
+    },
+    {
+      "task_id": "T22",
+      "title": "pages/Articles/ArticleEditPage.tsx (getArticleById 초기값 + 기존 fileUrls→MediaItem 변환 + EditorForm mode='edit' + updateArticle PATCH)",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T04",
+        "T18"
+      ],
+      "files_plan": [
+        "src/pages/Articles/ArticleEditPage.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "complex",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:33:59Z",
+      "ended_at": "2026-05-03T08:36:28Z"
+    },
+    {
+      "task_id": "T23",
+      "title": "App.tsx에 4개 라우트 추가 + AdminRoute 감싸기",
+      "description": "",
+      "status": "DONE",
+      "depends_on": [
+        "T09",
+        "T19",
+        "T20",
+        "T21",
+        "T22"
+      ],
+      "files_plan": [
+        "src/App.tsx"
+      ],
+      "attempts": 1,
+      "max_attempts": 3,
+      "complexity": "simple",
+      "context_log_seqs": [],
+      "failed_logs": [],
+      "assigned_to": "harness-dev",
+      "started_at": "2026-05-03T08:37:49Z",
+      "ended_at": "2026-05-03T08:39:58Z"
+    }
+  ],
+  "current_task": null,
+  "skills_required": [
+    "harness-engineering"
+  ],
+  "mcps_required": [
+    "playwright"
+  ],
+  "stage_refs": {
+    "design": "0001-harness-design.md",
+    "dev": [
+      "0002-harness-dev.md",
+      "0003-harness-dev.md",
+      "0004-harness-dev.md",
+      "0005-harness-dev.md",
+      "0006-harness-dev.md",
+      "0007-harness-dev.md",
+      "0008-harness-dev.md",
+      "0009-harness-dev.md",
+      "0010-harness-dev.md",
+      "0011-harness-dev.md",
+      "0012-harness-dev.md",
+      "0013-harness-dev.md",
+      "0014-harness-dev.md",
+      "0015-harness-dev.md",
+      "0016-harness-dev.md",
+      "0017-harness-dev.md",
+      "0018-harness-dev.md",
+      "0019-harness-dev.md",
+      "0020-harness-dev.md",
+      "0021-harness-dev.md",
+      "0022-harness-dev.md",
+      "0023-harness-dev.md",
+      "0024-harness-dev.md"
+    ],
+    "validation": "0025-harness-validator.md",
+    "unit_test": "0026-harness-unit-test.md",
+    "e2e_test": "0027-harness-e2e-test.md",
+    "merge_pr": "0028-harness-merge.md",
+    "merge_sha": null,
+    "report": "0029-harness-reporter.md"
+  },
+  "depends_on": [],
+  "shared_resources": [],
+  "history": [
+    {
+      "ts": "2026-05-03T07:06:45Z",
+      "from": null,
+      "to": "TODO/PENDING",
+      "by": "human"
+    },
+    {
+      "ts": "2026-05-03T07:08:46Z",
+      "from": "TODO/PENDING",
+      "to": "DESIGN/PENDING",
+      "by": "harness-state-machine"
+    },
+    {
+      "ts": "2026-05-03T07:21:17Z",
+      "from": "DESIGN/PASSED",
+      "to": "DESIGN/PASSED",
+      "by": "stage_advance",
+      "note": "applied tasks decomposition: 23 tasks"
+    },
+    {
+      "ts": "2026-05-03T07:21:18Z",
+      "from": "DESIGN/PENDING",
+      "to": "DESIGN/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0001-harness-design.md"
+    },
+    {
+      "ts": "2026-05-03T07:21:18Z",
+      "from": "DESIGN/PASSED",
+      "to": "DEV/PENDING",
+      "by": "subagent_stop"
+    },
+    {
+      "ts": "2026-05-03T07:22:48Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T01"
+    },
+    {
+      "ts": "2026-05-03T07:25:30Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T02"
+    },
+    {
+      "ts": "2026-05-03T07:29:38Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T03"
+    },
+    {
+      "ts": "2026-05-03T07:33:17Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T04"
+    },
+    {
+      "ts": "2026-05-03T07:35:31Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T05"
+    },
+    {
+      "ts": "2026-05-03T07:40:06Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T06"
+    },
+    {
+      "ts": "2026-05-03T07:43:15Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T07"
+    },
+    {
+      "ts": "2026-05-03T07:47:20Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T08"
+    },
+    {
+      "ts": "2026-05-03T07:49:49Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T09"
+    },
+    {
+      "ts": "2026-05-03T07:52:25Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T10"
+    },
+    {
+      "ts": "2026-05-03T07:55:32Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T11"
+    },
+    {
+      "ts": "2026-05-03T07:58:30Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T12"
+    },
+    {
+      "ts": "2026-05-03T08:01:56Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T13"
+    },
+    {
+      "ts": "2026-05-03T08:05:44Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T14"
+    },
+    {
+      "ts": "2026-05-03T08:08:54Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T15"
+    },
+    {
+      "ts": "2026-05-03T08:11:30Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T16"
+    },
+    {
+      "ts": "2026-05-03T08:15:58Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T17"
+    },
+    {
+      "ts": "2026-05-03T08:18:32Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T18"
+    },
+    {
+      "ts": "2026-05-03T08:23:52Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T19"
+    },
+    {
+      "ts": "2026-05-03T08:27:19Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T20"
+    },
+    {
+      "ts": "2026-05-03T08:30:45Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T21"
+    },
+    {
+      "ts": "2026-05-03T08:33:59Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T22"
+    },
+    {
+      "ts": "2026-05-03T08:37:49Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PENDING",
+      "by": "harness-dev",
+      "note": "task-claim T23"
+    },
+    {
+      "ts": "2026-05-03T08:40:04Z",
+      "from": "DEV/PENDING",
+      "to": "DEV/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0024-harness-dev.md"
+    },
+    {
+      "ts": "2026-05-03T08:40:05Z",
+      "from": "DEV/PASSED",
+      "to": "VALIDATION/PENDING",
+      "by": "subagent_stop"
+    },
+    {
+      "ts": "2026-05-03T08:44:23Z",
+      "from": "VALIDATION/PENDING",
+      "to": "VALIDATION/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0025-harness-validator.md"
+    },
+    {
+      "ts": "2026-05-03T08:44:24Z",
+      "from": "VALIDATION/PASSED",
+      "to": "UNIT_TEST/PENDING",
+      "by": "subagent_stop"
+    },
+    {
+      "ts": "2026-05-03T08:47:46Z",
+      "from": "UNIT_TEST/PENDING",
+      "to": "UNIT_TEST/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0026-harness-unit-test.md"
+    },
+    {
+      "ts": "2026-05-03T08:47:47Z",
+      "from": "UNIT_TEST/PASSED",
+      "to": "E2E/PENDING",
+      "by": "subagent_stop"
+    },
+    {
+      "ts": "2026-05-03T09:02:40Z",
+      "from": "E2E/PENDING",
+      "to": "E2E/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0027-harness-e2e-test.md"
+    },
+    {
+      "ts": "2026-05-03T09:02:40Z",
+      "from": "E2E/PASSED",
+      "to": "MERGE/PENDING",
+      "by": "subagent_stop"
+    },
+    {
+      "ts": "2026-05-03T09:06:04Z",
+      "from": "MERGE/PENDING",
+      "to": "MERGE/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0028-harness-merge.md"
+    },
+    {
+      "ts": "2026-05-03T09:06:05Z",
+      "from": "MERGE/PASSED",
+      "to": "REPORT/PENDING",
+      "by": "subagent_stop"
+    },
+    {
+      "ts": "2026-05-03T09:14:48Z",
+      "from": "REPORT/PENDING",
+      "to": "REPORT/PASSED",
+      "by": "subagent_stop",
+      "note": "verified entry 0029-harness-reporter.md"
+    },
+    {
+      "ts": "2026-05-03T09:14:49Z",
+      "from": "REPORT/PASSED",
+      "to": "DONE/PASSED",
+      "by": "subagent_stop"
+    }
+  ],
+  "created_at": "2026-05-03T07:06:45Z",
+  "updated_at": "2026-05-03T09:14:49Z"
+}
