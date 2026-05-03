@@ -14,9 +14,14 @@ import { ForbiddenPage } from '@/pages/Error/ForbiddenPage';
 import { TooManyRequestsPage } from '@/pages/Error/TooManyRequestsPage';
 import { ServerErrorPage } from '@/pages/Error/ServerErrorPage';
 import { PrivateRoute } from '@/components/Auth/PrivateRoute';
+import { AdminRoute } from '@/components/Auth/AdminRoute';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { AuthProvider } from '@/context/Auth/AuthContext';
 import { Header } from "@/components/Layout/Header/Header";
+import { ArticleListPage } from '@/pages/Articles/ArticleListPage';
+import { ArticleDetailPage } from '@/pages/Articles/ArticleDetailPage';
+import { ArticleCreatePage } from '@/pages/Articles/ArticleCreatePage';
+import { ArticleEditPage } from '@/pages/Articles/ArticleEditPage';
 
 function ScrollToTopOnPathChange() {
     const { pathname } = useLocation();
@@ -38,6 +43,8 @@ export const App = () => {
                     {/* --- 공개 라우트 --- */}
                     <Route path="/" element={<LanderPage />} />
                     <Route path="/announcements" element={<AnnouncementsPage />} />
+                    <Route path="/articles" element={<ArticleListPage />} />
+                    <Route path="/articles/:id" element={<ArticleDetailPage />} />
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/terms" element={<TermsOfServicePage />} />
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
@@ -54,6 +61,12 @@ export const App = () => {
                     {/* --- 비공개 라우트 --- */}
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<ProfilePage />} />
+                    </Route>
+
+                    {/* --- ADMIN 전용 라우트 --- */}
+                    <Route element={<AdminRoute />}>
+                        <Route path="/articles/new" element={<ArticleCreatePage />} />
+                        <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
                     </Route>
 
                     {/* --- 404 --- */}
