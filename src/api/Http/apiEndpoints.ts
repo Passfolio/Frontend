@@ -16,6 +16,20 @@ export const API_ENDPOINTS = {
     github: {
         repos: '/api/v1/github/repos',
     },
+    articles: {
+        list: '/api/v1/articles',
+        detail: (id: number) => `/api/v1/articles/${id}`,
+        create: '/api/v1/articles',
+        update: (id: number) => `/api/v1/articles/${id}`,
+        delete: (id: number) => `/api/v1/articles/${id}`,
+    },
+    files: {
+        multipart: {
+            initiate: '/api/v1/files/multipart/initiate',
+            complete: '/api/v1/files/multipart/complete',
+            abort: '/api/v1/files/multipart/abort',
+        },
+    },
 } as const;
 
 export const isAuthRefreshUrl = (url: string): boolean =>
