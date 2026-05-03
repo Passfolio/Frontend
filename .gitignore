@@ -53,12 +53,14 @@ CLAUDE.md
 
 # DOCS
 convention/
+description/
 
 # REFERENCE
 references/
 projectRule
 
 # Agent
+.mcp.json
 .codex
 .claude
 CLAUDE.md
