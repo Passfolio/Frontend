@@ -57,8 +57,10 @@ convention/
 # REFERENCE
 references/
 projectRule
+description/
 
 # Agent
+.mcp.json
 .codex
 .claude
 CLAUDE.md
