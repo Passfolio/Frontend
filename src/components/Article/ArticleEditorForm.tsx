@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type {
     ArticleCreateRequestType,
     ArticleType,
@@ -71,10 +71,6 @@ export function ArticleEditorForm(props: ArticleEditorFormProps) {
         (initial?.fileUrls ?? []).map(toExistingMediaItem),
     );
 
-    const handleItemsChange = useCallback((items: MediaItemType[]) => {
-        setMediaItems(items);
-    }, []);
-
     // 모든 미디어 항목이 COMPLETED여야 제출 가능 — design REQ3.
     const isAllMediaCompleted = useMemo(
         () => mediaItems.every((item) => item.status === 'COMPLETED'),
@@ -96,6 +92,12 @@ export function ArticleEditorForm(props: ArticleEditorFormProps) {
         const fileUrls = mediaItems
             .map((item) => item.serverData?.cdnUrl ?? '')
             .filter((url) => url.length > 0);
+
+        console.info('[Passfolio][Article][fileUrls]', 'editorSubmit:builtFileUrls', {
+            mode,
+            count: fileUrls.length,
+            fileUrls,
+        });
 
         if (mode === 'create') {
             const body: CreateSubmitBody = {
@@ -168,7 +170,7 @@ export function ArticleEditorForm(props: ArticleEditorFormProps) {
                 <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
                     첨부 (이미지/영상/PDF)
                 </p>
-                <MediaUploaderList mediaItems={mediaItems} onItemsChange={handleItemsChange} />
+                <MediaUploaderList mediaItems={mediaItems} onItemsChange={setMediaItems} />
                 {!isAllMediaCompleted && mediaItems.length > 0 && (
                     <p className="text-[0.72rem] text-amber-300/80">
                         업로드 중인 파일이 있습니다. 완료 후 제출할 수 있습니다.

@@ -39,8 +39,9 @@ export function MediaUploaderItem({
     // file === null(기존 파일)은 부모가 이미 COMPLETED 상태로 주입했으므로 재통지 불필요.
     useEffect(() => {
         if (!file) return;
+        if (item.status === status && item.serverData === result) return;
         onStatusChange(item.id, status, result);
-    }, [file, item.id, status, result, onStatusChange]);
+    }, [file, item.id, item.status, item.serverData, status, result, onStatusChange]);
 
     // 미리보기 URL: 신규 파일은 objectURL, 기존 파일은 serverData.cdnUrl.
     const [objectUrl, setObjectUrl] = useState<string | null>(null);

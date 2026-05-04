@@ -1,11 +1,12 @@
-import { useCallback } from 'react';
+import { useCallback, type Dispatch, type SetStateAction } from 'react';
 import type { MediaItemType, MediaUploadStatusType, UploadFileResponseType } from '@/types/file.type';
 import { MediaUploaderInput } from '@/components/Article/MediaUploaderInput';
 import { MediaUploaderItem } from '@/components/Article/MediaUploaderItem';
 
 type MediaUploaderListProps = {
     mediaItems: MediaItemType[];
-    onItemsChange: (items: MediaItemType[]) => void;
+    /** 함수형 업데이트를 지원해 콜백 참조를 안정적으로 유지한다(무한 렌더 방지). */
+    onItemsChange: Dispatch<SetStateAction<MediaItemType[]>>;
 };
 
 export function MediaUploaderList({ mediaItems, onItemsChange }: MediaUploaderListProps) {
@@ -17,27 +18,27 @@ export function MediaUploaderList({ mediaItems, onItemsChange }: MediaUploaderLi
                 status: 'PENDING',
                 serverData: null,
             }));
-            onItemsChange([...mediaItems, ...newItems]);
+            onItemsChange((prev) => [...prev, ...newItems]);
         },
-        [mediaItems, onItemsChange],
+        [onItemsChange],
     );
 
     const handleStatusChange = useCallback(
         (tempId: string, status: MediaUploadStatusType, result: UploadFileResponseType | null) => {
-            onItemsChange(
-                mediaItems.map((item) =>
+            onItemsChange((prev) =>
+                prev.map((item) =>
                     item.id === tempId ? { ...item, status, serverData: result } : item,
                 ),
             );
         },
-        [mediaItems, onItemsChange],
+        [onItemsChange],
     );
 
     const handleRemove = useCallback(
         (tempId: string) => {
-            onItemsChange(mediaItems.filter((item) => item.id !== tempId));
+            onItemsChange((prev) => prev.filter((item) => item.id !== tempId));
         },
-        [mediaItems, onItemsChange],
+        [onItemsChange],
     );
 
     return (
