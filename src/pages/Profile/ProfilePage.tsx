@@ -119,27 +119,41 @@ export const ProfilePage = () => {
     [setSearchParams],
   );
 
-  const refreshProfileSpec = useCallback(async (patchResult?: DevSpecUpdateResponseType) => {
-    if (!user?.id) {
-      setSpec(EMPTY_SPEC);
-      return;
-    }
-    try {
-      if (patchResult != null) {
-        setSpec(specFromPatch(patchResult));  // 즉각 반영
+  const refreshProfileSpec = useCallback(
+    async (
+      patchResult?: DevSpecUpdateResponseType,
+      options?: { isCancelled?: () => boolean },
+    ) => {
+      const isCancelled = () => options?.isCancelled?.() === true;
+
+      if (!user?.id) {
+        if (!isCancelled()) setSpec(EMPTY_SPEC);
+        return;
       }
-      const [career, educationHistory] = await Promise.all([
-        getMyCareer(),
-        getMyEducationHistory({ cacheBust: true }),
-      ]);
-      setSpec(buildProfileSpecState(career.experience, career, educationHistory));
-    } catch {
-      if (patchResult == null) setSpec(EMPTY_SPEC);
-    }
-  }, [user?.id]);
+      try {
+        if (patchResult != null && !isCancelled()) {
+          setSpec(specFromPatch(patchResult)); // 즉각 반영
+        }
+        if (isCancelled()) return;
+        const [career, educationHistory] = await Promise.all([
+          getMyCareer(),
+          getMyEducationHistory({ cacheBust: true }),
+        ]);
+        if (isCancelled()) return;
+        setSpec(buildProfileSpecState(career.experience, career, educationHistory));
+      } catch {
+        if (!isCancelled() && patchResult == null) setSpec(EMPTY_SPEC);
+      }
+    },
+    [user?.id],
+  );
 
   useEffect(() => {
-    void refreshProfileSpec();
+    let cancelled = false;
+    void refreshProfileSpec(undefined, { isCancelled: () => cancelled });
+    return () => {
+      cancelled = true;
+    };
   }, [refreshProfileSpec]);
 
   const openUpdateProfile = () => setUpdateProfileOpen(true);

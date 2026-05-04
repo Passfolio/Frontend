@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { socialMe } from '@/api/Auth/authApi';
 import { useAuth } from '@/context/Auth/AuthContext';
+import { ADMIN_PORTAL_PROFILE_PATH } from '@/constants/adminPortal';
+import { mapMeToUserType } from '@/utils/Auth/mapMeToUserType';
 import { extractErrorMessage } from '@/utils/errorMessage';
 
 export const OAuthCallback = () => {
@@ -10,33 +12,37 @@ export const OAuthCallback = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        let cancelled = false;
+        let errorNavigateTimer: ReturnType<typeof setTimeout> | null = null;
+
         (async () => {
             try {
                 const response = await socialMe();
+                if (cancelled) return;
 
                 if (response?.user) {
-                    const userData = {
-                        id: String(response.user.id),
-                        nickname: response.user.nickname || '',
-                        profileImageUrl: response.user.profileImageUrl || '',
-                        githubLogin: response.user.githubLogin || '',
-                        role: response.user.role || 'USER'
-                    };
+                    const userData = mapMeToUserType(response.user);
 
                     loginUser(userData);
-                    navigate('/profile'); // 로그인 완료 후 프로필로 리다이렉트
+                    navigate(userData.role === 'ADMIN' ? ADMIN_PORTAL_PROFILE_PATH : '/profile');
                 } else {
                     throw new Error('사용자 정보를 가져올 수 없습니다.');
                 }
             } catch (error: unknown) {
+                if (cancelled) return;
                 console.error('OAuth 콜백 처리 실패:', error);
                 setError(extractErrorMessage(error, '로그인 처리 중 오류가 발생했습니다.'));
 
-                setTimeout(() => {
-                    navigate('/');
+                errorNavigateTimer = setTimeout(() => {
+                    if (!cancelled) navigate('/');
                 }, 2000);
             }
         })();
+
+        return () => {
+            cancelled = true;
+            if (errorNavigateTimer != null) clearTimeout(errorNavigateTimer);
+        };
     }, [navigate, loginUser]);
 
     if (error) {
