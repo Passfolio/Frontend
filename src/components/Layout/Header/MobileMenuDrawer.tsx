@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { UserType } from '@/context/Auth/AuthContext';
+import { ADMIN_PORTAL_PROFILE_PATH } from '@/constants/adminPortal';
 import type { LandingNavLinkType } from '@/constants/landingPage';
 import { MENU_LIST, MENU_SECTION_SLUG } from '@/constants/profile';
 
@@ -98,18 +99,28 @@ export const MobileMenuDrawer = ({
                 {showProfileSection && (
                     <div className="flex flex-col px-4 py-3">
                         <p className="mb-1 px-3 text-[10px] font-bold uppercase tracking-[0.12em] text-zinc-600">
-                            프로필
+                            {user?.role === 'ADMIN' ? '관리자' : '프로필'}
                         </p>
-                        {MENU_LIST.map((menuItem) => (
+                        {user?.role === 'ADMIN' ? (
                             <Link
-                                key={menuItem}
-                                to={`/profile?section=${MENU_SECTION_SLUG[menuItem]}`}
+                                to={ADMIN_PORTAL_PROFILE_PATH}
                                 onClick={onClose}
                                 className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
                             >
-                                {menuItem}
+                                관리자 홈
                             </Link>
-                        ))}
+                        ) : (
+                            MENU_LIST.map((menuItem) => (
+                                <Link
+                                    key={menuItem}
+                                    to={`/profile?section=${MENU_SECTION_SLUG[menuItem]}`}
+                                    onClick={onClose}
+                                    className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
+                                >
+                                    {menuItem}
+                                </Link>
+                            ))
+                        )}
                     </div>
                 )}
 

@@ -1,9 +1,10 @@
 import { axiosInstance } from '@/api/Http/axiosInstance';
 import { clearTokenExpiresInfo, refreshTokenOnce } from '@/api/Auth/tokenRefreshManager';
 import { API_ENDPOINTS } from '@/api/Http/apiEndpoints';
+import type { UserMeResponseType } from '@/utils/Auth/mapMeToUserType';
 
-export const fetchMe = async () => {
-    const { data } = await axiosInstance.get(API_ENDPOINTS.auth.me);
+export const fetchMe = async (): Promise<UserMeResponseType> => {
+    const { data } = await axiosInstance.get<UserMeResponseType>(API_ENDPOINTS.auth.me);
     return data;
 };
 

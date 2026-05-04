@@ -6,6 +6,12 @@ export const API_ENDPOINTS = {
         revokeSession: '/api/v1/auth/revoke-session',
         delete: '/api/v1/auth/delete',
     },
+    systemAuth: {
+        signup: '/api/v1/system/auth/signup',
+        login: '/api/v1/system/auth/login',
+        emailSend: '/api/v1/system/auth/email/send',
+        emailVerify: '/api/v1/system/auth/email/verify',
+    },
     spec: {
         devSpec: '/api/v1/spec/dev-spec',
         educationHistory: '/api/v1/spec/dev-spec/education-history',

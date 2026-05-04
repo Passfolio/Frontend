@@ -5,7 +5,7 @@ import { AnnouncementsPage } from '@/pages/Announcements/AnnouncementsPage';
 import { FaqPage } from '@/pages/Faq/FaqPage';
 import { TermsOfServicePage } from '@/pages/Terms/TermsOfServicePage';
 import { PrivacyPolicyPage } from '@/pages/Privacy/PrivacyPolicyPage';
-import { ProfilePage } from '@/pages/Profile/ProfilePage';
+import { UserProfileRoute } from '@/pages/Profile/userProfileRoute';
 import { OAuthCallback } from '@/pages/OAuthCallback/OAuthCallback';
 import { BadRequestPage } from '@/pages/Error/BadRequestPage';
 import { UnauthorizedPage } from '@/pages/Error/UnauthorizedPage';
@@ -22,6 +22,9 @@ import { ArticleListPage } from '@/pages/Articles/ArticleListPage';
 import { ArticleDetailPage } from '@/pages/Articles/ArticleDetailPage';
 import { ArticleCreatePage } from '@/pages/Articles/ArticleCreatePage';
 import { ArticleEditPage } from '@/pages/Articles/ArticleEditPage';
+import { AdminLoginPage } from '@/pages/AdminPortal/AdminLoginPage';
+import { AdminSignupPage } from '@/pages/AdminPortal/AdminSignupPage';
+import { AdminProfilePage } from '@/pages/AdminPortal/AdminProfilePage';
 
 function ScrollToTopOnPathChange() {
     const { pathname } = useLocation();
@@ -50,6 +53,10 @@ export const App = () => {
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
                     <Route path="/oauth/callback" element={<OAuthCallback />} />
 
+                    {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}
+                    <Route path="/sys/adm/login" element={<AdminLoginPage />} />
+                    <Route path="/sys/adm/signup" element={<AdminSignupPage />} />
+
                     {/* --- 에러 페이지 --- */}
                     <Route path="/400" element={<BadRequestPage />} />
                     <Route path="/401" element={<UnauthorizedPage />} />
@@ -60,13 +67,12 @@ export const App = () => {
 
                     {/* --- 비공개 라우트 --- */}
                     <Route element={<PrivateRoute />}>
-                        <Route path="/profile" element={<ProfilePage />} />
-                    </Route>
-
-                    {/* --- ADMIN 전용 라우트 --- */}
-                    <Route element={<AdminRoute />}>
-                        <Route path="/articles/new" element={<ArticleCreatePage />} />
-                        <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
+                        <Route path="/profile" element={<UserProfileRoute />} />
+                        <Route element={<AdminRoute />}>
+                            <Route path="/sys/adm/profile" element={<AdminProfilePage />} />
+                            <Route path="/articles/new" element={<ArticleCreatePage />} />
+                            <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
+                        </Route>
                     </Route>
 
                     {/* --- 404 --- */}

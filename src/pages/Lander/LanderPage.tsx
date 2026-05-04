@@ -21,10 +21,10 @@ export const LanderPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // 로그인 유저 자동 리다이렉트: 홈(/)으로 들어와도 로그인되어 있으면 프로필로 이동
+    // 일반(USER) 로그인 시에만 홈(/) → 프로필 자동 이동 — ADMIN은 랜딩 유지
     useEffect(() => {
-        const isAuthenticated = user?.id || localStorage.getItem('userId');
-        if (isAuthenticated) {
+        const isAuthenticated = Boolean(user?.id || localStorage.getItem('userId'));
+        if (isAuthenticated && user?.role === 'USER') {
             navigate('/profile', { replace: true });
         }
     }, [user, navigate]);
