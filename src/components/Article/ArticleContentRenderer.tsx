@@ -1,3 +1,7 @@
+import { useMemo } from 'react';
+import { generateHTML, type JSONContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
 import { isImageUrl, isVideoUrl, isPdfUrl } from '@/utils/Article/fileType';
 import { ArticleType } from '@/types/article.type';
 
@@ -6,7 +10,63 @@ type ArticleContentRendererProps = {
     fileUrls: ArticleType['fileUrls'];
 };
 
+const TIPTAP_RENDER_EXTENSIONS = [
+    StarterKit,
+    Image.configure({
+        inline: false,
+        allowBase64: false,
+        HTMLAttributes: {
+            class: 'max-w-full rounded-lg',
+            referrerpolicy: 'no-referrer',
+        },
+    }),
+];
+
+const tryParseTipTapDoc = (raw: string): JSONContent | null => {
+    const trimmed = raw.trim();
+    if (!trimmed.startsWith('{')) return null;
+    try {
+        const parsed = JSON.parse(trimmed) as unknown;
+        if (
+            parsed &&
+            typeof parsed === 'object' &&
+            (parsed as JSONContent).type === 'doc' &&
+            Array.isArray((parsed as JSONContent).content)
+        ) {
+            return parsed as JSONContent;
+        }
+    } catch {
+        // not JSON
+    }
+    return null;
+};
+
 export function ArticleContentRenderer({ contents, fileUrls }: ArticleContentRendererProps) {
+    const tiptapDoc = useMemo(() => (contents ? tryParseTipTapDoc(contents) : null), [contents]);
+
+    const renderedHtml = useMemo(() => {
+        if (!tiptapDoc) return null;
+        try {
+            return generateHTML(tiptapDoc, TIPTAP_RENDER_EXTENSIONS);
+        } catch {
+            return null;
+        }
+    }, [tiptapDoc]);
+
+    if (renderedHtml !== null) {
+        return (
+            <div
+                className="tiptap-rendered text-sm leading-relaxed text-zinc-200 [&_h1]:mb-2 [&_h1]:mt-4 [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:text-white [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-white [&_h3]:mb-1 [&_h3]:mt-3 [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:text-white [&_p]:break-words [&_a]:text-sky-300 [&_a]:underline [&_ul]:my-1 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:my-1 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:my-0.5 [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_pre]:my-2 [&_pre]:rounded-lg [&_pre]:bg-black/40 [&_pre]:p-3 [&_pre]:text-[0.85em] [&_img]:my-2 [&_img]:max-w-full [&_img]:rounded-lg"
+                dangerouslySetInnerHTML={{ __html: renderedHtml }}
+            />
+        );
+    }
+
+    // legacy: plain text + 별도 fileUrls
+    return <LegacyContentRenderer contents={contents} fileUrls={fileUrls} />;
+}
+
+function LegacyContentRenderer({ contents, fileUrls }: ArticleContentRendererProps) {
     const attachmentUrlList = (fileUrls ?? [])
         .map((u) => (typeof u === 'string' ? u.trim() : ''))
         .filter((u) => u.length > 0);

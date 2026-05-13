@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import type { JSONContent } from '@tiptap/react';
 import type {
     ArticleCreateRequestType,
     ArticleType,
     ArticleUpdateRequestType,
 } from '@/types/article.type';
-import type { MediaItemType, UploadFileResponseType } from '@/types/file.type';
-import { MediaUploaderList } from '@/components/Article/MediaUploaderList';
-import { isImageUrl, isPdfUrl, isVideoUrl } from '@/utils/Article/fileType';
+import { TipTapEditor } from '@/components/Article/TipTapEditor';
+import { extractImageUrls } from '@/utils/Article/extractImageUrls';
 
 type CreateSubmitBody = ArticleCreateRequestType;
 type UpdateSubmitBody = ArticleUpdateRequestType;
@@ -25,34 +25,41 @@ type ArticleEditorFormProps =
           submitting: boolean;
       };
 
-// 기존 cdnUrl을 MediaItemType으로 직렬화 — file=null로 둬서 useS3Upload가 no-op가 되도록 한다.
-// fileId/fileSize는 신규 업로드가 아니므로 0/0 placeholder. MediaUploaderItem은 cdnUrl/filename/mediaType만 읽으므로 안전.
-const toExistingMediaItem = (cdnUrl: string): MediaItemType => {
-    const filename = cdnUrl.split('/').pop()?.split('?')[0] ?? '';
-    const mediaType = isImageUrl(cdnUrl)
-        ? 'image/*'
-        : isVideoUrl(cdnUrl)
-            ? 'video/*'
-            : isPdfUrl(cdnUrl)
-                ? 'application/pdf'
-                : 'application/octet-stream';
-    const serverData: UploadFileResponseType = {
-        fileId: 0,
-        filename,
-        cdnUrl,
-        fileSize: 0,
-        mediaType,
-        status: 'COMPLETED',
-    };
+const EMPTY_DOC: JSONContent = { type: 'doc', content: [{ type: 'paragraph' }] };
+
+// 기존 게시물 contents가 plain text(legacy) 또는 JSON(신규)인 경우를 모두 처리.
+// JSON.parse 후 doc 스키마(type === 'doc' && content 배열)를 반드시 검증.
+const parseInitialContents = (raw: string | null | undefined): JSONContent => {
+    if (!raw || raw.trim().length === 0) return EMPTY_DOC;
+    const trimmed = raw.trim();
+    if (trimmed.startsWith('{')) {
+        try {
+            const parsed = JSON.parse(trimmed) as unknown;
+            if (
+                parsed &&
+                typeof parsed === 'object' &&
+                (parsed as JSONContent).type === 'doc' &&
+                Array.isArray((parsed as JSONContent).content)
+            ) {
+                return parsed as JSONContent;
+            }
+        } catch {
+            // fallthrough to plain text
+        }
+    }
+    // legacy plain text — 단일 paragraph로 감싸 TipTap에 주입
     return {
-        id: crypto.randomUUID(),
-        file: null,
-        status: 'COMPLETED',
-        serverData,
+        type: 'doc',
+        content: [
+            {
+                type: 'paragraph',
+                content: [{ type: 'text', text: raw }],
+            },
+        ],
     };
 };
 
-// 두 fileUrls 배열이 동일한 순서/내용인지 비교.
+// 두 fileUrls 배열이 동일한 순서/내용인지 비교
 const areFileUrlsEqual = (a: string[], b: string[]): boolean => {
     if (a.length !== b.length) return false;
     for (let i = 0; i < a.length; i += 1) {
@@ -61,37 +68,61 @@ const areFileUrlsEqual = (a: string[], b: string[]): boolean => {
     return true;
 };
 
+// 빈 doc 판정: paragraph 하나에 텍스트도 image도 없는 경우
+const isDocEmpty = (doc: JSONContent): boolean => {
+    let hasContent = false;
+    const visit = (node: JSONContent | undefined): void => {
+        if (!node || hasContent) return;
+        if (node.type === 'image') {
+            hasContent = true;
+            return;
+        }
+        if (node.type === 'text' && typeof node.text === 'string' && node.text.trim().length > 0) {
+            hasContent = true;
+            return;
+        }
+        node.content?.forEach(visit);
+    };
+    visit(doc);
+    return !hasContent;
+};
+
 export function ArticleEditorForm(props: ArticleEditorFormProps) {
     const { mode, onSubmit, submitting } = props;
     const initial = props.mode === 'edit' ? props.initial : undefined;
 
     const [title, setTitle] = useState<string>(initial?.title ?? '');
-    const [contents, setContents] = useState<string>(initial?.contents ?? '');
-    const [mediaItems, setMediaItems] = useState<MediaItemType[]>(() =>
-        (initial?.fileUrls ?? []).map(toExistingMediaItem),
-    );
+    const initialJson = useMemo(() => parseInitialContents(initial?.contents), [initial?.contents]);
+    const [editorJson, setEditorJson] = useState<JSONContent>(initialJson);
+    const [uploadingCount, setUploadingCount] = useState<number>(0);
 
-    // 모든 미디어 항목이 COMPLETED여야 제출 가능 — design REQ3.
-    const isAllMediaCompleted = useMemo(
-        () => mediaItems.every((item) => item.status === 'COMPLETED'),
-        [mediaItems],
-    );
+    // editor onChange는 매번 새 함수로 들어와도 stable해야 — useCallback
+    const handleEditorChange = useCallback((json: JSONContent) => {
+        setEditorJson(json);
+    }, []);
+    const handleUploadingCountChange = useCallback((count: number) => {
+        setUploadingCount(count);
+    }, []);
+
     const trimmedTitle = title.trim();
-    const trimmedContents = contents.trim();
+    const docEmpty = isDocEmpty(editorJson);
     const isFormValid =
         trimmedTitle.length > 0 &&
-        trimmedContents.length > 0 &&
-        isAllMediaCompleted &&
+        !docEmpty &&
+        uploadingCount === 0 &&
         !submitting;
+
+    // edit 모드일 때 초기 contents 직렬화 — 비교용 캐시
+    const initialContentsSerializedRef = useRef<string>(
+        initial ? JSON.stringify(initialJson) : '',
+    );
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isFormValid) return;
 
-        // 완료된 항목의 cdnUrl만 추출. 빈 문자열/누락은 방어적으로 제거.
-        const fileUrls = mediaItems
-            .map((item) => item.serverData?.cdnUrl ?? '')
-            .filter((url) => url.length > 0);
+        const contentsSerialized = JSON.stringify(editorJson);
+        const fileUrls = extractImageUrls(editorJson);
 
         console.info('[Passfolio][Article][fileUrls]', 'editorSubmit:builtFileUrls', {
             mode,
@@ -102,21 +133,20 @@ export function ArticleEditorForm(props: ArticleEditorFormProps) {
         if (mode === 'create') {
             const body: CreateSubmitBody = {
                 title: trimmedTitle,
-                contents: trimmedContents,
+                contents: contentsSerialized,
                 ...(fileUrls.length > 0 ? { fileUrls } : {}),
             };
             await onSubmit(body);
             return;
         }
 
-        // edit — design Decisions §5: 변경된 필드만 전송. fileUrls는 빈 배열도 의미가 있으므로(전부 비움)
-        // 길이가 아니라 "초기값과 다른지"로 판단한다. undefined로 두면 BE가 변경 없음으로 처리.
+        // edit — 변경된 필드만 PATCH
         const body: UpdateSubmitBody = {};
         if (initial && trimmedTitle !== initial.title) {
             body.title = trimmedTitle;
         }
-        if (initial && trimmedContents !== initial.contents) {
-            body.contents = trimmedContents;
+        if (contentsSerialized !== initialContentsSerializedRef.current) {
+            body.contents = contentsSerialized;
         }
         if (initial && !areFileUrlsEqual(fileUrls, initial.fileUrls)) {
             body.fileUrls = fileUrls;
@@ -149,33 +179,15 @@ export function ArticleEditorForm(props: ArticleEditorFormProps) {
             </section>
 
             <section className="flex flex-col gap-2">
-                <label
-                    htmlFor="article-contents"
-                    className="text-xs font-medium uppercase tracking-wider text-zinc-500"
-                >
-                    본문
-                </label>
-                <textarea
-                    id="article-contents"
-                    value={contents}
-                    onChange={(e) => setContents(e.target.value)}
-                    placeholder="본문을 입력하세요"
-                    rows={10}
-                    disabled={submitting}
-                    className="w-full resize-y rounded-xl border border-white/[0.12] bg-white/[0.05] px-3 py-2.5 text-sm leading-relaxed text-white outline-none ring-0 transition placeholder:text-zinc-600 focus:border-white/25 disabled:opacity-60"
-                />
-            </section>
-
-            <section className="flex flex-col gap-2">
                 <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                    첨부 (이미지/영상/PDF)
+                    본문
                 </p>
-                <MediaUploaderList mediaItems={mediaItems} onItemsChange={setMediaItems} />
-                {!isAllMediaCompleted && mediaItems.length > 0 && (
-                    <p className="text-[0.72rem] text-amber-300/80">
-                        업로드 중인 파일이 있습니다. 완료 후 제출할 수 있습니다.
-                    </p>
-                )}
+                <TipTapEditor
+                    initialJson={initialJson}
+                    onChange={handleEditorChange}
+                    onUploadingCountChange={handleUploadingCountChange}
+                    disabled={submitting}
+                />
             </section>
 
             <div className="flex justify-end">
