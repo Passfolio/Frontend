@@ -25,6 +25,11 @@ import { ArticleEditPage } from '@/pages/Articles/ArticleEditPage';
 import { AdminLoginPage } from '@/pages/AdminPortal/AdminLoginPage';
 import { AdminSignupPage } from '@/pages/AdminPortal/AdminSignupPage';
 import { AdminProfilePage } from '@/pages/AdminPortal/AdminProfilePage';
+import {
+    ADMIN_PORTAL_LOGIN_PATH,
+    ADMIN_PORTAL_PROFILE_PATH,
+    ADMIN_PORTAL_SIGNUP_PATH,
+} from '@/constants/adminPortal';
 
 function ScrollToTopOnPathChange() {
     const { pathname } = useLocation();
@@ -54,8 +59,8 @@ export const App = () => {
                     <Route path="/oauth/callback" element={<OAuthCallback />} />
 
                     {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}
-                    <Route path="/sys/adm/login" element={<AdminLoginPage />} />
-                    <Route path="/sys/adm/signup" element={<AdminSignupPage />} />
+                    <Route path={ADMIN_PORTAL_LOGIN_PATH} element={<AdminLoginPage />} />
+                    <Route path={ADMIN_PORTAL_SIGNUP_PATH} element={<AdminSignupPage />} />
 
                     {/* --- 에러 페이지 --- */}
                     <Route path="/400" element={<BadRequestPage />} />
@@ -69,7 +74,7 @@ export const App = () => {
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<UserProfileRoute />} />
                         <Route element={<AdminRoute />}>
-                            <Route path="/system/admin/profile" element={<AdminProfilePage />} />
+                            <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
                             <Route path="/articles/create" element={<ArticleCreatePage />} />
                             <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
                         </Route>
