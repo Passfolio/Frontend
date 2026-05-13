@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { useAuth } from '@/context/Auth/AuthContext';
-import { ADMIN_DEFAULT_PROFILE_IMAGE_URL, ADMIN_PORTAL_TEST_PATH } from '@/constants/adminPortal';
+import { ADMIN_PORTAL_TEST_PATH } from '@/constants/adminPortal';
+import gitHubInvertocatLogoSrc from '@/assets/logo/GitHub_Invertocat_Black.svg';
 import '@/pages/Lander/landerPage.css';
 
 type AdminCapabilityCardProps = {
@@ -47,7 +48,7 @@ const AdminCapabilityCard = ({ title, description, to, isComingSoon }: AdminCapa
 export const AdminProfilePage = () => {
     const { user } = useAuth();
     const displayName = user?.nickname || '관리자';
-    const avatarSrc = user?.profileImageUrl || ADMIN_DEFAULT_PROFILE_IMAGE_URL;
+    const avatarSrc = user?.profileImageUrl || gitHubInvertocatLogoSrc;
 
     return (
         <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">

@@ -5,10 +5,10 @@ import { fetchMe, logout } from '@/api/Auth/authApi';
 import { clearTokenExpiresInfo, saveTokenExpiresInfo } from '@/api/Auth/tokenRefreshManager';
 import { useAuth } from '@/context/Auth/AuthContext';
 import {
-    ADMIN_DEFAULT_PROFILE_IMAGE_URL,
     ADMIN_PORTAL_PROFILE_PATH,
     ADMIN_PORTAL_SIGNUP_PATH,
 } from '@/constants/adminPortal';
+import gitHubInvertocatLogoSrc from '@/assets/logo/GitHub_Invertocat_Black.svg';
 import { mapMeToUserType } from '@/utils/Auth/mapMeToUserType';
 import { extractErrorMessage } from '@/utils/errorMessage';
 
@@ -51,7 +51,7 @@ export const AdminLoginPage = () => {
             <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#16171a] p-8 shadow-lg">
                 <div className="mb-8 text-center">
                     <img
-                        src={ADMIN_DEFAULT_PROFILE_IMAGE_URL}
+                        src={gitHubInvertocatLogoSrc}
                         alt=""
                         width={48}
                         height={48}
