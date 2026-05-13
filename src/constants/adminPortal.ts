@@ -1,3 +1,5 @@
+import gitHubInvertocatLogoSrc from '@/assets/logo/GitHub_Invertocat_Black.svg';
+
 /**
  * URL로만 접근하는 관리자 포털(공개 네비게이션에 노출하지 않음).
  *
@@ -60,5 +62,11 @@ export const ADMIN_PORTAL_TEST_PATH = resolveAdminPath(
     DEV_FALLBACK_PATHS.test,
 );
 
-/** 시스템(이메일) 가입 계정 기본 프로필 — GitHub 기본 아바타와 동일 계열 */
-export const ADMIN_DEFAULT_PROFILE_IMAGE_URL = 'https://avatars.githubusercontent.com/u/0?v=4';
+/**
+ * 시스템(이메일) 가입 계정 기본 프로필 placeholder.
+ *
+ * mapMeToUserType 이 빈 profileImageUrl 을 이 값으로 채우므로 admin 화면 전반의
+ * 기본 아바타로 동작한다. 외부 GitHub avatar URL 대신 번들된 GitHub Invertocat
+ * 로고를 사용해 외부 의존을 제거한다.
+ */
+export const ADMIN_DEFAULT_PROFILE_IMAGE_URL: string = gitHubInvertocatLogoSrc;

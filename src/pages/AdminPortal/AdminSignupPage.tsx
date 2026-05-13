@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { postSystemAuthEmailSend, postSystemAuthEmailVerify, postSystemAuthSignup } from '@/api/Auth/systemAuthApi';
-import { ADMIN_PORTAL_LOGIN_PATH } from '@/constants/adminPortal';
-import gitHubInvertocatLogoSrc from '@/assets/logo/GitHub_Invertocat_Black.svg';
+import { ADMIN_DEFAULT_PROFILE_IMAGE_URL, ADMIN_PORTAL_LOGIN_PATH } from '@/constants/adminPortal';
 import { extractErrorMessage } from '@/utils/errorMessage';
 
 type SignupStepType = 'email' | 'code' | 'credentials';
@@ -80,7 +79,7 @@ export const AdminSignupPage = () => {
             <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#16171a] p-8 shadow-lg">
                 <div className="mb-8 text-center">
                     <img
-                        src={gitHubInvertocatLogoSrc}
+                        src={ADMIN_DEFAULT_PROFILE_IMAGE_URL}
                         alt=""
                         width={48}
                         height={48}
