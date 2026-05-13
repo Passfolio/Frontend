@@ -5,7 +5,7 @@ import { AnnouncementsPage } from '@/pages/Announcements/AnnouncementsPage';
 import { FaqPage } from '@/pages/Faq/FaqPage';
 import { TermsOfServicePage } from '@/pages/Terms/TermsOfServicePage';
 import { PrivacyPolicyPage } from '@/pages/Privacy/PrivacyPolicyPage';
-import { ProfilePage } from '@/pages/Profile/ProfilePage';
+import { UserProfileRoute } from '@/pages/Profile/userProfileRoute';
 import { OAuthCallback } from '@/pages/OAuthCallback/OAuthCallback';
 import { BadRequestPage } from '@/pages/Error/BadRequestPage';
 import { UnauthorizedPage } from '@/pages/Error/UnauthorizedPage';
@@ -14,9 +14,24 @@ import { ForbiddenPage } from '@/pages/Error/ForbiddenPage';
 import { TooManyRequestsPage } from '@/pages/Error/TooManyRequestsPage';
 import { ServerErrorPage } from '@/pages/Error/ServerErrorPage';
 import { PrivateRoute } from '@/components/Auth/PrivateRoute';
+import { AdminRoute } from '@/components/Auth/AdminRoute';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { AuthProvider } from '@/context/Auth/AuthContext';
 import { Header } from "@/components/Layout/Header/Header";
+import { ArticleListPage } from '@/pages/Articles/ArticleListPage';
+import { ArticleDetailPage } from '@/pages/Articles/ArticleDetailPage';
+import { ArticleCreatePage } from '@/pages/Articles/ArticleCreatePage';
+import { ArticleEditPage } from '@/pages/Articles/ArticleEditPage';
+import { AdminLoginPage } from '@/pages/AdminPortal/AdminLoginPage';
+import { AdminSignupPage } from '@/pages/AdminPortal/AdminSignupPage';
+import { AdminProfilePage } from '@/pages/AdminPortal/AdminProfilePage';
+import { AdminTestPage } from '@/pages/AdminPortal/AdminTestPage';
+import {
+    ADMIN_PORTAL_LOGIN_PATH,
+    ADMIN_PORTAL_PROFILE_PATH,
+    ADMIN_PORTAL_SIGNUP_PATH,
+    ADMIN_PORTAL_TEST_PATH,
+} from '@/constants/adminPortal';
 
 function ScrollToTopOnPathChange() {
     const { pathname } = useLocation();
@@ -38,10 +53,16 @@ export const App = () => {
                     {/* --- 공개 라우트 --- */}
                     <Route path="/" element={<LanderPage />} />
                     <Route path="/announcements" element={<AnnouncementsPage />} />
+                    <Route path="/articles" element={<ArticleListPage />} />
+                    <Route path="/articles/:id" element={<ArticleDetailPage />} />
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/terms" element={<TermsOfServicePage />} />
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
                     <Route path="/oauth/callback" element={<OAuthCallback />} />
+
+                    {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}
+                    <Route path={ADMIN_PORTAL_LOGIN_PATH} element={<AdminLoginPage />} />
+                    <Route path={ADMIN_PORTAL_SIGNUP_PATH} element={<AdminSignupPage />} />
 
                     {/* --- 에러 페이지 --- */}
                     <Route path="/400" element={<BadRequestPage />} />
@@ -53,7 +74,13 @@ export const App = () => {
 
                     {/* --- 비공개 라우트 --- */}
                     <Route element={<PrivateRoute />}>
-                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/profile" element={<UserProfileRoute />} />
+                        <Route element={<AdminRoute />}>
+                            <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
+                            <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />
+                            <Route path="/articles/create" element={<ArticleCreatePage />} />
+                            <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
+                        </Route>
                     </Route>
 
                     {/* --- 404 --- */}

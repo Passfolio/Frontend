@@ -89,21 +89,33 @@ export const RepositoryColumn = ({ chipLabel, type }: RepositoryColumnConfigType
     const isLoadingMoreRef = useRef(false);
 
     const loadRepos = useCallback(
-        async (cursor?: string | null) => {
+        async (cursor?: string | null, options?: { isCancelled?: () => boolean }) => {
             const append = Boolean(cursor);
+            const isCancelled = () => options?.isCancelled?.() === true;
+
             if (append && isLoadingMoreRef.current) return;
             if (!append && isLoadingRef.current) return;
             try {
-                if (append) { isLoadingMoreRef.current = true; setIsLoadingMore(true); }
-                else { isLoadingRef.current = true; setIsLoading(true); }
+                if (append) {
+                    isLoadingMoreRef.current = true;
+                    setIsLoadingMore(true);
+                } else {
+                    isLoadingRef.current = true;
+                    setIsLoading(true);
+                }
                 const response = await fetchGitHubRepos(type, cursor);
+                if (isCancelled()) return;
                 setRepos((prev) => (append ? [...prev, ...response.repos] : response.repos));
                 setNextCursor(response.nextCursor);
                 setErrorMessage(null);
             } catch {
-                setErrorMessage('Repository를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+                if (!isCancelled()) {
+                    setErrorMessage('Repository를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+                }
             } finally {
-                setInitialized(true);
+                if (!isCancelled()) {
+                    setInitialized(true);
+                }
                 isLoadingRef.current = false;
                 isLoadingMoreRef.current = false;
                 setIsLoading(false);
@@ -113,7 +125,17 @@ export const RepositoryColumn = ({ chipLabel, type }: RepositoryColumnConfigType
         [type],
     );
 
-    useEffect(() => { void loadRepos(); }, [loadRepos]);
+    useEffect(() => {
+        let cancelled = false;
+        void loadRepos(undefined, { isCancelled: () => cancelled });
+        return () => {
+            cancelled = true;
+            // StrictMode 등으로 이전 effect의 fetch가 끝나기 전에 다음 effect가 돌면,
+            // isLoadingRef가 true인 채로 남아 두 번째 loadRepos가 맨 앞에서 return → 영원히 빈 UI가 될 수 있음.
+            isLoadingRef.current = false;
+            isLoadingMoreRef.current = false;
+        };
+    }, [loadRepos]);
 
     useEffect(() => {
         const root = scrollContainerRef.current;

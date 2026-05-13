@@ -228,16 +228,6 @@
     background: linear-gradient(to bottom, transparent, var(--bg-color));
   }
 
-  .hero-grid {
-    @apply absolute inset-0 z-[1];
-    background-size: 50px 50px;
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
-    -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
-  }
-
   .hero-glow {
     @apply absolute inset-[-20%] z-0;
     background:

@@ -13,12 +13,12 @@ const getInitialUser = (): UserType | null => {
     const storedProfileUrl = localStorage.getItem(AUTH_STORAGE_KEYS.PROFILE_IMAGE_URL);
     const storedRole = localStorage.getItem(AUTH_STORAGE_KEYS.ROLE);
 
-    if (storedId && storedNickname && storedGithubLogin && storedProfileUrl && storedRole) {
+    if (storedId && storedNickname && storedRole) {
         return {
             id: storedId,
             nickname: storedNickname,
-            githubLogin: storedGithubLogin,
-            profileImageUrl: storedProfileUrl,
+            githubLogin: storedGithubLogin ?? '',
+            profileImageUrl: storedProfileUrl ?? '',
             role: storedRole,
         };
     }

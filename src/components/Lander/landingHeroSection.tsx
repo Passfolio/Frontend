@@ -17,7 +17,6 @@ export const LandingHeroSection = () => {
   return (
     <section className="hero" aria-labelledby="landing-hero-title">
       <div className="hero-glow" aria-hidden />
-      <div className="hero-grid" aria-hidden />
 
       <div className={`hero-content reveal ${isHeroReady ? 'active' : ''}`}>
         <div className={`hero-badge reveal delay-100 ${isHeroReady ? 'active' : ''}`}>

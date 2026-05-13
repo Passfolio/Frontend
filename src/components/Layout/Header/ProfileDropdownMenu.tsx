@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { UserType } from '@/context/Auth/AuthContext';
+import { ADMIN_PORTAL_PROFILE_PATH } from '@/constants/adminPortal';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 type ProfileDropdownMenuProps = {
@@ -77,15 +78,15 @@ export const ProfileDropdownMenu = ({
 
             <Divider />
 
-            {/* 내 프로필 */}
+            {/* 내 프로필 / 관리자 홈 */}
             <div className="px-1.5 py-1">
                 <Link
-                    to="/profile"
+                    to={user.role === 'ADMIN' ? ADMIN_PORTAL_PROFILE_PATH : '/profile'}
                     role="menuitem"
                     onClick={onClose}
                     className="flex w-full items-center rounded-lg px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/[0.07] hover:text-white"
                 >
-                    내 프로필
+                    {user.role === 'ADMIN' ? '관리자 홈' : '내 프로필'}
                 </Link>
             </div>
 
