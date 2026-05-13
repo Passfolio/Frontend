@@ -10,6 +10,7 @@
  *   VITE_ADMIN_PORTAL_LOGIN_PATH
  *   VITE_ADMIN_PORTAL_SIGNUP_PATH
  *   VITE_ADMIN_PORTAL_PROFILE_PATH
+ *   VITE_ADMIN_PORTAL_TEST_PATH
  */
 
 const trimEnv = (value: string | undefined): string =>
@@ -19,6 +20,7 @@ const DEV_FALLBACK_PATHS = {
     login: '/system/admin/login',
     signup: '/system/admin/signup',
     profile: '/system/admin/profile',
+    test: '/system/admin/test',
 } as const;
 
 // Vite는 `import.meta.env.VITE_FOO` 형태의 정적 참조만 빌드 타임에 치환·tree-shake 하므로
@@ -51,6 +53,11 @@ export const ADMIN_PORTAL_PROFILE_PATH = resolveAdminPath(
     import.meta.env.VITE_ADMIN_PORTAL_PROFILE_PATH,
     'VITE_ADMIN_PORTAL_PROFILE_PATH',
     DEV_FALLBACK_PATHS.profile,
+);
+export const ADMIN_PORTAL_TEST_PATH = resolveAdminPath(
+    import.meta.env.VITE_ADMIN_PORTAL_TEST_PATH,
+    'VITE_ADMIN_PORTAL_TEST_PATH',
+    DEV_FALLBACK_PATHS.test,
 );
 
 /** 시스템(이메일) 가입 계정 기본 프로필 — GitHub 기본 아바타와 동일 계열 */

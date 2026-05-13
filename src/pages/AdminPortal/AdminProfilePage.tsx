@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
-import { AdminFileUploadTestSection } from '@/components/AdminPortal/AdminFileUploadTestSection';
 import { useAuth } from '@/context/Auth/AuthContext';
-import { ADMIN_DEFAULT_PROFILE_IMAGE_URL } from '@/constants/adminPortal';
+import { ADMIN_DEFAULT_PROFILE_IMAGE_URL, ADMIN_PORTAL_TEST_PATH } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
 
 type AdminCapabilityCardProps = {
@@ -113,9 +112,37 @@ export const AdminProfilePage = () => {
                     </ul>
                 </section>
 
-                <div className="mt-12">
-                    <AdminFileUploadTestSection />
-                </div>
+                <section
+                    aria-labelledby="admin-test-features-heading"
+                    className="mt-12"
+                >
+                    <h2
+                        id="admin-test-features-heading"
+                        className="text-lg font-semibold text-white"
+                    >
+                        테스트 기능
+                    </h2>
+                    <p className="mt-1 text-sm text-zinc-500">
+                        운영 전 동작 검증을 위한 도구 모음입니다.
+                    </p>
+
+                    <ul className="mt-8 grid list-none gap-4 p-0 sm:grid-cols-2">
+                        <li>
+                            <AdminCapabilityCard
+                                title="File Upload Test"
+                                description="파일을 업로드하고 본인 계정으로 업로드한 파일들을 열람할 수 있습니다."
+                                to={ADMIN_PORTAL_TEST_PATH}
+                            />
+                        </li>
+                        <li>
+                            <AdminCapabilityCard
+                                title="API 헬스체크"
+                                description="주요 백엔드 엔드포인트 응답을 한 번에 확인합니다."
+                                isComingSoon
+                            />
+                        </li>
+                    </ul>
+                </section>
 
                 <div className="mt-12">
                     <Link

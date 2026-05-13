@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_ADMIN_PORTAL_LOGIN_PATH?: string;
   readonly VITE_ADMIN_PORTAL_SIGNUP_PATH?: string;
   readonly VITE_ADMIN_PORTAL_PROFILE_PATH?: string;
+  readonly VITE_ADMIN_PORTAL_TEST_PATH?: string;
 }
 
 interface ImportMeta {
