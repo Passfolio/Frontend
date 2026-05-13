@@ -35,6 +35,7 @@ export const API_ENDPOINTS = {
             complete: '/api/v1/files/multipart/complete',
             abort: '/api/v1/files/multipart/abort',
         },
+        me: '/api/v1/files/me',
     },
 } as const;
 

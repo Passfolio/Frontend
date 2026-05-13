@@ -6,6 +6,7 @@ import type {
     MultipartInitiateResponseType,
     MultipartCompleteRequestType,
     MultipartAbortRequestType,
+    MyFileCdnUrlsResponseType,
     UploadFileResponseType,
 } from '@/types/file.type';
 
@@ -68,4 +69,12 @@ export const abortMultipartUpload = async (
     req: MultipartAbortRequestType,
 ): Promise<void> => {
     await axiosInstance.post(API_ENDPOINTS.files.multipart.abort, req);
+};
+
+// 5. 현재 인증된 사용자의 업로드 CDN URL 목록 (최신 업로드 순)
+export const listMyFileCdnUrls = async (): Promise<MyFileCdnUrlsResponseType> => {
+    const { data } = await axiosInstance.get<MyFileCdnUrlsResponseType>(
+        API_ENDPOINTS.files.me,
+    );
+    return data;
 };

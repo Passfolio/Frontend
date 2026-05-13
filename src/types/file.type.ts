@@ -66,3 +66,8 @@ export type MediaItemType = {
     status: MediaUploadStatusType;
     serverData: UploadFileResponseType | null;
 };
+
+// BE FileDto.MyFileCdnUrlsResponse 미러 — GET /api/v1/files/me 응답 본문
+export type MyFileCdnUrlsResponseType = {
+    cdnUrls: string[];
+};

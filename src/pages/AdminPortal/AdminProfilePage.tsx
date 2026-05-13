@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
+import { AdminFileUploadTestSection } from '@/components/AdminPortal/AdminFileUploadTestSection';
 import { useAuth } from '@/context/Auth/AuthContext';
 import { ADMIN_DEFAULT_PROFILE_IMAGE_URL } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
@@ -111,6 +112,10 @@ export const AdminProfilePage = () => {
                         </li>
                     </ul>
                 </section>
+
+                <div className="mt-12">
+                    <AdminFileUploadTestSection />
+                </div>
 
                 <div className="mt-12">
                     <Link
