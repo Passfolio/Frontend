@@ -65,6 +65,14 @@ export function ArticleEditPage() {
         setSubmitting(true);
         setSubmitError(null);
         try {
+            const hasChanges =
+                body.title !== undefined
+                || body.contents !== undefined
+                || body.fileUrls !== undefined;
+            if (!hasChanges) {
+                navigate(`/articles/${article.id}`, { replace: true });
+                return;
+            }
             const updated = await updateArticle(article.id, body);
             navigate(`/articles/${updated.id}`, { replace: true });
         } catch {
