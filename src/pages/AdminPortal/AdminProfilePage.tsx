@@ -50,27 +50,7 @@ export const AdminProfilePage = () => {
     const avatarSrc = user?.profileImageUrl || ADMIN_DEFAULT_PROFILE_IMAGE_URL;
 
     return (
-        <div
-            className="flex min-h-screen flex-col bg-[#0d0d0f] text-white"
-            style={{
-                backgroundImage: [
-                    'linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px)',
-                    'linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px)',
-                ].join(', '),
-                backgroundSize: '40px 40px',
-                backgroundPosition: 'center top',
-            }}
-        >
-            <div
-                className="pointer-events-none fixed inset-0 z-0"
-                style={{
-                    background: [
-                        'radial-gradient(ellipse 60% 40% at 20% 10%, rgba(255,255,255,0.04) 0%, transparent 70%)',
-                        'radial-gradient(ellipse 40% 30% at 80% 85%, rgba(255,255,255,0.025) 0%, transparent 70%)',
-                    ].join(', '),
-                }}
-            />
-
+        <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
             <main className="relative z-[1] mx-auto w-full max-w-[960px] flex-1 px-4 pb-20 pt-24 md:px-6 md:pt-28">
                 <header className="mb-10 flex flex-col gap-6 border-b border-white/[0.08] pb-10 md:flex-row md:items-center md:gap-8">
                     <img
@@ -88,7 +68,7 @@ export const AdminProfilePage = () => {
                         </p>
                         <div className="mt-4 flex flex-wrap gap-2">
                             <span className="rounded-full border border-amber-500/25 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-200/90">
-                                ROLE_ADMIN
+                                ADMIN
                             </span>
                         </div>
                     </div>

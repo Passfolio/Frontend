@@ -4,27 +4,7 @@ import '@/pages/Lander/landerPage.css';
 
 export function FaqPage() {
   return (
-    <div
-      className="flex min-h-screen flex-col bg-[#0d0d0f] text-white"
-      style={{
-        backgroundImage: [
-          'linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px)',
-          'linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px)',
-        ].join(', '),
-        backgroundSize: '40px 40px',
-        backgroundPosition: 'center top',
-      }}
-    >
-      <div
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          background: [
-            'radial-gradient(ellipse 60% 40% at 20% 10%, rgba(255,255,255,0.04) 0%, transparent 70%)',
-            'radial-gradient(ellipse 40% 30% at 80% 85%, rgba(255,255,255,0.025) 0%, transparent 70%)',
-          ].join(', '),
-        }}
-      />
-
+    <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
       <main className="relative z-[1] mx-auto w-full max-w-[720px] flex-1 px-4 pb-20 pt-24 md:px-6 md:pt-28">
         <header className="mb-10 md:mb-12">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-zinc-500">Help</p>

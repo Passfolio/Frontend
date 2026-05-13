@@ -159,26 +159,7 @@ export const ProfilePage = () => {
   const openUpdateProfile = () => setUpdateProfileOpen(true);
 
   return (
-      <div
-          className="flex min-h-screen flex-col bg-[#0d0d0f] text-white"
-          style={{
-            backgroundImage: [
-              'linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px)',
-              'linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px)',
-            ].join(', '),
-            backgroundSize: '40px 40px',
-            backgroundPosition: 'center top',
-          }}
-      >
-        <div
-            className="pointer-events-none fixed inset-0 z-0"
-            style={{
-                background: [
-                    'radial-gradient(ellipse 60% 40% at 20% 10%, rgba(255,255,255,0.04) 0%, transparent 70%)',
-                    'radial-gradient(ellipse 40% 30% at 80% 85%, rgba(255,255,255,0.025) 0%, transparent 70%)',
-                ].join(', '),
-            }}
-        />
+      <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
         <main className="relative z-[1] mx-auto flex w-full flex-1 max-w-[1200px] flex-col gap-10 px-4 pb-16 pt-24 md:px-6 md:pt-28 lg:flex-none lg:flex-row lg:items-stretch lg:gap-10 lg:px-10">
 
           <div className="flex flex-col gap-5 lg:hidden">
