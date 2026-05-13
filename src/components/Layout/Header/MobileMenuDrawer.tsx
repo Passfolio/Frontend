@@ -84,16 +84,27 @@ export const MobileMenuDrawer = ({
                     className="flex flex-col px-4 py-3"
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
                 >
-                    {navLinkList.map((link) => (
-                        <a
-                            key={link.href}
-                            href={link.href}
-                            onClick={onClose}
-                            className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
-                        >
-                            {link.label}
-                        </a>
-                    ))}
+                    {navLinkList.map((link) =>
+                        link.href.startsWith('/') ? (
+                            <Link
+                                key={link.href}
+                                to={link.href}
+                                onClick={onClose}
+                                className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
+                            >
+                                {link.label}
+                            </Link>
+                        ) : (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                onClick={onClose}
+                                className="rounded-xl px-3 py-2.5 text-sm font-medium text-zinc-400 transition-all duration-150 hover:bg-white/[0.06] hover:text-white"
+                            >
+                                {link.label}
+                            </a>
+                        ),
+                    )}
                 </div>
 
                 {showProfileSection && (

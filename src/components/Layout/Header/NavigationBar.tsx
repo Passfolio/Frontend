@@ -1,6 +1,10 @@
+import { Link } from 'react-router-dom';
 import type { UserType } from '@/context/Auth/AuthContext';
 import type { NavUnderlineStateType } from '@/hooks/Layout/useNavUnderline';
 import type { LandingNavLinkType } from '@/constants/landingPage';
+
+// '/foo' 같은 라우터 내부 경로는 Link로, '#section'·외부 URL은 일반 a 태그로 렌더한다.
+const isInternalRoutePath = (href: string): boolean => href.startsWith('/');
 
 type NavigationBarProps = {
     handleLinkMouseEnter: (event: React.MouseEvent<HTMLAnchorElement>) => void;
@@ -92,11 +96,25 @@ export const NavigationBar = ({
                 {/* 네비 링크 + 프로필 아바타: 프로필 모바일에서는 lg 이상만 표시, 그 외는 항상 표시 */}
                 <div className={`nav-right${enableMobileMenu ? ` hidden ${showDesktopClass}` : ''}`}>
                     <div className="nav-links" onMouseLeave={handleLinksMouseLeave}>
-                        {navLinkList.map((link) => (
-                            <a key={link.href} href={link.href} onMouseEnter={handleLinkMouseEnter}>
-                                {link.label}
-                            </a>
-                        ))}
+                        {navLinkList.map((link) =>
+                            isInternalRoutePath(link.href) ? (
+                                <Link
+                                    key={link.href}
+                                    to={link.href}
+                                    onMouseEnter={handleLinkMouseEnter}
+                                >
+                                    {link.label}
+                                </Link>
+                            ) : (
+                                <a
+                                    key={link.href}
+                                    href={link.href}
+                                    onMouseEnter={handleLinkMouseEnter}
+                                >
+                                    {link.label}
+                                </a>
+                            ),
+                        )}
 
                         <div
                             className="nav-underline"

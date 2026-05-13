@@ -69,7 +69,7 @@ export type LandingNavLinkType = {
 export const LANDING_NAV_LINK_LIST: LandingNavLinkType[] = [
   { href: '#documentation', label: 'Documentation' },
   { href: '#service', label: 'Service' },
-  { href: '#article', label: 'Article' },
+  { href: '/articles', label: 'Article' },
 ];
 
 export type LandingCtaType = {
@@ -236,7 +236,7 @@ export const LANDING_RESULT_CARD_LIST: LandingBentoCardType[] = [
 export const LANDING_ARTICLE_SECTION = {
   title: 'Insights',
   cta: {
-    href: getOptionalLandingHref(import.meta.env.VITE_LANDING_ARTICLE_LIST_HREF),
+    href: getOptionalLandingHref(import.meta.env.VITE_LANDING_ARTICLE_LIST_HREF, '/articles'),
     label: 'View All',
   },
 } as const satisfies {
