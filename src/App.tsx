@@ -69,8 +69,8 @@ export const App = () => {
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<UserProfileRoute />} />
                         <Route element={<AdminRoute />}>
-                            <Route path="/sys/adm/profile" element={<AdminProfilePage />} />
-                            <Route path="/articles/new" element={<ArticleCreatePage />} />
+                            <Route path="/system/admin/profile" element={<AdminProfilePage />} />
+                            <Route path="/articles/create" element={<ArticleCreatePage />} />
                             <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
                         </Route>
                     </Route>
