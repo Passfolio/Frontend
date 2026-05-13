@@ -85,7 +85,7 @@ export const AdminProfilePage = () => {
                             <AdminCapabilityCard
                                 title="Article 작성"
                                 description="관리자 권한으로 인사이트 글을 작성·게시합니다."
-                                to="/articles/new"
+                                to="/articles/create"
                             />
                         </li>
                         <li>
