@@ -11,6 +11,9 @@ interface ImportMetaEnv {
   readonly VITE_FOOTER_ADDRESS?: string;
   readonly VITE_FOOTER_CONTACT_PHONE?: string;
   readonly VITE_FOOTER_CONTACT_EMAIL?: string;
+  readonly VITE_ADMIN_PORTAL_LOGIN_PATH?: string;
+  readonly VITE_ADMIN_PORTAL_SIGNUP_PATH?: string;
+  readonly VITE_ADMIN_PORTAL_PROFILE_PATH?: string;
 }
 
 interface ImportMeta {
