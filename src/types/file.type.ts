@@ -1,5 +1,9 @@
 // BE FileDto 1:1 미러 + FE 전용 상태 머신 타입
 
+export type DocumentTypeValue = 'COVER_LETTER' | 'PORTFOLIO';
+
+export type ActionTypeValue = 'EDIT' | 'GENERATE';
+
 export type MediaRoleType = 'PREVIEW' | 'CONTENT';
 
 export type MediaUploadStatusType = 'PENDING' | 'UPLOADING' | 'COMPLETED' | 'ERROR' | 'ABORTED';
@@ -41,6 +45,8 @@ export type MultipartCompleteRequestType = {
     originalFileName: string;
     fileSize: number;
     mimeType?: string;
+    documentType?: DocumentTypeValue;
+    actionType?: ActionTypeValue;
 };
 
 // BE FileDto.MultipartUploadAbortRequest 미러
@@ -57,6 +63,8 @@ export type UploadFileResponseType = {
     fileSize: number;
     mediaType: string;
     status: string;
+    documentType: DocumentTypeValue | null;
+    actionType: ActionTypeValue | null;
 };
 
 // FE 전용 — 업로드 상태 머신 항목

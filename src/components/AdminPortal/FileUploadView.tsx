@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { uploadFileToS3 } from '@/utils/Article/uploadToS3';
-import type { UploadFileResponseType } from '@/types/file.type';
+import type {
+    ActionTypeValue,
+    DocumentTypeValue,
+    UploadFileResponseType,
+} from '@/types/file.type';
 
 const ACCEPTED_MIME_TYPES = 'image/*,application/pdf';
 
@@ -19,6 +23,8 @@ type CompletedItemType = {
     id: string;
     fileName: string;
     cdnUrl: string;
+    documentType: DocumentTypeValue | null;
+    actionType: ActionTypeValue | null;
 };
 
 type FileUploadViewProps = {
@@ -30,6 +36,8 @@ export function FileUploadView({ onUploaded }: FileUploadViewProps) {
     const abortControllersRef = useRef<Set<AbortController>>(new Set());
     const [uploadingItemList, setUploadingItemList] = useState<UploadingItemType[]>([]);
     const [completedItemList, setCompletedItemList] = useState<CompletedItemType[]>([]);
+    const [documentType, setDocumentType] = useState<DocumentTypeValue | ''>('');
+    const [actionType, setActionType] = useState<ActionTypeValue | ''>('');
 
     // 언마운트 시 진행 중 업로드 모두 abort → multipart abort 연쇄
     useEffect(() => {
@@ -67,12 +75,20 @@ export function FileUploadView({ onUploaded }: FileUploadViewProps) {
                                 ),
                             );
                         },
+                        documentType: documentType || undefined,
+                        actionType: actionType || undefined,
                     });
                     if (controller.signal.aborted) return;
                     // 진행 중 리스트에서 제거 + 완료 리스트에 (최신 먼저) 추가
                     setUploadingItemList((prev) => prev.filter((item) => item.id !== tempId));
                     setCompletedItemList((prev) => [
-                        { id: tempId, fileName: file.name, cdnUrl: result.cdnUrl },
+                        {
+                            id: tempId,
+                            fileName: file.name,
+                            cdnUrl: result.cdnUrl,
+                            documentType: result.documentType,
+                            actionType: result.actionType,
+                        },
                         ...prev,
                     ]);
                     await onUploaded();
@@ -89,7 +105,7 @@ export function FileUploadView({ onUploaded }: FileUploadViewProps) {
                 }
             })();
         },
-        [onUploaded],
+        [onUploaded, documentType, actionType],
     );
 
     const handleFileInputChange = useCallback(
@@ -125,6 +141,36 @@ export function FileUploadView({ onUploaded }: FileUploadViewProps) {
                 aria-hidden
                 tabIndex={-1}
             />
+            <div className="grid grid-cols-2 gap-3">
+                <label className="flex flex-col gap-1 text-xs text-zinc-400">
+                    <span>Document Type</span>
+                    <select
+                        value={documentType}
+                        onChange={(e) =>
+                            setDocumentType(e.target.value as DocumentTypeValue | '')
+                        }
+                        className="rounded-md border border-white/[0.12] bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors focus:border-white/30 focus:outline-none"
+                    >
+                        <option value="">선택 안함</option>
+                        <option value="COVER_LETTER">COVER_LETTER</option>
+                        <option value="PORTFOLIO">PORTFOLIO</option>
+                    </select>
+                </label>
+                <label className="flex flex-col gap-1 text-xs text-zinc-400">
+                    <span>Action Type</span>
+                    <select
+                        value={actionType}
+                        onChange={(e) =>
+                            setActionType(e.target.value as ActionTypeValue | '')
+                        }
+                        className="rounded-md border border-white/[0.12] bg-white/[0.04] px-3 py-2 text-sm text-zinc-200 transition-colors focus:border-white/30 focus:outline-none"
+                    >
+                        <option value="">선택 안함</option>
+                        <option value="EDIT">EDIT</option>
+                        <option value="GENERATE">GENERATE</option>
+                    </select>
+                </label>
+            </div>
             <button
                 type="button"
                 onClick={handleFileButtonClick}
@@ -207,6 +253,20 @@ export function FileUploadView({ onUploaded }: FileUploadViewProps) {
                                 >
                                     {item.cdnUrl}
                                 </a>
+                                {(item.documentType || item.actionType) && (
+                                    <div className="mt-1 flex flex-wrap gap-1.5">
+                                        {item.documentType && (
+                                            <span className="rounded border border-sky-400/30 bg-sky-400/[0.08] px-1.5 py-0.5 text-[0.65rem] font-mono uppercase tracking-wider text-sky-300">
+                                                {item.documentType}
+                                            </span>
+                                        )}
+                                        {item.actionType && (
+                                            <span className="rounded border border-violet-400/30 bg-violet-400/[0.08] px-1.5 py-0.5 text-[0.65rem] font-mono uppercase tracking-wider text-violet-300">
+                                                {item.actionType}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
