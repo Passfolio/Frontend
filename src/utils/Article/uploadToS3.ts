@@ -5,7 +5,12 @@ import {
     initiateMultipartUpload,
     uploadPartToS3,
 } from '@/api/File/fileApi';
-import type { UploadFileResponseType, UploadedPartType } from '@/types/file.type';
+import type {
+    ActionTypeValue,
+    DocumentTypeValue,
+    UploadFileResponseType,
+    UploadedPartType,
+} from '@/types/file.type';
 
 // TipTap 에디터 핸들러처럼 React 훅 컨텍스트 밖에서 호출되는 일반 비동기 흐름용.
 // useS3Upload(훅) 로직을 재구현하지 않고 fileApi 4종을 직접 호출한다.
@@ -14,6 +19,8 @@ import type { UploadFileResponseType, UploadedPartType } from '@/types/file.type
 export type UploadFileToS3Options = {
     signal: AbortSignal;
     onProgress?: (percent: number) => void;
+    documentType?: DocumentTypeValue;
+    actionType?: ActionTypeValue;
 };
 
 const isAbortLikeError = (error: unknown): boolean => {
@@ -25,7 +32,7 @@ export const uploadFileToS3 = async (
     file: File,
     opts: UploadFileToS3Options,
 ): Promise<UploadFileResponseType> => {
-    const { signal, onProgress } = opts;
+    const { signal, onProgress, documentType, actionType } = opts;
 
     let multipartContext: { key: string; uploadId: string } | null = null;
     const cleanupAbortedSession = () => {
@@ -85,6 +92,8 @@ export const uploadFileToS3 = async (
                 originalFileName: file.name,
                 fileSize: file.size,
                 mimeType: file.type,
+                documentType,
+                actionType,
             },
             { signal },
         );
