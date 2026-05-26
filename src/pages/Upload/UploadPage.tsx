@@ -150,6 +150,8 @@ export const UploadPage = () => {
       patch(index, { uploadStatus: 'done', progress: 100, uploadResult: result, isSubmitting: true });
 
       const fileId = result.fileId;
+      console.info('[Passfolio][Upload] fileId received', { fileId, documentType: SLOTS[index].documentType, actionType: slot.selectedAction });
+
       const meta = SLOTS[index];
       let res;
       if (slot.selectedAction === 'EDIT') {
@@ -161,6 +163,7 @@ export const UploadPage = () => {
           ? await postCoverLetterFromPortfolio(fileId, slot.jobPosition, slot.career)
           : await postCoverLetterToPortfolio(fileId, slot.jobPosition, slot.career);
       }
+      console.info('[Passfolio][Upload] AI job submitted', { fileId, jobId: res.jobId, documentType: meta.documentType, actionType: slot.selectedAction });
       patch(index, {
         isSubmitting: false,
         job: { jobId: res.jobId, status: 'PENDING', outputUrl: null, errorMessage: null },
@@ -168,6 +171,7 @@ export const UploadPage = () => {
       pollJobStatus(index, res.jobId);
     } catch (err) {
       const isAbort = (err as { name?: string })?.name === 'AbortError';
+      if (!isAbort) console.error('[Passfolio][Upload] failed', err);
       patch(index, { uploadStatus: isAbort ? 'idle' : 'error', progress: 0, isSubmitting: false });
     }
   }, [slots, patch, pollJobStatus]);
