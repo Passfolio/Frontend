@@ -37,6 +37,13 @@ export const API_ENDPOINTS = {
         },
         me: '/api/v1/files/me',
     },
+    aiJobs: {
+        portfolioFromPdf: '/api/v1/ai/jobs/portfolio/from-pdf',
+        coverLetterFromPdf: '/api/v1/ai/jobs/cover-letter/from-pdf',
+        coverLetterFromPortfolio: '/api/v1/ai/jobs/cover-letter/from-portfolio',
+        coverLetterToPortfolio: '/api/v1/ai/jobs/cover-letter/to-portfolio',
+        status: (jobId: number) => `/api/v1/ai/jobs/${jobId}`,
+    },
 } as const;
 
 export const isAuthRefreshUrl = (url: string): boolean =>

@@ -41,6 +41,7 @@ export const AdminLoginPage = () => {
             loginUser(userData);
             navigate(ADMIN_PORTAL_PROFILE_PATH, { replace: true });
         } catch (err: unknown) {
+            console.error('[Passfolio][AdminLogin] 로그인 실패', err);
             setError(extractErrorMessage(err, '로그인에 실패했습니다.'));
             setSubmitting(false);
         }

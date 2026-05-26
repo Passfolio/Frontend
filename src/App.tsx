@@ -18,6 +18,7 @@ import { AdminRoute } from '@/components/Auth/AdminRoute';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { AuthProvider } from '@/context/Auth/AuthContext';
 import { Header } from "@/components/Layout/Header/Header";
+import { UploadPage } from '@/pages/Upload/UploadPage';
 import { ArticleListPage } from '@/pages/Articles/ArticleListPage';
 import { ArticleDetailPage } from '@/pages/Articles/ArticleDetailPage';
 import { ArticleCreatePage } from '@/pages/Articles/ArticleCreatePage';
@@ -58,6 +59,7 @@ export const App = () => {
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/terms" element={<TermsOfServicePage />} />
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                    <Route path="/upload" element={<UploadPage />} />
                     <Route path="/oauth/callback" element={<OAuthCallback />} />
 
                     {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}

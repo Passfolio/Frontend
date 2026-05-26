@@ -67,8 +67,8 @@ export type LandingNavLinkType = {
 };
 
 export const LANDING_NAV_LINK_LIST: LandingNavLinkType[] = [
-  { href: '#documentation', label: 'Documentation' },
-  { href: '#service', label: 'Service' },
+  { href: '/#documentation', label: 'Documentation' },
+  { href: '/#service', label: 'Service' },
   { href: '/articles', label: 'Article' },
 ];
 

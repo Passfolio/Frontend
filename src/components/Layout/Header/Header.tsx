@@ -24,6 +24,9 @@ export const Header = () => {
     const navigate = useNavigate();
 
     const isAuthenticated = Boolean(user?.id || localStorage.getItem('userId'));
+    const navLinkList = isAuthenticated
+        ? LANDING_NAV_LINK_LIST.filter((l) => l.href !== '/#documentation' && l.href !== '/#service')
+        : LANDING_NAV_LINK_LIST;
     const isNarrowViewport = useMediaQuery(MOBILE_MEDIA_QUERY);
     const useCompactHeaderLayout = isNarrowViewport;
     const mobileMenuBreakpoint: 'md' | 'lg' = 'md';
@@ -84,7 +87,7 @@ export const Header = () => {
                 isNavScrolled={isNavScrolled}
                 underline={underline}
                 logoSrc={LANDING_LOGO_SRC}
-                navLinkList={LANDING_NAV_LINK_LIST}
+                navLinkList={navLinkList}
                 defaultProfileImageUrl={LANDING_DEFAULT_PROFILE_IMAGE_URL}
                 user={user}
                 enableMobileMenu={useCompactHeaderLayout}
@@ -104,7 +107,7 @@ export const Header = () => {
                     onClose={() => setIsMenuOpen(false)}
                     logoSrc={LANDING_LOGO_SRC}
                     menuIconSrc={menuIconSrc}
-                    navLinkList={LANDING_NAV_LINK_LIST}
+                    navLinkList={navLinkList}
                     user={user}
                     onLogout={handleLogout}
                     showProfileSection={isAuthenticated}

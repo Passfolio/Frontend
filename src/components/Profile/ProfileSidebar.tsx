@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { ProfileJobLinksSection } from './ProfileJobLinksSection';
 import { MENU_LIST, type ProfileMenuItemType } from '@/constants/profile';
 import type { UserType } from '@/context/Auth/AuthContext';
@@ -109,6 +110,18 @@ export const ProfileSidebar = ({
                     >
                         Update Profile
                     </button>
+
+                    <Link
+                        to="/upload"
+                        className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-full px-6 py-2.5 text-[0.82rem] font-semibold tracking-tight text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99]"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(99,102,241,0.9) 0%, rgba(139,92,246,0.9) 100%)',
+                            boxShadow: '0 4px 16px -4px rgba(99,102,241,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                        }}
+                    >
+                        자소서 · 포트폴리오
+                        <i className="fa-solid fa-arrow-right text-[0.7rem]" aria-hidden />
+                    </Link>
                 </div>
             </div>
 
