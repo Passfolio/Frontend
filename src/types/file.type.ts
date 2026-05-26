@@ -20,6 +20,8 @@ export type MultipartInitiateRequestType = {
     originalFileName: string;
     mimeType?: string;
     fileSize: number;
+    documentType?: DocumentTypeValue;
+    actionType?: ActionTypeValue;
 };
 
 // BE FileDto.MultipartUploadInitiateResponse 미러

@@ -49,6 +49,8 @@ export const uploadFileToS3 = async (
                 originalFileName: file.name,
                 mimeType: file.type,
                 fileSize: file.size,
+                documentType,
+                actionType,
             },
             { signal },
         );

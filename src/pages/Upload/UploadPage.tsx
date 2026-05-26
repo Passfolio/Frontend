@@ -144,6 +144,8 @@ export const UploadPage = () => {
       const result = await uploadFileToS3(slot.file, {
         signal: controller.signal,
         onProgress: (percent) => patch(index, { progress: percent }),
+        documentType: SLOTS[index].documentType,
+        actionType: slot.selectedAction,
       });
       patch(index, { uploadStatus: 'done', progress: 100, uploadResult: result, isSubmitting: true });
 
