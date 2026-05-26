@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { UserType } from '@/context/Auth/AuthContext';
 
 type MobileProfileHeaderProps = {
@@ -73,17 +74,30 @@ export const MobileProfileHeader = ({
                         </span>
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={onUpdateProfile}
-                        className="shrink-0 rounded-full border border-white/[0.18] px-4 py-2 text-xs font-semibold text-white/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.28),inset_0_-1px_0_rgba(0,0,0,0.18),0_4px_16px_-4px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-200 hover:border-white/30 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.32),0_0_20px_rgba(255,255,255,0.08)] active:scale-[0.97]"
-                        style={{
-                            background:
-                                'linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%)',
-                        }}
-                    >
-                        Update Profile
-                    </button>
+                    <div className="flex shrink-0 flex-col gap-1.5">
+                        <button
+                            type="button"
+                            onClick={onUpdateProfile}
+                            className="rounded-full border border-white/[0.18] px-4 py-2 text-xs font-semibold text-white/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.28),inset_0_-1px_0_rgba(0,0,0,0.18),0_4px_16px_-4px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-200 hover:border-white/30 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.32),0_0_20px_rgba(255,255,255,0.08)] active:scale-[0.97]"
+                            style={{
+                                background:
+                                    'linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%)',
+                            }}
+                        >
+                            Update Profile
+                        </button>
+                        <Link
+                            to="/upload"
+                            className="inline-flex items-center justify-center gap-1 rounded-full px-4 py-2 text-xs font-semibold text-white transition-all duration-200 active:scale-[0.97]"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(99,102,241,0.9) 0%, rgba(139,92,246,0.9) 100%)',
+                                boxShadow: '0 4px 16px -4px rgba(99,102,241,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                            }}
+                        >
+                            자소서 · 포트폴리오
+                            <i className="fa-solid fa-arrow-right text-[0.65rem]" aria-hidden />
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
