@@ -52,3 +52,14 @@ export type AnalysisModeType = 'NONSTOP' | 'STEP';
 export type { AnalysisStatusType };
 export type AnalysisProgressItemType = AdminBatchAnalysisItemType;
 export type AnalysisBatchStatusType = AdminBatchStatusResponseType;
+
+// 분석 이력(GET /history) — 프로필 '분석 이력' 탭.
+export type AnalysisHistoryItemType = {
+    analysisId: string;
+    batchId: string | null;
+    repoUrl: string;
+    status: AnalysisStatusType;
+    serviceName: string | null;
+    failureReason: string | null;
+    createdAt: string;
+};

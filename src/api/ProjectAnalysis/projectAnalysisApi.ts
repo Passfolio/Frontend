@@ -5,7 +5,9 @@ import type {
     PrecheckStartResponseType,
     AnalysisStartResponseType,
     AnalysisBatchStatusType,
+    AnalysisHistoryItemType,
 } from '@/types/userProjectAnalysis.type';
+import type { AnalysisReportResponseType } from '@/types/analysisReport.type';
 
 // 선택 repo(≤5) 사전 점검 시작. 결과는 SSE/폴링으로 갱신.
 export const postRepoPrecheck = async (repoUrlList: string[]): Promise<PrecheckStartResponseType> => {
@@ -41,6 +43,23 @@ export const postStartAnalysis = async (
 export const getUserBatchStatus = async (batchId: string): Promise<AnalysisBatchStatusType> => {
     const { data } = await axiosInstance.get<AnalysisBatchStatusType>(
         API_ENDPOINTS.projectAnalysis.batchStatus(batchId),
+    );
+    return data;
+};
+
+// 본인 분석 이력(최근순). 프로필 '분석 이력' 탭.
+export const getAnalysisHistory = async (): Promise<AnalysisHistoryItemType[]> => {
+    const { data } = await axiosInstance.get<AnalysisHistoryItemType[]>(
+        API_ENDPOINTS.projectAnalysis.history,
+    );
+    return Array.isArray(data) ? data : [];
+};
+
+// 본인 단건 리포트(리포트 페이지). BE가 CDN 결과 JSON을 서버사이드 fetch해 report에 인라인 반환.
+// 타인 분석은 BE에서 차단. status≠DONE이거나 fetch 실패 시 report=null.
+export const getUserAnalysisReport = async (analysisId: string): Promise<AnalysisReportResponseType> => {
+    const { data } = await axiosInstance.get<AnalysisReportResponseType>(
+        API_ENDPOINTS.projectAnalysis.report(analysisId),
     );
     return data;
 };

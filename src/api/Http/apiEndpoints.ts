@@ -49,6 +49,8 @@ export const API_ENDPOINTS = {
         start: '/api/v1/project-analysis/start',
         subscribe: '/api/v1/project-analysis/subscribe', // SSE
         batchStatus: (batchId: string) => `/api/v1/project-analysis/batch/${batchId}`, // 본인 배치 상태(진행중 페이지)
+        report: (analysisId: string) => `/api/v1/project-analysis/${analysisId}/report`, // 본인 단건 리포트(BE가 CDN JSON 프록시)
+        history: '/api/v1/project-analysis/history', // 본인 분석 이력(최근순)
     },
     adminProjectAnalysis: {
         testBatch: '/api/v1/admin/project-analysis/test-batch',

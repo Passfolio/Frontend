@@ -164,9 +164,12 @@ export const AnalysisProgressPage = () => {
                                                 <span className="truncate text-xs text-zinc-400">{row.serviceName}</span>
                                             )}
                                             {rowStatus === 'DONE' && (
-                                                <span className="text-xs text-zinc-600" title="결과 리포트는 곧 제공됩니다.">
-                                                    리포트 준비중
-                                                </span>
+                                                <Link
+                                                    to={`/analysis/report/${row.analysisId}`}
+                                                    className="text-xs font-medium text-emerald-300 underline-offset-2 hover:underline"
+                                                >
+                                                    리포트 보기
+                                                </Link>
                                             )}
                                             {rowStatus === 'FAILED' && row.failureReason && (
                                                 <span className="max-w-[16rem] truncate text-xs text-red-300/90" title={row.failureReason}>

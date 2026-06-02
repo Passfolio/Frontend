@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { LanderPage } from '@/pages/Lander/LanderPage';
 import { AnnouncementsPage } from '@/pages/Announcements/AnnouncementsPage';
@@ -31,6 +31,8 @@ import { AdminAnalysisMetricsPage } from '@/pages/AdminPortal/AdminAnalysisMetri
 import { AdminUsersPage } from '@/pages/AdminPortal/AdminUsersPage';
 import { AdminPrecheckTestPage } from '@/pages/AdminPortal/AdminPrecheckTestPage';
 import { AnalysisProgressPage } from '@/pages/Analysis/AnalysisProgressPage';
+// 리포트 페이지는 전용 CSS·플립카드 등 무게가 있어 라우트 단위 코드 스플릿(lazy).
+const AnalysisReportPage = lazy(() => import('@/pages/Analysis/AnalysisReportPage'));
 import {
     ADMIN_PORTAL_LOGIN_PATH,
     ADMIN_PORTAL_PROFILE_PATH,
@@ -85,6 +87,14 @@ export const App = () => {
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<UserProfileRoute />} />
                         <Route path="/analysis/:batchId" element={<AnalysisProgressPage />} />
+                        <Route
+                            path="/analysis/report/:analysisId"
+                            element={
+                                <Suspense fallback={null}>
+                                    <AnalysisReportPage />
+                                </Suspense>
+                            }
+                        />
                         <Route element={<AdminRoute />}>
                             <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
                             <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />

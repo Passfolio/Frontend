@@ -3,7 +3,14 @@ import { fetchGitHubRepos } from '@/api/GitHub/githubApi';
 import type { GitHubRepoItemType, GitHubRepoType } from '@/api/GitHub/githubApi';
 import { useRepoPrecheck } from '@/hooks/useRepoPrecheck';
 import { AnalysisStartModal } from '@/components/Profile/AnalysisStartModal';
+import { AnalysisHistoryList } from '@/components/Profile/AnalysisHistoryList';
 import type { PrecheckStatusType } from '@/types/userProjectAnalysis.type';
+
+const SECTION_TABS = [
+    { key: 'analyze', label: '저장소 분석' },
+    { key: 'history', label: '분석 이력' },
+] as const;
+type SectionTabType = (typeof SECTION_TABS)[number]['key'];
 
 const REPO_TYPE_LIST = ['public', 'private', 'organization'] as const;
 type RepoTabType = (typeof REPO_TYPE_LIST)[number];
@@ -43,6 +50,7 @@ export const ProjectAnalysisSection = () => {
     const [filter, setFilter] = useState<FilterType>('all');
     const [isDispatching, setIsDispatching] = useState<boolean>(false);
     const [isStartModalOpen, setIsStartModalOpen] = useState<boolean>(false);
+    const [sectionTab, setSectionTab] = useState<SectionTabType>('analyze');
 
     const { statusMap, startPrecheck, errorMessage } = useRepoPrecheck();
 
@@ -140,7 +148,36 @@ export const ProjectAnalysisSection = () => {
             <h2 id="project-analysis-heading" className="text-lg font-semibold text-white">
                 프로젝트 분석
             </h2>
-            <p className="mt-1 text-sm text-zinc-500">
+            {/* 섹션 탭 */}
+            <div className="mt-4 inline-flex rounded-full border border-white/[0.10] p-0.5" role="tablist" aria-label="프로젝트 분석 탭">
+                {SECTION_TABS.map((t) => {
+                    const isActive = t.key === sectionTab;
+                    return (
+                        <button
+                            key={t.key}
+                            type="button"
+                            role="tab"
+                            aria-selected={isActive}
+                            onClick={() => setSectionTab(t.key)}
+                            className={`rounded-full px-4 py-1 text-sm font-medium transition-colors ${
+                                isActive ? 'bg-white/[0.12] text-white' : 'text-zinc-400 hover:text-white'
+                            }`}
+                        >
+                            {t.label}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {sectionTab === 'history' && (
+                <div className="mt-5">
+                    <AnalysisHistoryList />
+                </div>
+            )}
+
+            {sectionTab === 'analyze' && (
+            <>
+            <p className="mt-4 text-sm text-zinc-500">
                 분석 전, 저장소가 분석 가능한 크기인지 먼저 점검합니다.
             </p>
 
@@ -302,6 +339,8 @@ export const ProjectAnalysisSection = () => {
                 repoUrls={analyzeTargets}
                 onClose={() => setIsStartModalOpen(false)}
             />
+            </>
+            )}
         </section>
     );
 };
