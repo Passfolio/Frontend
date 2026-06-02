@@ -44,6 +44,11 @@ export const API_ENDPOINTS = {
         coverLetterToPortfolio: '/api/v1/ai/jobs/cover-letter/to-portfolio',
         status: (jobId: number) => `/api/v1/ai/jobs/${jobId}`,
     },
+    adminProjectAnalysis: {
+        testBatch: '/api/v1/admin/project-analysis/test-batch',
+        testBatchLimit: '/api/v1/admin/project-analysis/test-batch/limit',
+        batchStatus: (batchId: string) => `/api/v1/admin/project-analysis/batch/${batchId}`,
+    },
 } as const;
 
 export const isAuthRefreshUrl = (url: string): boolean =>

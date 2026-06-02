@@ -11,6 +11,7 @@
  *   VITE_ADMIN_PORTAL_SIGNUP_PATH
  *   VITE_ADMIN_PORTAL_PROFILE_PATH
  *   VITE_ADMIN_PORTAL_TEST_PATH
+ *   VITE_ADMIN_PORTAL_ANALYSIS_METRICS_PATH
  */
 
 const trimEnv = (value: string | undefined): string =>
@@ -21,6 +22,7 @@ const DEV_FALLBACK_PATHS = {
     signup: '/system/admin/signup',
     profile: '/system/admin/profile',
     test: '/system/admin/test',
+    analysisMetrics: '/system/admin/analysis-metrics',
 } as const;
 
 // Vite는 `import.meta.env.VITE_FOO` 형태의 정적 참조만 빌드 타임에 치환·tree-shake 하므로
@@ -58,6 +60,11 @@ export const ADMIN_PORTAL_TEST_PATH = resolveAdminPath(
     import.meta.env.VITE_ADMIN_PORTAL_TEST_PATH,
     'VITE_ADMIN_PORTAL_TEST_PATH',
     DEV_FALLBACK_PATHS.test,
+);
+export const ADMIN_PORTAL_ANALYSIS_METRICS_PATH = resolveAdminPath(
+    import.meta.env.VITE_ADMIN_PORTAL_ANALYSIS_METRICS_PATH,
+    'VITE_ADMIN_PORTAL_ANALYSIS_METRICS_PATH',
+    DEV_FALLBACK_PATHS.analysisMetrics,
 );
 
 /** 시스템(이메일) 가입 계정 기본 프로필 — 일반 회원과 동일한 placeholder 아바타 사용 */

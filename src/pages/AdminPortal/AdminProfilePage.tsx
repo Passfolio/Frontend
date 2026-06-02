@@ -4,6 +4,7 @@ import { useAuth } from '@/context/Auth/AuthContext';
 import {
     ADMIN_DEFAULT_PROFILE_IMAGE_URL,
     ADMIN_PORTAL_TEST_PATH,
+    ADMIN_PORTAL_ANALYSIS_METRICS_PATH,
 } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
 
@@ -100,9 +101,9 @@ export const AdminProfilePage = () => {
                         </li>
                         <li>
                             <AdminCapabilityCard
-                                title="운영 지표"
-                                description="서비스 이용·콘텐츠 지표를 한눈에 확인합니다."
-                                isComingSoon
+                                title="프로젝트 분석 테스트"
+                                description="동시 프로젝트 분석 진행 메트릭을 실시간 확인합니다."
+                                to={ADMIN_PORTAL_ANALYSIS_METRICS_PATH}
                             />
                         </li>
                         <li>
