@@ -49,6 +49,10 @@ export const API_ENDPOINTS = {
         testBatchLimit: '/api/v1/admin/project-analysis/test-batch/limit',
         batchStatus: (batchId: string) => `/api/v1/admin/project-analysis/batch/${batchId}`,
     },
+    adminUsers: {
+        signupsDaily: '/api/v1/admin/users/signups-daily',
+        list: '/api/v1/admin/users',
+    },
 } as const;
 
 export const isAuthRefreshUrl = (url: string): boolean =>

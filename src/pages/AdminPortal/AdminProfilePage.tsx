@@ -5,6 +5,7 @@ import {
     ADMIN_DEFAULT_PROFILE_IMAGE_URL,
     ADMIN_PORTAL_TEST_PATH,
     ADMIN_PORTAL_ANALYSIS_METRICS_PATH,
+    ADMIN_PORTAL_USERS_PATH,
 } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
 
@@ -94,9 +95,9 @@ export const AdminProfilePage = () => {
                         </li>
                         <li>
                             <AdminCapabilityCard
-                                title="회원 및 권한 관리"
-                                description="조직 내 계정·역할을 검토하고 정책에 맞게 조정합니다."
-                                isComingSoon
+                                title="회원 관리"
+                                description="사용자 유입 추이와 회원 목록을 확인합니다."
+                                to={ADMIN_PORTAL_USERS_PATH}
                             />
                         </li>
                         <li>
