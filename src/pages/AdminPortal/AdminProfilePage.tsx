@@ -6,6 +6,7 @@ import {
     ADMIN_PORTAL_TEST_PATH,
     ADMIN_PORTAL_ANALYSIS_METRICS_PATH,
     ADMIN_PORTAL_USERS_PATH,
+    ADMIN_PORTAL_PRECHECK_TEST_PATH,
 } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
 
@@ -137,6 +138,13 @@ export const AdminProfilePage = () => {
                                 title="File Upload Test"
                                 description="파일을 업로드하고 본인 계정으로 업로드한 파일들을 열람할 수 있습니다."
                                 to={ADMIN_PORTAL_TEST_PATH}
+                            />
+                        </li>
+                        <li>
+                            <AdminCapabilityCard
+                                title="Project Precheck Test"
+                                description="공개 저장소로 분석 가능성 사전 점검을 토큰 없이 테스트합니다."
+                                to={ADMIN_PORTAL_PRECHECK_TEST_PATH}
                             />
                         </li>
                         <li>

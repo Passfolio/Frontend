@@ -29,6 +29,7 @@ import { AdminProfilePage } from '@/pages/AdminPortal/AdminProfilePage';
 import { AdminTestPage } from '@/pages/AdminPortal/AdminTestPage';
 import { AdminAnalysisMetricsPage } from '@/pages/AdminPortal/AdminAnalysisMetricsPage';
 import { AdminUsersPage } from '@/pages/AdminPortal/AdminUsersPage';
+import { AdminPrecheckTestPage } from '@/pages/AdminPortal/AdminPrecheckTestPage';
 import {
     ADMIN_PORTAL_LOGIN_PATH,
     ADMIN_PORTAL_PROFILE_PATH,
@@ -36,6 +37,7 @@ import {
     ADMIN_PORTAL_TEST_PATH,
     ADMIN_PORTAL_ANALYSIS_METRICS_PATH,
     ADMIN_PORTAL_USERS_PATH,
+    ADMIN_PORTAL_PRECHECK_TEST_PATH,
 } from '@/constants/adminPortal';
 
 function ScrollToTopOnPathChange() {
@@ -86,6 +88,7 @@ export const App = () => {
                             <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />
                             <Route path={ADMIN_PORTAL_ANALYSIS_METRICS_PATH} element={<AdminAnalysisMetricsPage />} />
                             <Route path={ADMIN_PORTAL_USERS_PATH} element={<AdminUsersPage />} />
+                            <Route path={ADMIN_PORTAL_PRECHECK_TEST_PATH} element={<AdminPrecheckTestPage />} />
                             <Route path="/articles/create" element={<ArticleCreatePage />} />
                             <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
                         </Route>

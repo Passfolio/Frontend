@@ -5,6 +5,16 @@ import type {
     UserSummaryType,
     PageListResponseType,
 } from '@/types/user.type';
+import type { PrecheckStartResponseType } from '@/types/userProjectAnalysis.type';
+
+// ADMIN 전용: 공개 repo(≤5) 사전 점검 테스트(토큰 불필요). useRepoPrecheck dispatcher로 주입.
+export const postAdminPrecheck = async (repoUrlList: string[]): Promise<PrecheckStartResponseType> => {
+    const { data } = await axiosInstance.post<PrecheckStartResponseType>(
+        API_ENDPOINTS.adminProjectAnalysis.precheckTest,
+        { repoUrls: repoUrlList },
+    );
+    return data;
+};
 
 // ADMIN 전용: 날짜별 가입자 수(사용자 유입 그래프). createdAt 기준 일별 집계(오름차순).
 export const getDailySignups = async (): Promise<DailySignupType[]> => {
