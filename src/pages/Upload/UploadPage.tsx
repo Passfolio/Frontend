@@ -92,6 +92,7 @@ export const UploadPage = () => {
   const { user } = useAuth();
   const isLoggedIn = user !== null;
   const [slots, setSlots] = useState<SlotState[]>(SLOTS.map(makeIdle));
+  const [activeSlot, setActiveSlot] = useState<number | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const abortRefs = useRef<(AbortController | null)[]>([null, null]);
   const pollTimers = useRef<(ReturnType<typeof setTimeout> | null)[]>([null, null]);
@@ -187,6 +188,7 @@ export const UploadPage = () => {
   const handleFileSelect = useCallback((index: number, file: File | undefined) => {
     if (!file || file.type !== 'application/pdf') return;
     patch(index, { file, progress: 0, uploadStatus: 'idle', uploadResult: null, job: null, selectedAction: null });
+    setActiveSlot(index);
   }, [patch]);
 
   const handleInputChange = useCallback((index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,6 +214,7 @@ export const UploadPage = () => {
     abortRefs.current[index] = null;
     if (pollTimers.current[index]) clearTimeout(pollTimers.current[index]!);
     patch(index, makeIdle());
+    setActiveSlot(null);
   }, [patch]);
 
   const showUploadButton = slots.some((s) => s.file && s.uploadStatus === 'idle');
@@ -244,8 +247,10 @@ export const UploadPage = () => {
           자기소개서와 포트폴리오 PDF를 각각 업로드하고 원하는 작업을 선택하세요.
         </p>
 
-        <div className="grid w-full max-w-3xl gap-6 sm:grid-cols-2">
+        <div className={`grid w-full gap-6 ${activeSlot !== null ? 'max-w-md' : 'max-w-3xl sm:grid-cols-2'}`}>
           {SLOTS.map((meta, index) => {
+            if (activeSlot !== null && activeSlot !== index) return null;
+
             const slot = slots[index];
             const isUploading = slot.uploadStatus === 'uploading';
             const isDone = slot.uploadStatus === 'done';

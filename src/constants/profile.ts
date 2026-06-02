@@ -3,7 +3,7 @@ export const MENU_LIST = [
     '나의 보유 역량',
     '프로젝트 분석',
     '맞춤 채용 분석',
-    '포트폴리오',
+    '로드맵',
     '면접 시뮬레이션',
 ] as const;
 
@@ -15,7 +15,7 @@ export const MENU_SECTION_SLUG: Record<ProfileMenuItemType, string> = {
     '나의 보유 역량': 'competencies',
     '프로젝트 분석': 'project-analysis',
     '맞춤 채용 분석': 'job-analysis',
-    포트폴리오: 'portfolio',
+    로드맵: 'roadmap',
     '면접 시뮬레이션': 'interview',
 };
 

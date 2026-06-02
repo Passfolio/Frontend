@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { UpdateProfileModal } from '@/components/Profile/UpdateProfileModal/UpdateProfileModal';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
@@ -6,6 +6,17 @@ import { ProfileSidebar } from '@/components/Profile/ProfileSidebar';
 import { TechStackSection } from '@/components/Profile/TechStackSection';
 import { MyCompetenciesSection } from '@/components/Profile/MyCompetenciesSection';
 import { ProfileComingSoonSection } from '@/components/Profile/ProfileComingSoonSection';
+
+const RoadmapTabSection = lazy(() => import('@/components/Profile/RoadmapTabSection'));
+
+function RoadmapSpinner() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 py-20">
+      <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
+      <p className="text-sm text-zinc-500">로드맵을 불러오는 중...</p>
+    </div>
+  );
+}
 import { ProfileMobileSectionTabs } from '@/components/Profile/ProfileMobileSectionTabs';
 import { RepositorySection } from '@/components/Profile/RepositorySection';
 import { MobileProfileHeader } from '@/components/Profile/MobileProfileHeader';
@@ -160,7 +171,7 @@ export const ProfilePage = () => {
 
   return (
       <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
-        <main className="relative z-[1] mx-auto flex w-full flex-1 max-w-[1200px] flex-col gap-10 px-4 pb-16 pt-24 md:px-6 md:pt-28 lg:flex-none lg:flex-row lg:items-stretch lg:gap-10 lg:px-10">
+        <main className="relative z-1 mx-auto flex w-full flex-1 max-w-[1200px] flex-col gap-10 px-4 pb-16 pt-24 md:px-6 md:pt-28 lg:flex-none lg:flex-row lg:items-stretch lg:gap-10 lg:px-10">
 
           <div className="flex flex-col gap-5 lg:hidden">
             <MobileProfileHeader
@@ -190,6 +201,10 @@ export const ProfilePage = () => {
                     majors={spec.techMajors}
                     skills={spec.techSkills}
                 />
+              ) : activeMenu === '로드맵' ? (
+                <Suspense fallback={<RoadmapSpinner />}>
+                  <RoadmapTabSection />
+                </Suspense>
               ) : (
                 <ProfileComingSoonSection title={activeMenu} />
               )}
@@ -225,6 +240,10 @@ export const ProfilePage = () => {
                     majors={spec.techMajors}
                     skills={spec.techSkills}
                 />
+            ) : activeMenu === '로드맵' ? (
+                <Suspense fallback={<RoadmapSpinner />}>
+                  <RoadmapTabSection />
+                </Suspense>
             ) : (
                 <ProfileComingSoonSection title={activeMenu} />
             )}
