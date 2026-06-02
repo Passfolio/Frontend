@@ -4,6 +4,9 @@ import { useAuth } from '@/context/Auth/AuthContext';
 import {
     ADMIN_DEFAULT_PROFILE_IMAGE_URL,
     ADMIN_PORTAL_TEST_PATH,
+    ADMIN_PORTAL_ANALYSIS_METRICS_PATH,
+    ADMIN_PORTAL_USERS_PATH,
+    ADMIN_PORTAL_PRECHECK_TEST_PATH,
 } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
 
@@ -93,16 +96,16 @@ export const AdminProfilePage = () => {
                         </li>
                         <li>
                             <AdminCapabilityCard
-                                title="회원 및 권한 관리"
-                                description="조직 내 계정·역할을 검토하고 정책에 맞게 조정합니다."
-                                isComingSoon
+                                title="회원 관리"
+                                description="사용자 유입 추이와 회원 목록을 확인합니다."
+                                to={ADMIN_PORTAL_USERS_PATH}
                             />
                         </li>
                         <li>
                             <AdminCapabilityCard
-                                title="운영 지표"
-                                description="서비스 이용·콘텐츠 지표를 한눈에 확인합니다."
-                                isComingSoon
+                                title="프로젝트 분석 테스트"
+                                description="동시 프로젝트 분석 진행 메트릭을 실시간 확인합니다."
+                                to={ADMIN_PORTAL_ANALYSIS_METRICS_PATH}
                             />
                         </li>
                         <li>
@@ -135,6 +138,13 @@ export const AdminProfilePage = () => {
                                 title="File Upload Test"
                                 description="파일을 업로드하고 본인 계정으로 업로드한 파일들을 열람할 수 있습니다."
                                 to={ADMIN_PORTAL_TEST_PATH}
+                            />
+                        </li>
+                        <li>
+                            <AdminCapabilityCard
+                                title="Project Precheck Test"
+                                description="공개 저장소로 분석 가능성 사전 점검을 토큰 없이 테스트합니다."
+                                to={ADMIN_PORTAL_PRECHECK_TEST_PATH}
                             />
                         </li>
                         <li>

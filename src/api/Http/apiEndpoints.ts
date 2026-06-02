@@ -44,6 +44,24 @@ export const API_ENDPOINTS = {
         coverLetterToPortfolio: '/api/v1/ai/jobs/cover-letter/to-portfolio',
         status: (jobId: number) => `/api/v1/ai/jobs/${jobId}`,
     },
+    projectAnalysis: {
+        precheck: '/api/v1/project-analysis/precheck', // POST(시작) / GET(상태 목록)
+        start: '/api/v1/project-analysis/start',
+        subscribe: '/api/v1/project-analysis/subscribe', // SSE
+        batchStatus: (batchId: string) => `/api/v1/project-analysis/batch/${batchId}`, // 본인 배치 상태(진행중 페이지)
+        report: (analysisId: string) => `/api/v1/project-analysis/${analysisId}/report`, // 본인 단건 리포트(BE가 CDN JSON 프록시)
+        history: '/api/v1/project-analysis/history', // 본인 분석 이력(최근순)
+    },
+    adminProjectAnalysis: {
+        testBatch: '/api/v1/admin/project-analysis/test-batch',
+        precheckTest: '/api/v1/admin/project-analysis/precheck-test',
+        testBatchLimit: '/api/v1/admin/project-analysis/test-batch/limit',
+        batchStatus: (batchId: string) => `/api/v1/admin/project-analysis/batch/${batchId}`,
+    },
+    adminUsers: {
+        signupsDaily: '/api/v1/admin/users/signups-daily',
+        list: '/api/v1/admin/users',
+    },
 } as const;
 
 export const isAuthRefreshUrl = (url: string): boolean =>

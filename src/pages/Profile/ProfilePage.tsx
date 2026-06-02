@@ -6,6 +6,7 @@ import { ProfileSidebar } from '@/components/Profile/ProfileSidebar';
 import { TechStackSection } from '@/components/Profile/TechStackSection';
 import { MyCompetenciesSection } from '@/components/Profile/MyCompetenciesSection';
 import { ProfileComingSoonSection } from '@/components/Profile/ProfileComingSoonSection';
+import { ProjectAnalysisSection } from '@/components/Profile/ProjectAnalysisSection';
 import { ProfileMobileSectionTabs } from '@/components/Profile/ProfileMobileSectionTabs';
 import { RepositorySection } from '@/components/Profile/RepositorySection';
 import { MobileProfileHeader } from '@/components/Profile/MobileProfileHeader';
@@ -190,6 +191,8 @@ export const ProfilePage = () => {
                     majors={spec.techMajors}
                     skills={spec.techSkills}
                 />
+              ) : activeMenu === '프로젝트 분석' ? (
+                <ProjectAnalysisSection />
               ) : (
                 <ProfileComingSoonSection title={activeMenu} />
               )}
@@ -225,6 +228,8 @@ export const ProfilePage = () => {
                     majors={spec.techMajors}
                     skills={spec.techSkills}
                 />
+            ) : activeMenu === '프로젝트 분석' ? (
+                <ProjectAnalysisSection />
             ) : (
                 <ProfileComingSoonSection title={activeMenu} />
             )}
