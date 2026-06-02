@@ -30,6 +30,7 @@ import { AdminTestPage } from '@/pages/AdminPortal/AdminTestPage';
 import { AdminAnalysisMetricsPage } from '@/pages/AdminPortal/AdminAnalysisMetricsPage';
 import { AdminUsersPage } from '@/pages/AdminPortal/AdminUsersPage';
 import { AdminPrecheckTestPage } from '@/pages/AdminPortal/AdminPrecheckTestPage';
+import { AnalysisProgressPage } from '@/pages/Analysis/AnalysisProgressPage';
 import {
     ADMIN_PORTAL_LOGIN_PATH,
     ADMIN_PORTAL_PROFILE_PATH,
@@ -83,6 +84,7 @@ export const App = () => {
                     {/* --- 비공개 라우트 --- */}
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<UserProfileRoute />} />
+                        <Route path="/analysis/:batchId" element={<AnalysisProgressPage />} />
                         <Route element={<AdminRoute />}>
                             <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
                             <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />

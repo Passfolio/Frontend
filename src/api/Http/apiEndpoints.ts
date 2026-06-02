@@ -48,6 +48,7 @@ export const API_ENDPOINTS = {
         precheck: '/api/v1/project-analysis/precheck', // POST(시작) / GET(상태 목록)
         start: '/api/v1/project-analysis/start',
         subscribe: '/api/v1/project-analysis/subscribe', // SSE
+        batchStatus: (batchId: string) => `/api/v1/project-analysis/batch/${batchId}`, // 본인 배치 상태(진행중 페이지)
     },
     adminProjectAnalysis: {
         testBatch: '/api/v1/admin/project-analysis/test-batch',

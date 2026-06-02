@@ -1,6 +1,12 @@
 // 사용자용 프로젝트 분석 — 사전 점검(Precheck) + 분석 시작 응답 타입.
 // BE: RepoAvailabilityDto / ProjectAnalysisDto.
 
+import type {
+    AnalysisStatusType,
+    AdminBatchAnalysisItemType,
+    AdminBatchStatusResponseType,
+} from '@/types/projectAnalysis.type';
+
 export type PrecheckStatusType = 'CHECKING' | 'AVAILABLE' | 'DISABLED';
 
 // 사전 점검 항목(GET /precheck, POST /precheck 응답 items)
@@ -38,3 +44,11 @@ export type AnalysisStartResponseType = {
     batchId: string;
     analyses: AnalysisDispatchedItemType[];
 };
+
+// 분석 모드 — NONSTOP=완료 후 포트폴리오 생성, STEP=분석만.
+export type AnalysisModeType = 'NONSTOP' | 'STEP';
+
+// 진행중 페이지 — 본인 배치 상태(GET /batch/{batchId}). BE는 admin과 동일 shape 반환이라 타입 재사용.
+export type { AnalysisStatusType };
+export type AnalysisProgressItemType = AdminBatchAnalysisItemType;
+export type AnalysisBatchStatusType = AdminBatchStatusResponseType;

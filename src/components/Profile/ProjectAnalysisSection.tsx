@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { fetchGitHubRepos } from '@/api/GitHub/githubApi';
 import type { GitHubRepoItemType, GitHubRepoType } from '@/api/GitHub/githubApi';
 import { useRepoPrecheck } from '@/hooks/useRepoPrecheck';
+import { AnalysisStartModal } from '@/components/Profile/AnalysisStartModal';
 import type { PrecheckStatusType } from '@/types/userProjectAnalysis.type';
 
 const REPO_TYPE_LIST = ['public', 'private', 'organization'] as const;
@@ -41,9 +42,9 @@ export const ProjectAnalysisSection = () => {
     const [selectedUrlSet, setSelectedUrlSet] = useState<Set<string>>(new Set());
     const [filter, setFilter] = useState<FilterType>('all');
     const [isDispatching, setIsDispatching] = useState<boolean>(false);
-    const [analyzeMessage, setAnalyzeMessage] = useState<string | null>(null);
+    const [isStartModalOpen, setIsStartModalOpen] = useState<boolean>(false);
 
-    const { statusMap, startPrecheck, startAnalysis, errorMessage } = useRepoPrecheck();
+    const { statusMap, startPrecheck, errorMessage } = useRepoPrecheck();
 
     useEffect(() => {
         let cancelled = false;
@@ -109,10 +110,14 @@ export const ProjectAnalysisSection = () => {
         [statusMap],
     );
 
+    const analyzeTargets = useMemo(
+        () => selectedAvailableList.slice(0, MAX_ANALYZE),
+        [selectedAvailableList],
+    );
+
     const handlePrecheck = async () => {
         if (selectedUrlList.length === 0 || isDispatching) return;
         setIsDispatching(true);
-        setAnalyzeMessage(null);
         try {
             await startPrecheck(selectedUrlList);
         } finally {
@@ -120,19 +125,9 @@ export const ProjectAnalysisSection = () => {
         }
     };
 
-    const handleAnalyze = async () => {
-        const targets = selectedAvailableList.slice(0, MAX_ANALYZE);
-        if (targets.length === 0 || isDispatching) return;
-        setIsDispatching(true);
-        setAnalyzeMessage(null);
-        try {
-            const res = await startAnalysis(targets);
-            setAnalyzeMessage(`분석이 시작되었습니다. (${res.analyses.length}개 · batch ${res.batchId.slice(0, 8)}…)`);
-        } catch {
-            setAnalyzeMessage('분석 시작에 실패했습니다. 잠시 후 다시 시도해주세요.');
-        } finally {
-            setIsDispatching(false);
-        }
+    const handleAnalyze = () => {
+        if (analyzeTargets.length === 0 || isDispatching) return;
+        setIsStartModalOpen(true);
     };
 
     const canAnalyze = selectedAvailableList.length > 0 && !isDispatching;
@@ -300,11 +295,13 @@ export const ProjectAnalysisSection = () => {
                 </div>
             </div>
 
-            {(analyzeMessage || errorMessage) && (
-                <p className={`mt-3 text-sm ${analyzeMessage?.includes('시작되었') ? 'text-emerald-300' : 'text-amber-300'}`}>
-                    {analyzeMessage ?? errorMessage}
-                </p>
-            )}
+            {errorMessage && <p className="mt-3 text-sm text-amber-300">{errorMessage}</p>}
+
+            <AnalysisStartModal
+                isOpen={isStartModalOpen}
+                repoUrls={analyzeTargets}
+                onClose={() => setIsStartModalOpen(false)}
+            />
         </section>
     );
 };
