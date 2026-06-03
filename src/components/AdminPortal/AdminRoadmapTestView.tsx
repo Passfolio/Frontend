@@ -6,11 +6,10 @@ const RoadmapTabSection = lazy(() => import('@/components/Profile/RoadmapTabSect
 
 const CDN_JSON_URL = 'https://cdn.passfolio.dev/analyses/hooby/deokive-be-youcu-1/final.json';
 
-type Phase = 'idle' | 'fetching' | 'posting' | 'streaming' | 'done' | 'error';
+type Phase = 'idle' | 'posting' | 'streaming' | 'done' | 'error';
 
 const PHASE_LABEL: Record<Phase, string> = {
     idle: '',
-    fetching: 'CDN JSON 로드 중...',
     posting: '서버에 분석 요청 중...',
     streaming: 'Job 결과 수신 중...',
     done: '',
@@ -32,18 +31,13 @@ export function AdminRoadmapTestView() {
 
     const handleStart = async () => {
         esCleanupRef.current?.();
-        setPhase('fetching');
+        setPhase('posting');
         setErrorMsg(null);
         setResult(null);
         setJobId(null);
 
         try {
-            const cdnRes = await fetch(CDN_JSON_URL);
-            if (!cdnRes.ok) throw new Error(`CDN 로드 실패: ${cdnRes.status}`);
-            const cdnJson: unknown = await cdnRes.json();
-
-            setPhase('posting');
-            const { job_id } = await postRoadmapAssess(cdnJson);
+            const { job_id } = await postRoadmapAssess({ analysis_url: CDN_JSON_URL });
             setJobId(job_id);
 
             setPhase('streaming');
@@ -65,7 +59,7 @@ export function AdminRoadmapTestView() {
         }
     };
 
-    const isRunning = phase === 'fetching' || phase === 'posting' || phase === 'streaming';
+    const isRunning = phase === 'posting' || phase === 'streaming';
 
     return (
         <div className="flex flex-col gap-6">
