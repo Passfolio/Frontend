@@ -1,10 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getUserBatchStatus } from '@/api/ProjectAnalysis/projectAnalysisApi';
+import { getAiJobStatus, type AiJobStatus } from '@/api/AiJob/aiJobApi';
 import { API_ENDPOINTS } from '@/api/Http/apiEndpoints';
 import type {
     AnalysisBatchStatusType,
     AnalysisStatusType,
 } from '@/types/userProjectAnalysis.type';
+
+export type PortfolioJobStateType = {
+    status: AiJobStatus; // PENDING | DONE | ERROR
+    pdfUrl: string | null;
+    errorMessage: string | null;
+};
 
 // 개별 repo 완료 SSE(PROJECT_ANALYSIS_STATUS) — 종료(DONE/FAILED) 시에만 푸시.
 const SSE_ANALYSIS_EVENT = 'PROJECT_ANALYSIS_STATUS';
@@ -25,6 +32,8 @@ export type UseAnalysisProgressReturnType = {
     status: AnalysisBatchStatusType | null;
     isLoading: boolean;
     errorMessage: string | null;
+    portfolioJob: PortfolioJobStateType | null; // NONSTOP 포폴 생성 작업(없으면 null)
+    refresh: () => Promise<void>; // 배치 상태 재조회(예: 포폴 핸드오프 재시도 후 portfolioJobId 반영)
 };
 
 const toAnalysisStatus = (raw: string): AnalysisStatusType =>
@@ -40,6 +49,7 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
     const [status, setStatus] = useState<AnalysisBatchStatusType | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [portfolioJob, setPortfolioJob] = useState<PortfolioJobStateType | null>(null);
 
     const statusRef = useRef<AnalysisBatchStatusType | null>(null);
     statusRef.current = status;
@@ -169,5 +179,32 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
     // 언마운트 시 폴링 정리
     useEffect(() => clearPoll, [clearPoll]);
 
-    return { status, isLoading, errorMessage };
+    // NONSTOP 포폴 작업 폴링(batch status에 portfolioJobId가 잡히면) — DONE/ERROR까지 4초 주기.
+    const portfolioJobId = status?.portfolioJobId ?? null;
+    useEffect(() => {
+        if (!portfolioJobId) {
+            setPortfolioJob(null);
+            return;
+        }
+        let cancelled = false;
+        let timer: ReturnType<typeof setTimeout> | null = null;
+        const poll = async () => {
+            try {
+                const j = await getAiJobStatus(portfolioJobId);
+                if (cancelled) return;
+                setPortfolioJob({ status: j.status, pdfUrl: j.outputPdfS3Url, errorMessage: j.errorMessage });
+                if (j.status === 'DONE' || j.status === 'ERROR') return; // 종료 → 폴링 중지
+            } catch {
+                /* 일시 오류 무시, 다음 폴링에서 재시도 */
+            }
+            if (!cancelled) timer = setTimeout(poll, SAFETY_POLL_MS);
+        };
+        void poll();
+        return () => {
+            cancelled = true;
+            if (timer) clearTimeout(timer);
+        };
+    }, [portfolioJobId]);
+
+    return { status, isLoading, errorMessage, portfolioJob, refresh };
 }

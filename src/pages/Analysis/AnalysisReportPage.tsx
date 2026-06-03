@@ -30,6 +30,9 @@ const ICONS: Record<string, ReactNode> = {
     users: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="8" r="3.2" /><path d="M3.5 20a5.5 5.5 0 0 1 11 0M16 5.2a3.2 3.2 0 0 1 0 5.6M17.5 14.4A5.5 5.5 0 0 1 21 20" /></svg>,
 };
 
+/** 돌아가기 → 프로필의 프로젝트 분석 탭, 분석 이력 위치 */
+const PROFILE_ANALYSIS_HISTORY_PATH = '/profile?section=project-analysis&tab=history';
+
 const CAT_ORDER = ['Language', 'Framework', 'Database', 'Infrastructure', 'Build·Tooling', 'Library'] as const;
 const fmtDate = (s: string): string => s.replace(/-/g, '.');
 const fmtNum = (n: number): string => n.toLocaleString('en-US');
@@ -517,7 +520,7 @@ export const AnalysisReportPage = () => {
     return (
         <div className="analysis-report">
             <div className="ar-wrap">
-                <Link to={batchId ? `/analysis/${batchId}` : '/profile'} className="ar-back">{ICONS.arrow} 돌아가기</Link>
+                <Link to={PROFILE_ANALYSIS_HISTORY_PATH} className="ar-back">{ICONS.arrow} 돌아가기</Link>
                 <div className="ar-topbar">
                     <div>
                         <h1 className="ar-title">프로젝트 분석 보고서</h1>
