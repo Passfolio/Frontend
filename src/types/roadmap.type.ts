@@ -42,7 +42,7 @@ export interface SequenceInfo {
 }
 
 export interface PerRoleData {
-  level: string;
+  coverage_level: string;
   coverage_pct: number;
   topic_coverage: string;
   sequence: SequenceInfo;
@@ -51,6 +51,19 @@ export interface PerRoleData {
   covered_count: number;
   partial_count: number;
   uncovered_count: number;
+}
+
+export interface AssessmentReliability {
+  grade: 'high' | 'medium' | 'low';
+  contribute_pct: number;
+  note: string;
+}
+
+export interface FinalLevel {
+  final_level: string;
+  skill_level: string;
+  coverage_level: string;
+  note: string;
 }
 
 export interface StrongArea {
@@ -108,6 +121,8 @@ export interface RoadmapAssessment {
   dev_type: string;
   primary_roles: string[];
   secondary_roles: string[];
+  assessment_reliability?: AssessmentReliability;
+  final_level?: FinalLevel;
   per_role: Record<string, PerRoleData>;
   llm_assessment: LLMAssessment;
   market_brief: MarketBrief;

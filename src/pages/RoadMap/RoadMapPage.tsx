@@ -5,9 +5,22 @@ import { RoadmapTimeline } from '@/components/RoadMap/RoadmapTimeline';
 import type {
   RoadmapAssessment,
   MarketTier,
+  AssessmentReliability,
 } from '@/types/roadmap.type';
 
 /* ─── 상수 ─────────────────────────────────────────────── */
+
+const RELIABILITY_COLOR: Record<AssessmentReliability['grade'], string> = {
+  high:   '#4ade80',
+  medium: '#fb923c',
+  low:    '#f87171',
+};
+
+const RELIABILITY_LABEL: Record<AssessmentReliability['grade'], string> = {
+  high:   '높음',
+  medium: '보통',
+  low:    '낮음',
+};
 
 const URGENCY: Record<string, { color: string; label: string }> = {
   urgent:         { color: '#f87171', label: '긴급' },
@@ -136,8 +149,41 @@ export function RoadMapPage() {
           <div className="flex flex-wrap items-center gap-3 text-sm text-zinc-400">
             <span className="font-semibold text-white">{data.llm_assessment.overall_level}</span>
             <span className="h-3.5 w-px bg-white/10" />
-            <span>{roleData.level} · {roleData.topic_coverage} 토픽 커버</span>
+            <span>{roleData.coverage_level} · {roleData.topic_coverage} 토픽 커버</span>
           </div>
+
+          {/* final_level */}
+          {data.final_level && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="rounded-lg border border-white/10 bg-white/4 px-3 py-1 text-xs text-zinc-300">
+                최종 레벨 <span className="ml-1 font-bold text-white">{data.final_level.final_level}</span>
+              </span>
+              <span className="rounded-lg border border-white/10 bg-white/4 px-3 py-1 text-xs text-zinc-300">
+                구현 깊이 <span className="ml-1 font-bold text-white">{data.final_level.skill_level}</span>
+              </span>
+              <span className="rounded-lg border border-white/10 bg-white/4 px-3 py-1 text-xs text-zinc-300">
+                로드맵 폭 <span className="ml-1 font-bold text-white">{data.final_level.coverage_level}</span>
+              </span>
+            </div>
+          )}
+
+          {/* assessment_reliability */}
+          {data.assessment_reliability && (
+            <div className="mt-2 flex items-center gap-2">
+              <span
+                className="rounded-full px-2 py-0.5 text-[10px] font-bold"
+                style={{
+                  background: `${RELIABILITY_COLOR[data.assessment_reliability.grade]}1a`,
+                  color: RELIABILITY_COLOR[data.assessment_reliability.grade],
+                }}
+              >
+                신뢰도 {RELIABILITY_LABEL[data.assessment_reliability.grade]}
+              </span>
+              <span className="text-xs text-zinc-500">
+                기여도 {data.assessment_reliability.contribute_pct}% · {data.assessment_reliability.note}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* ── 역할 탭 ──────────────────────────────────── */}

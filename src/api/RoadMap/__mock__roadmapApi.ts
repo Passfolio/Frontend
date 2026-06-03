@@ -7,7 +7,7 @@ export const MOCK_ASSESSMENT: RoadmapAssessment = {
   secondary_roles: ["DevOps Engineer"],
   per_role: {
     "Frontend Developer": {
-      level: "Senior",
+      coverage_level: "Senior",
       coverage_pct: 72.5,
       topic_coverage: "29/40",
       sequence: {
@@ -70,7 +70,7 @@ export const MOCK_ASSESSMENT: RoadmapAssessment = {
       uncovered_count: 3,
     },
     "Backend Developer": {
-      level: "Mid-Senior",
+      coverage_level: "Mid-Senior",
       coverage_pct: 58.3,
       topic_coverage: "21/36",
       sequence: {
@@ -124,7 +124,7 @@ export const MOCK_ASSESSMENT: RoadmapAssessment = {
       uncovered_count: 2,
     },
     "DevOps Engineer": {
-      level: "Junior-Mid",
+      coverage_level: "Junior-Mid",
       coverage_pct: 38.0,
       topic_coverage: "9/24",
       sequence: {
