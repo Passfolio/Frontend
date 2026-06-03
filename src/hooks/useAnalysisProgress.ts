@@ -198,7 +198,7 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
             try {
                 const j = await getAiJobStatus(portfolioJobId);
                 if (cancelled) return;
-                setPortfolioJob({ status: j.status, pdfUrl: j.outputPdfS3Url, errorMessage: j.errorMessage });
+                setPortfolioJob({ status: j.status, pdfUrl: j.outputPdfUrl, errorMessage: j.errorMessage });
                 if (j.status === 'DONE' || j.status === 'ERROR') return; // 종료 → 폴링 중지
             } catch {
                 /* 일시 오류 무시, 다음 폴링에서 재시도 */

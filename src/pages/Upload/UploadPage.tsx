@@ -123,7 +123,7 @@ export const UploadPage = () => {
       try {
         const res = await getAiJobStatus(jobId);
         patch(index, {
-          job: { jobId: res.jobId, status: res.status, outputUrl: res.outputPdfS3Url, errorMessage: res.errorMessage },
+          job: { jobId: res.jobId, status: res.status, outputUrl: res.outputPdfUrl, errorMessage: res.errorMessage },
         });
         if (res.status === 'PENDING') pollJobStatus(index, jobId);
       } catch {
