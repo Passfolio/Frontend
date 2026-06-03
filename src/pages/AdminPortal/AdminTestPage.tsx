@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { lazy, Suspense, useCallback, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { FileUploadView } from '@/components/AdminPortal/FileUploadView';
@@ -7,12 +7,15 @@ import { useMyFileCdnUrls } from '@/hooks/AdminPortal/useMyFileCdnUrls';
 import { ADMIN_PORTAL_PROFILE_PATH } from '@/constants/adminPortal';
 import '@/pages/Lander/landerPage.css';
 
-const TEST_VIEW_LIST = ['files', 'upload'] as const;
+const RoadmapTabSection = lazy(() => import('@/components/Profile/RoadmapTabSection'));
+
+const TEST_VIEW_LIST = ['files', 'upload', 'roadmap'] as const;
 type TestViewType = (typeof TEST_VIEW_LIST)[number];
 
 const VIEW_LABEL: Record<TestViewType, string> = {
     files: 'My Files',
     upload: 'Upload',
+    roadmap: '로드맵 테스트',
 };
 
 const DEFAULT_VIEW: TestViewType = 'files';
@@ -93,6 +96,16 @@ export const AdminTestPage = () => {
                         />
                     )}
                     {activeView === 'upload' && <FileUploadView onUploaded={refresh} />}
+                    {activeView === 'roadmap' && (
+                        <Suspense fallback={
+                            <div className="flex flex-col items-center justify-center gap-3 py-20">
+                                <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
+                                <p className="text-sm text-zinc-500">로드맵을 불러오는 중...</p>
+                            </div>
+                        }>
+                            <RoadmapTabSection />
+                        </Suspense>
+                    )}
                 </section>
 
                 <div className="mt-12">
