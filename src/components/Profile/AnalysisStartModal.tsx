@@ -94,7 +94,7 @@ export const AnalysisStartModal = ({ isOpen, repoUrls, onClose }: AnalysisStartM
         }
         setErrorMessage(null);
 
-        let pdfUrl: string | undefined;
+        let fileId: number | undefined;
         let portfolioPurpose: string | undefined;
         try {
             if (mode === 'NONSTOP' && file) {
@@ -107,7 +107,8 @@ export const AnalysisStartModal = ({ isOpen, repoUrls, onClose }: AnalysisStartM
                     documentType: purposeMeta.documentType,
                     actionType: purposeMeta.actionType,
                 });
-                pdfUrl = result.cdnUrl;
+                // 원시 CDN URL이 아니라 fileId를 전달 — 소유권 검증·URL 생성은 서버(IDOR/SSRF 차단).
+                fileId = result.fileId;
                 portfolioPurpose = purpose;
                 setIsUploading(false);
             }
@@ -123,7 +124,7 @@ export const AnalysisStartModal = ({ isOpen, repoUrls, onClose }: AnalysisStartM
                 repoUrls,
                 mode,
                 smsOptIn && normalizedPhone ? normalizedPhone : undefined,
-                pdfUrl,
+                fileId,
                 portfolioPurpose,
             );
             navigate(`/analysis/${res.batchId}`);

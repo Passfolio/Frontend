@@ -33,6 +33,7 @@ export type UseAnalysisProgressReturnType = {
     isLoading: boolean;
     errorMessage: string | null;
     portfolioJob: PortfolioJobStateType | null; // NONSTOP 포폴 생성 작업(없으면 null)
+    refresh: () => Promise<void>; // 배치 상태 재조회(예: 포폴 핸드오프 재시도 후 portfolioJobId 반영)
 };
 
 const toAnalysisStatus = (raw: string): AnalysisStatusType =>
@@ -205,5 +206,5 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
         };
     }, [portfolioJobId]);
 
-    return { status, isLoading, errorMessage, portfolioJob };
+    return { status, isLoading, errorMessage, portfolioJob, refresh };
 }

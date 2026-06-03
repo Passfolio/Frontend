@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
 import { useAnalysisProgress } from '@/hooks/useAnalysisProgress';
+import { retryPortfolioHandoff } from '@/api/ProjectAnalysis/projectAnalysisApi';
 import type { AnalysisStatusType } from '@/types/userProjectAnalysis.type';
 import '@/pages/Lander/landerPage.css';
 
@@ -45,10 +46,27 @@ const MetricCounter = ({ label, value, accentClassName }: { label: string; value
 
 export const AnalysisProgressPage = () => {
     const { batchId } = useParams<{ batchId: string }>();
-    const { status, isLoading, errorMessage, portfolioJob } = useAnalysisProgress(batchId);
+    const { status, isLoading, errorMessage, portfolioJob, refresh } = useAnalysisProgress(batchId);
     const [nowMs, setNowMs] = useState<number>(() => Date.now());
+    const [isRetrying, setIsRetrying] = useState<boolean>(false);
+    const [retryError, setRetryError] = useState<string | null>(null);
 
     const isRunning = status != null && !status.allTerminal;
+
+    // 자동 핸드오프가 실패한 배치의 포폴 생성 수동 재시도 → 성공 시 새 portfolioJobId를 재조회로 반영.
+    const handleRetryPortfolio = useCallback(async () => {
+        if (!batchId || isRetrying) return;
+        setIsRetrying(true);
+        setRetryError(null);
+        try {
+            await retryPortfolioHandoff(batchId);
+            await refresh();
+        } catch {
+            setRetryError('포트폴리오 생성 재시도에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        } finally {
+            setIsRetrying(false);
+        }
+    }, [batchId, isRetrying, refresh]);
 
     // 진행 중에는 1초 틱으로 경과 시간을 부드럽게 갱신.
     useEffect(() => {
@@ -221,6 +239,25 @@ export const AnalysisProgressPage = () => {
                                         포트폴리오 생성에 실패했습니다.{portfolioJob.errorMessage ? ` (${portfolioJob.errorMessage})` : ''}
                                     </p>
                                 )}
+                            </div>
+                        )}
+
+                        {/* NONSTOP 포폴 자동 핸드오프 실패 → 수동 재시도(portfolioJobId 없고 retryable일 때만) */}
+                        {status.portfolioJobId == null && status.portfolioRetryable && (
+                            <div className="mt-5 rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-4">
+                                <p className="text-sm font-semibold text-amber-100">포트폴리오 생성 시작에 실패했습니다</p>
+                                <p className="mt-1 text-sm text-amber-200/80">
+                                    분석은 완료됐지만 포트폴리오 생성 요청이 시작되지 못했습니다. 아래 버튼으로 다시 시도해주세요.
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={handleRetryPortfolio}
+                                    disabled={isRetrying}
+                                    className="mt-3 inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/15 px-4 py-2 text-sm font-medium text-amber-100 transition-colors hover:bg-amber-400/25 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    {isRetrying ? '재시도 중…' : '포트폴리오 생성 다시 시도'}
+                                </button>
+                                {retryError && <p className="mt-2 text-sm text-red-300/90">{retryError}</p>}
                             </div>
                         )}
                     </section>
