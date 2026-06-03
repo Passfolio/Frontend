@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { fetchGitHubRepos } from '@/api/GitHub/githubApi';
 import type { GitHubRepoItemType, GitHubRepoType } from '@/api/GitHub/githubApi';
 import { useRepoPrecheck } from '@/hooks/useRepoPrecheck';
@@ -62,7 +63,20 @@ export const ProjectAnalysisSection = () => {
     const [filter, setFilter] = useState<FilterType>('all');
     const [isDispatching, setIsDispatching] = useState<boolean>(false);
     const [isStartModalOpen, setIsStartModalOpen] = useState<boolean>(false);
-    const [sectionTab, setSectionTab] = useState<SectionTabType>('analyze');
+
+    // 분석서 페이지 등에서 ?tab=history 로 진입 시 분석 이력 탭을 열고 해당 위치로 이동한다.
+    const [searchParams, setSearchParams] = useSearchParams();
+    const isHistoryEntry = searchParams.get('tab') === 'history';
+    const [sectionTab, setSectionTab] = useState<SectionTabType>(isHistoryEntry ? 'history' : 'analyze');
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        if (!isHistoryEntry) return;
+        sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const next = new URLSearchParams(searchParams);
+        next.delete('tab');
+        setSearchParams(next, { replace: true });
+    }, [isHistoryEntry, searchParams, setSearchParams]);
 
     const { statusMap, startPrecheck, errorMessage } = useRepoPrecheck();
 
@@ -164,8 +178,9 @@ export const ProjectAnalysisSection = () => {
 
     return (
         <section
+            ref={sectionRef}
             aria-labelledby="project-analysis-heading"
-            className="rounded-2xl border border-white/[0.08] bg-[#141518]/90 p-5 sm:p-6"
+            className="scroll-mt-24 rounded-2xl border border-white/[0.08] bg-[#141518]/90 p-5 sm:p-6"
         >
             <h2 id="project-analysis-heading" className="text-lg font-semibold text-white">
                 프로젝트 분석

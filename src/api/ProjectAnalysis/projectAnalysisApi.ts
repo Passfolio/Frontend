@@ -26,15 +26,18 @@ export const getRepoPrecheckStatus = async (): Promise<PrecheckItemType[]> => {
     return Array.isArray(data) ? data : [];
 };
 
-// 분석 시작(AVAILABLE repo, ≤3). mode 기본 NONSTOP. phone(선택)=완료 SMS 수신 번호(DB 미저장·transient).
+// 분석 시작(AVAILABLE repo, ≤3). mode 기본 NONSTOP. phone(선택)=완료 SMS(transient).
+// NONSTOP 포트폴리오: pdfUrl(업로드 PDF CDN URL) + portfolioPurpose(EDIT|GENERATE).
 export const postStartAnalysis = async (
     repoUrlList: string[],
     mode?: string,
     phone?: string,
+    pdfUrl?: string,
+    portfolioPurpose?: string,
 ): Promise<AnalysisStartResponseType> => {
     const { data } = await axiosInstance.post<AnalysisStartResponseType>(
         API_ENDPOINTS.projectAnalysis.start,
-        { repoUrls: repoUrlList, mode, phone },
+        { repoUrls: repoUrlList, mode, phone, pdfUrl, portfolioPurpose },
     );
     return data;
 };

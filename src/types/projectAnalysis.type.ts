@@ -47,4 +47,5 @@ export type AdminBatchStatusResponseType = {
     allTerminal: boolean;
     counts: BatchStatusCountsType;
     analyses: AdminBatchAnalysisItemType[];
+    portfolioJobId?: number | null; // NONSTOP 포폴 AiJob id(있으면 진행중 페이지가 polling해 PDF 렌더)
 };

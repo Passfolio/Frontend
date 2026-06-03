@@ -45,7 +45,7 @@ const MetricCounter = ({ label, value, accentClassName }: { label: string; value
 
 export const AnalysisProgressPage = () => {
     const { batchId } = useParams<{ batchId: string }>();
-    const { status, isLoading, errorMessage } = useAnalysisProgress(batchId);
+    const { status, isLoading, errorMessage, portfolioJob } = useAnalysisProgress(batchId);
     const [nowMs, setNowMs] = useState<number>(() => Date.now());
 
     const isRunning = status != null && !status.allTerminal;
@@ -192,6 +192,36 @@ export const AnalysisProgressPage = () => {
                             <p className="mt-5 rounded-xl border border-white/[0.08] bg-[#101114]/70 px-4 py-3 text-sm text-zinc-300">
                                 분석 완료 · 총 {total}개 · 완료 {counts.done} · 실패 {counts.failed}
                             </p>
+                        )}
+
+                        {/* NONSTOP 포트폴리오 생성(portfolioJobId가 있을 때만) */}
+                        {status.portfolioJobId != null && (
+                            <div className="mt-5 rounded-xl border border-white/[0.08] bg-[#101114]/70 px-4 py-4">
+                                <div className="flex items-center justify-between gap-2">
+                                    <span className="text-sm font-semibold text-white">포트폴리오 생성</span>
+                                    <span className="text-xs text-zinc-500">
+                                        {portfolioJob?.status === 'DONE' ? '완료' : portfolioJob?.status === 'ERROR' ? '실패' : '생성 중…'}
+                                    </span>
+                                </div>
+                                {(!portfolioJob || portfolioJob.status === 'PENDING') && (
+                                    <p className="mt-2 text-sm text-zinc-400">분석 결과로 포트폴리오를 생성하고 있습니다. 완료되면 여기에 표시됩니다.</p>
+                                )}
+                                {portfolioJob?.status === 'DONE' && portfolioJob.pdfUrl && (
+                                    <a
+                                        href={portfolioJob.pdfUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-3 inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-400/15 px-4 py-2 text-sm font-medium text-emerald-100 transition-colors hover:bg-emerald-400/25"
+                                    >
+                                        포트폴리오 PDF 보기
+                                    </a>
+                                )}
+                                {portfolioJob?.status === 'ERROR' && (
+                                    <p className="mt-2 text-sm text-red-300/90">
+                                        포트폴리오 생성에 실패했습니다.{portfolioJob.errorMessage ? ` (${portfolioJob.errorMessage})` : ''}
+                                    </p>
+                                )}
+                            </div>
                         )}
                     </section>
                 )}
