@@ -131,7 +131,7 @@ export function RoadmapTabSection({
         <div className="flex flex-wrap items-center gap-3 text-sm text-zinc-400">
           <span className="font-semibold text-white">{data.llm_assessment.overall_level}</span>
           <span className="h-3.5 w-px bg-white/10" />
-          <span>{roleData.coverage_level} · {roleData.topic_coverage} 토픽 커버</span>
+          <span>{roleData.level} · {roleData.topic_coverage} 토픽 커버</span>
         </div>
       </div>
 
