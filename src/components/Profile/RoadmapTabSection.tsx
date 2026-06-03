@@ -60,13 +60,25 @@ function CoverageBar({ pct }: { pct: number }) {
 
 /* ─── 메인 컴포넌트 ─────────────────────────────────────── */
 
-export function RoadmapTabSection({ serviceKey }: { serviceKey?: string }) {
-  const [data, setData]       = useState<RoadmapAssessment | null>(null);
-  const [loading, setLoading] = useState(false);
+export function RoadmapTabSection({
+  serviceKey,
+  data: propData,
+}: {
+  serviceKey?: string;
+  data?: RoadmapAssessment;
+}) {
+  const [data, setData]       = useState<RoadmapAssessment | null>(propData ?? null);
+  const [loading, setLoading] = useState(!propData);
   const [error, setError]     = useState<string | null>(null);
-  const [activeRole, setActiveRole] = useState('');
+  const [activeRole, setActiveRole] = useState(propData?.primary_roles[0] ?? '');
 
   useEffect(() => {
+    if (propData) {
+      setData(propData);
+      setActiveRole(propData.primary_roles[0] ?? '');
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     getAssessment(serviceKey ?? '')
@@ -76,7 +88,7 @@ export function RoadmapTabSection({ serviceKey }: { serviceKey?: string }) {
       })
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false));
-  }, [serviceKey]);
+  }, [serviceKey, propData]);
 
   /* ── 상태별 렌더 ─── */
   if (loading) {
