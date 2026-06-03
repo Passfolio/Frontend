@@ -92,7 +92,33 @@ export const MOCK_ASSESSMENT: RoadmapAssessment = {
         { step: 8, topic: "메시지 큐 (Kafka/RabbitMQ)", tier: "core", status: "uncovered", subtopics_to_learn: ["Kafka 기초", "이벤트 소싱", "CQRS"], market_tier: "급부상", highlighted: true },
         { step: 9, topic: "컨테이너 (Docker/K8s)", tier: "support", status: "partial", subtopics_to_learn: ["K8s 배포", "Helm"], market_tier: "주류", highlighted: false },
       ],
-      nodes: [],
+      nodes: [
+        // CORE — covered
+        { label: "Python / Node.js 기초",       type: "topic",    parent: "", order: 5,  tier: "core",    status: "covered",   market_tier: "필수", highlighted: false },
+        { label: "REST API 설계",               type: "topic",    parent: "", order: 10, tier: "core",    status: "covered",   market_tier: "필수", highlighted: false },
+        { label: "Django / FastAPI",            type: "topic",    parent: "", order: 15, tier: "core",    status: "covered",   market_tier: "주류", highlighted: false },
+        { label: "SQL (PostgreSQL)",            type: "topic",    parent: "", order: 20, tier: "core",    status: "covered",   market_tier: "필수", highlighted: false },
+        { label: "데이터베이스 최적화",          type: "topic",    parent: "", order: 28, tier: "core",    status: "partial",   market_tier: "필수", highlighted: true  },
+        // CORE — uncovered
+        { label: "보안 (OAuth2, JWT 심화)",     type: "topic",    parent: "", order: 40, tier: "core",    status: "uncovered", market_tier: "필수", highlighted: true  },
+        { label: "메시지 큐 (Kafka/RabbitMQ)", type: "topic",    parent: "", order: 48, tier: "core",    status: "uncovered", market_tier: "급부상", highlighted: true  },
+        // SUPPORT — covered
+        { label: "Redis / 캐싱",               type: "topic",    parent: "", order: 25, tier: "support", status: "covered",   market_tier: "주류", highlighted: false },
+        // SUPPORT — partial
+        { label: "컨테이너 (Docker/K8s)",      type: "topic",    parent: "", order: 35, tier: "support", status: "partial",   market_tier: "주류", highlighted: false },
+        // subtopics
+        { label: "인덱스 전략",                type: "subtopic", parent: "데이터베이스 최적화",       order: 29, tier: "core",    status: "partial",   market_tier: "필수", highlighted: false },
+        { label: "쿼리 최적화",               type: "subtopic", parent: "데이터베이스 최적화",        order: 29, tier: "core",    status: "uncovered", market_tier: "필수", highlighted: false },
+        { label: "파티셔닝",                  type: "subtopic", parent: "데이터베이스 최적화",        order: 29, tier: "core",    status: "uncovered", market_tier: "중간", highlighted: false },
+        { label: "OIDC",                      type: "subtopic", parent: "보안 (OAuth2, JWT 심화)",   order: 41, tier: "core",    status: "uncovered", market_tier: "필수", highlighted: false },
+        { label: "PKCE",                      type: "subtopic", parent: "보안 (OAuth2, JWT 심화)",   order: 41, tier: "core",    status: "uncovered", market_tier: "주류", highlighted: false },
+        { label: "리프레시 토큰 전략",         type: "subtopic", parent: "보안 (OAuth2, JWT 심화)",   order: 41, tier: "core",    status: "uncovered", market_tier: "주류", highlighted: false },
+        { label: "Kafka 기초",                type: "subtopic", parent: "메시지 큐 (Kafka/RabbitMQ)", order: 49, tier: "core",    status: "uncovered", market_tier: "급부상", highlighted: false },
+        { label: "이벤트 소싱",               type: "subtopic", parent: "메시지 큐 (Kafka/RabbitMQ)", order: 49, tier: "core",    status: "uncovered", market_tier: "성장", highlighted: false },
+        { label: "CQRS",                      type: "subtopic", parent: "메시지 큐 (Kafka/RabbitMQ)", order: 49, tier: "core",    status: "uncovered", market_tier: "성장", highlighted: false },
+        { label: "K8s 배포",                  type: "subtopic", parent: "컨테이너 (Docker/K8s)",     order: 36, tier: "support", status: "uncovered", market_tier: "주류", highlighted: false },
+        { label: "Helm",                      type: "subtopic", parent: "컨테이너 (Docker/K8s)",     order: 36, tier: "support", status: "uncovered", market_tier: "중간", highlighted: false },
+      ],
       covered_count: 5,
       partial_count: 2,
       uncovered_count: 2,
