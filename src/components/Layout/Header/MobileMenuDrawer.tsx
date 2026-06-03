@@ -85,7 +85,7 @@ export const MobileMenuDrawer = ({
                     style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
                 >
                     {navLinkList.map((link) =>
-                        link.href.startsWith('/') ? (
+                        link.href.startsWith('/') && !link.href.startsWith('/#') ? (
                             <Link
                                 key={link.href}
                                 to={link.href}

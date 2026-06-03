@@ -24,9 +24,7 @@ export const Header = () => {
     const navigate = useNavigate();
 
     const isAuthenticated = Boolean(user?.id || localStorage.getItem('userId'));
-    const navLinkList = isAuthenticated
-        ? LANDING_NAV_LINK_LIST.filter((l) => l.href !== '/#documentation' && l.href !== '/#service')
-        : LANDING_NAV_LINK_LIST;
+    const navLinkList = LANDING_NAV_LINK_LIST;
     const isNarrowViewport = useMediaQuery(MOBILE_MEDIA_QUERY);
     const useCompactHeaderLayout = isNarrowViewport;
     const mobileMenuBreakpoint: 'md' | 'lg' = 'md';

@@ -69,7 +69,6 @@ export const App = () => {
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/terms" element={<TermsOfServicePage />} />
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                    <Route path="/upload" element={<UploadPage />} />
                     <Route path="/roadmap" element={<RoadMapPage />} />
                     <Route path="/oauth/callback" element={<OAuthCallback />} />
 
@@ -97,6 +96,7 @@ export const App = () => {
                                 </Suspense>
                             }
                         />
+                        <Route path="/upload" element={<UploadPage />} />
                         <Route element={<AdminRoute />}>
                             <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
                             <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />

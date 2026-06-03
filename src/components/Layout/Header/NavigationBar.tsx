@@ -3,8 +3,8 @@ import type { UserType } from '@/context/Auth/AuthContext';
 import type { NavUnderlineStateType } from '@/hooks/Layout/useNavUnderline';
 import type { LandingNavLinkType } from '@/constants/landingPage';
 
-// '/foo' 같은 라우터 내부 경로는 Link로, '#section'·외부 URL은 일반 a 태그로 렌더한다.
-const isInternalRoutePath = (href: string): boolean => href.startsWith('/');
+// '/foo' 같은 라우터 내부 경로는 Link로, '/#section'·외부 URL은 일반 a 태그로 렌더한다.
+const isInternalRoutePath = (href: string): boolean => href.startsWith('/') && !href.startsWith('/#');
 
 type NavigationBarProps = {
     handleLinkMouseEnter: (event: React.MouseEvent<HTMLAnchorElement>) => void;
