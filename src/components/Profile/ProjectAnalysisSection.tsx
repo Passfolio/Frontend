@@ -38,6 +38,18 @@ const NONE_META: BadgeMetaType = { label: '미점검', badgeClassName: 'border-w
 const repoUrlOf = (repo: GitHubRepoItemType): string | null =>
     repo.htmlUrl ?? (repo.fullName ? `https://github.com/${repo.fullName}` : null);
 
+const StatusBadge = ({ status }: { status?: PrecheckStatusType }) => {
+    const meta = status ? STATUS_META[status] : NONE_META;
+    return (
+        <span
+            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${meta.badgeClassName}`}
+        >
+            <span className={`h-1.5 w-1.5 rounded-full ${meta.dotClassName}`} aria-hidden="true" />
+            {meta.label}
+        </span>
+    );
+};
+
 // 사용자용 프로젝트 분석 — repo 사전 점검(분석 가능성) + 분석 시작.
 export const ProjectAnalysisSection = () => {
     const [repoType, setRepoType] = useState<RepoTabType>('public');
@@ -46,7 +58,7 @@ export const ProjectAnalysisSection = () => {
     const [isFetchingRepos, setIsFetchingRepos] = useState<boolean>(false);
     const [repoError, setRepoError] = useState<string | null>(null);
 
-    const [selectedUrlSet, setSelectedUrlSet] = useState<Set<string>>(new Set());
+    const [selectedRepoMap, setSelectedRepoMap] = useState<Map<string, GitHubRepoItemType>>(new Map());
     const [filter, setFilter] = useState<FilterType>('all');
     const [isDispatching, setIsDispatching] = useState<boolean>(false);
     const [isStartModalOpen, setIsStartModalOpen] = useState<boolean>(false);
@@ -91,11 +103,20 @@ export const ProjectAnalysisSection = () => {
         }
     }, [nextCursor, isFetchingRepos, repoType]);
 
-    const toggleSelect = useCallback((url: string) => {
-        setSelectedUrlSet((prev) => {
-            const next = new Set(prev);
+    const toggleSelect = useCallback((url: string, repo: GitHubRepoItemType) => {
+        setSelectedRepoMap((prev) => {
+            const next = new Map(prev);
             if (next.has(url)) next.delete(url);
-            else if (next.size < MAX_PRECHECK) next.add(url);
+            else if (next.size < MAX_PRECHECK) next.set(url, repo);
+            return next;
+        });
+    }, []);
+
+    const removeSelect = useCallback((url: string) => {
+        setSelectedRepoMap((prev) => {
+            if (!prev.has(url)) return prev;
+            const next = new Map(prev);
+            next.delete(url);
             return next;
         });
     }, []);
@@ -108,7 +129,8 @@ export const ProjectAnalysisSection = () => {
         });
     }, [repoList, filter, statusMap]);
 
-    const selectedUrlList = useMemo(() => [...selectedUrlSet], [selectedUrlSet]);
+    const selectedUrlList = useMemo(() => [...selectedRepoMap.keys()], [selectedRepoMap]);
+    const selectedRepoList = useMemo(() => [...selectedRepoMap.entries()], [selectedRepoMap]);
     const selectedAvailableList = useMemo(
         () => selectedUrlList.filter((url) => statusMap[url]?.status === 'AVAILABLE'),
         [selectedUrlList, statusMap],
@@ -246,9 +268,8 @@ export const ProjectAnalysisSection = () => {
                             const url = repoUrlOf(repo);
                             if (!url) return null;
                             const state = statusMap[url];
-                            const meta = state ? STATUS_META[state.status] : NONE_META;
-                            const isSelected = selectedUrlSet.has(url);
-                            const isSelectDisabled = !isSelected && selectedUrlSet.size >= MAX_PRECHECK;
+                            const isSelected = selectedRepoMap.has(url);
+                            const isSelectDisabled = !isSelected && selectedRepoMap.size >= MAX_PRECHECK;
                             return (
                                 <li key={url}>
                                     <label
@@ -261,7 +282,7 @@ export const ProjectAnalysisSection = () => {
                                                 type="checkbox"
                                                 checked={isSelected}
                                                 disabled={isSelectDisabled}
-                                                onChange={() => toggleSelect(url)}
+                                                onChange={() => toggleSelect(url, repo)}
                                                 className="h-4 w-4 shrink-0 accent-white"
                                             />
                                             <span className="truncate text-sm text-zinc-200">{repo.fullName ?? repo.name}</span>
@@ -277,12 +298,7 @@ export const ProjectAnalysisSection = () => {
                                                     {state.reason}
                                                 </span>
                                             )}
-                                            <span
-                                                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${meta.badgeClassName}`}
-                                            >
-                                                <span className={`h-1.5 w-1.5 rounded-full ${meta.dotClassName}`} aria-hidden="true" />
-                                                {meta.label}
-                                            </span>
+                                            <StatusBadge status={state?.status} />
                                         </div>
                                     </label>
                                 </li>
@@ -303,6 +319,46 @@ export const ProjectAnalysisSection = () => {
                     </button>
                 )}
             </div>
+
+            {/* 선택한 저장소 요약 */}
+            {selectedRepoList.length > 0 && (
+                <div className="mt-4 rounded-xl border border-white/[0.08] bg-[#101114]/70 p-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-medium text-zinc-200">선택한 저장소</h3>
+                        <span className="text-xs tabular-nums text-zinc-500">
+                            {selectedRepoList.length}/{MAX_PRECHECK}
+                        </span>
+                    </div>
+                    <ul className="mt-3 flex list-none flex-col gap-2 p-0">
+                        {selectedRepoList.map(([url, repo]) => {
+                            const state = statusMap[url];
+                            return (
+                                <li
+                                    key={url}
+                                    className="flex items-center justify-between gap-2 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2"
+                                >
+                                    <span className="min-w-0 truncate text-sm text-zinc-200">
+                                        {repo.fullName ?? repo.name}
+                                    </span>
+                                    <div className="flex shrink-0 items-center gap-2">
+                                        <StatusBadge status={state?.status} />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeSelect(url)}
+                                            aria-label={`${repo.fullName ?? repo.name} 선택 해제`}
+                                            className="flex h-6 w-6 items-center justify-center rounded-full text-zinc-500 transition-colors hover:bg-white/[0.08] hover:text-white"
+                                        >
+                                            <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                                                <path d="M5 5l10 10M15 5L5 15" strokeLinecap="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
 
             {/* 액션 */}
             <div className="mt-5 flex flex-col gap-3 border-t border-white/[0.08] pt-5 sm:flex-row sm:items-center sm:justify-between">
