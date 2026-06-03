@@ -41,7 +41,7 @@ export const API_ENDPOINTS = {
         portfolioFromPdf: '/api/v1/ai/jobs/portfolio/from-pdf',
         coverLetterFromPdf: '/api/v1/ai/jobs/cover-letter/from-pdf',
         coverLetterFromPortfolio: '/api/v1/ai/jobs/cover-letter/from-portfolio',
-        coverLetterToPortfolio: '/api/v1/ai/jobs/cover-letter/to-portfolio',
+        coverLetterToPortfolio: '/api/v1/ai/jobs/portfolio/from-cover-letter',
         status: (jobId: number) => `/api/v1/ai/jobs/${jobId}`,
     },
     projectAnalysis: {
