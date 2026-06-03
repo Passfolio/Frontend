@@ -10,7 +10,7 @@ export type AiJobResponseType = {
 export type AiJobStatusResponseType = {
     jobId: number;
     status: AiJobStatus;
-    outputPdfS3Url: string | null;
+    outputPdfUrl: string | null;
     errorMessage: string | null;
 };
 
