@@ -51,8 +51,8 @@ export const MobileProfileHeader = ({
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-2">
-                    <div className="flex min-w-0 flex-1 flex-wrap gap-2">
+                <div className="flex flex-col gap-2">
+                    <div className="flex flex-wrap gap-2">
                         <span
                             className="max-w-full truncate rounded-full border border-white/[0.18] px-3 py-1 text-xs font-medium text-white/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(0,0,0,0.15)] backdrop-blur-xl sm:max-w-none"
                             style={{
@@ -74,11 +74,11 @@ export const MobileProfileHeader = ({
                         </span>
                     </div>
 
-                    <div className="flex shrink-0 flex-col gap-1.5">
+                    <div className="flex gap-2">
                         <button
                             type="button"
                             onClick={onUpdateProfile}
-                            className="rounded-full border border-white/[0.18] px-4 py-2 text-xs font-semibold text-white/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.28),inset_0_-1px_0_rgba(0,0,0,0.18),0_4px_16px_-4px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-200 hover:border-white/30 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.32),0_0_20px_rgba(255,255,255,0.08)] active:scale-[0.97]"
+                            className="flex-1 rounded-full border border-white/18 px-4 py-2 text-xs font-semibold text-white/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.28),inset_0_-1px_0_rgba(0,0,0,0.18),0_4px_16px_-4px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all duration-200 hover:border-white/30 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.32),0_0_20px_rgba(255,255,255,0.08)] active:scale-[0.97]"
                             style={{
                                 background:
                                     'linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%)',
@@ -88,7 +88,7 @@ export const MobileProfileHeader = ({
                         </button>
                         <Link
                             to="/upload"
-                            className="inline-flex items-center justify-center gap-1 rounded-full px-4 py-2 text-xs font-semibold text-white transition-all duration-200 active:scale-[0.97]"
+                            className="flex-1 inline-flex items-center justify-center gap-1 rounded-full px-4 py-2 text-xs font-semibold text-white transition-all duration-200 active:scale-[0.97]"
                             style={{
                                 background: 'linear-gradient(135deg, rgba(99,102,241,0.9) 0%, rgba(139,92,246,0.9) 100%)',
                                 boxShadow: '0 4px 16px -4px rgba(99,102,241,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
