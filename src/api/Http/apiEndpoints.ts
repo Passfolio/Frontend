@@ -63,6 +63,10 @@ export const API_ENDPOINTS = {
         signupsDaily: '/api/v1/admin/users/signups-daily',
         list: '/api/v1/admin/users',
     },
+    roadmap: {
+        assess: '/api/v1/roadmap/assess',
+        stream: (jobId: string) => `/api/v1/roadmap/jobs/${jobId}/stream`,
+    },
 } as const;
 
 export const isAuthRefreshUrl = (url: string): boolean =>
