@@ -242,6 +242,14 @@ export const AnalysisProgressPage = () => {
                             </div>
                         )}
 
+                        {/* NONSTOP 포폴 핸드오프 in-flight(FastAPI 호출 중) — 곧 portfolioJobId가 잡힘 */}
+                        {status.portfolioJobId == null && status.portfolioPending && (
+                            <div className="mt-5 rounded-xl border border-white/[0.08] bg-[#101114]/70 px-4 py-4">
+                                <p className="text-sm font-semibold text-white">포트폴리오 생성 준비 중…</p>
+                                <p className="mt-1 text-sm text-zinc-400">분석 결과로 포트폴리오 생성을 시작하고 있습니다.</p>
+                            </div>
+                        )}
+
                         {/* NONSTOP 포폴 자동 핸드오프 실패 → 수동 재시도(portfolioJobId 없고 retryable일 때만) */}
                         {status.portfolioJobId == null && status.portfolioRetryable && (
                             <div className="mt-5 rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-4">

@@ -49,4 +49,5 @@ export type AdminBatchStatusResponseType = {
     analyses: AdminBatchAnalysisItemType[];
     portfolioJobId?: number | null; // NONSTOP 포폴 AiJob id(있으면 진행중 페이지가 polling해 PDF 렌더)
     portfolioRetryable?: boolean; // NONSTOP 전원성공이나 포폴 핸드오프 미완(자동 실패) → 재시도 노출(새로고침에도 유지)
+    portfolioPending?: boolean; // 핸드오프 in-flight(FastAPI 호출 중) — 폴링 지속·재시도 미노출(retryable과 상호배타)
 };
