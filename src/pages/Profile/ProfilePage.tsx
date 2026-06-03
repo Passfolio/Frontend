@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { UpdateProfileModal } from '@/components/Profile/UpdateProfileModal/UpdateProfileModal';
 import { LanderFooter } from '@/components/Lander/LanderFooter';
@@ -27,6 +27,17 @@ import type {
 } from '@/api/Spec/specApi';
 import { getMyCareer, getMyEducationHistory } from '@/api/Spec/specApi';
 import '@/pages/Lander/landerPage.css';
+
+const RoadmapTabSection = lazy(() => import('@/components/Profile/RoadmapTabSection'));
+
+function RoadmapSpinner() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 py-20">
+      <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
+      <p className="text-sm text-zinc-500">로드맵을 불러오는 중...</p>
+    </div>
+  );
+}
 
 function formatJobKeywordsPreview(keywords: string[]): string {
   const list = keywords.filter(Boolean);
@@ -92,7 +103,6 @@ function pickCareerFromPatch(patch: DevSpecUpdateResponseType): CareerInfoType {
   };
 }
 
-/** PATCH 직후 GET 전에 화면에 반영 (서버 응답 본문 기준) */
 function specFromPatch(patch: DevSpecUpdateResponseType) {
   return buildProfileSpecState(
     patch.experience,
@@ -126,14 +136,13 @@ export const ProfilePage = () => {
       options?: { isCancelled?: () => boolean },
     ) => {
       const isCancelled = () => options?.isCancelled?.() === true;
-
       if (!user?.id) {
         if (!isCancelled()) setSpec(EMPTY_SPEC);
         return;
       }
       try {
         if (patchResult != null && !isCancelled()) {
-          setSpec(specFromPatch(patchResult)); // 즉각 반영
+          setSpec(specFromPatch(patchResult));
         }
         if (isCancelled()) return;
         const [career, educationHistory] = await Promise.all([
@@ -152,100 +161,100 @@ export const ProfilePage = () => {
   useEffect(() => {
     let cancelled = false;
     void refreshProfileSpec(undefined, { isCancelled: () => cancelled });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [refreshProfileSpec]);
 
   const openUpdateProfile = () => setUpdateProfileOpen(true);
 
   return (
-      <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
-        <main className="relative z-[1] mx-auto flex w-full flex-1 max-w-[1200px] flex-col gap-10 px-4 pb-16 pt-24 md:px-6 md:pt-28 lg:flex-none lg:flex-row lg:items-stretch lg:gap-10 lg:px-10">
+    <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
+      <main className="relative z-1 mx-auto flex w-full flex-1 max-w-[1200px] flex-col gap-10 px-4 pb-16 pt-24 md:px-6 md:pt-28 lg:flex-none lg:flex-row lg:items-stretch lg:gap-10 lg:px-10">
 
-          <div className="flex flex-col gap-5 lg:hidden">
-            <MobileProfileHeader
-                user={user}
-                jobLine={spec.jobLine}
-                educationSchool={spec.educationSchool}
-                careerYearsLabel={spec.careerYearsLabel}
-                onUpdateProfile={openUpdateProfile}
-            />
-            <ProfileMobileSectionTabs activeMenu={activeMenu} onSelect={setActiveMenu} />
-            <div className="flex flex-col gap-10">
-              {activeMenu === '프로필' ? (
-                <>
-                  <TechStackSection
-                      roles={spec.techRoles}
-                      majors={spec.techMajors}
-                      skills={spec.techSkills}
-                  />
-                  <RepositoryAccordion />
-                </>
-              ) : activeMenu === '나의 보유 역량' ? (
-                <MyCompetenciesSection
-                    educationHistory={spec.educationHistory}
-                    jobLine={spec.jobLine}
-                    careerYearsLabel={spec.careerYearsLabel}
-                    roles={spec.techRoles}
-                    majors={spec.techMajors}
-                    skills={spec.techSkills}
-                />
-              ) : activeMenu === '프로젝트 분석' ? (
-                <ProjectAnalysisSection />
-              ) : (
-                <ProfileComingSoonSection title={activeMenu} />
-              )}
-            </div>
-          </div>
-
-          <ProfileSidebar
-              user={user}
-              jobLine={spec.jobLine}
-              educationSchool={spec.educationSchool}
-              careerYearsLabel={spec.careerYearsLabel}
-              activeMenu={activeMenu}
-              setActiveMenu={setActiveMenu}
-              onUpdateProfile={openUpdateProfile}
+        {/* 모바일 */}
+        <div className="flex flex-col gap-5 lg:hidden">
+          <MobileProfileHeader
+            user={user}
+            jobLine={spec.jobLine}
+            educationSchool={spec.educationSchool}
+            careerYearsLabel={spec.careerYearsLabel}
+            onUpdateProfile={openUpdateProfile}
           />
-
-          <section className="hidden min-h-0 w-full flex-1 flex-col gap-11 lg:flex lg:min-h-0">
+          <ProfileMobileSectionTabs activeMenu={activeMenu} onSelect={setActiveMenu} />
+          <div className="flex flex-col gap-10">
             {activeMenu === '프로필' ? (
-                <>
-                    <TechStackSection
-                        roles={spec.techRoles}
-                        majors={spec.techMajors}
-                        skills={spec.techSkills}
-                    />
-                    <RepositorySection />
-                </>
+              <>
+                <TechStackSection roles={spec.techRoles} majors={spec.techMajors} skills={spec.techSkills} />
+                <RepositoryAccordion />
+              </>
             ) : activeMenu === '나의 보유 역량' ? (
-                <MyCompetenciesSection
-                    educationHistory={spec.educationHistory}
-                    jobLine={spec.jobLine}
-                    careerYearsLabel={spec.careerYearsLabel}
-                    roles={spec.techRoles}
-                    majors={spec.techMajors}
-                    skills={spec.techSkills}
-                />
+              <MyCompetenciesSection
+                educationHistory={spec.educationHistory}
+                jobLine={spec.jobLine}
+                careerYearsLabel={spec.careerYearsLabel}
+                roles={spec.techRoles}
+                majors={spec.techMajors}
+                skills={spec.techSkills}
+              />
             ) : activeMenu === '프로젝트 분석' ? (
-                <ProjectAnalysisSection />
+              <ProjectAnalysisSection />
+            ) : activeMenu === '로드맵' ? (
+              <Suspense fallback={<RoadmapSpinner />}>
+                <RoadmapTabSection />
+              </Suspense>
             ) : (
-                <ProfileComingSoonSection title={activeMenu} />
+              <ProfileComingSoonSection title={activeMenu} />
             )}
-          </section>
-        </main>
+          </div>
+        </div>
 
-        <LanderFooter />
+        <ProfileSidebar
+          user={user}
+          jobLine={spec.jobLine}
+          educationSchool={spec.educationSchool}
+          careerYearsLabel={spec.careerYearsLabel}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+          onUpdateProfile={openUpdateProfile}
+        />
 
-        {user?.id ? (
-            <UpdateProfileModal
-                open={updateProfileOpen}
-                onClose={() => setUpdateProfileOpen(false)}
-                userId={user.id}
-                onProfileUpdated={(result) => void refreshProfileSpec(result)}
+        {/* 데스크탑 */}
+        <section className="hidden min-h-0 w-full flex-1 flex-col gap-11 lg:flex lg:min-h-0">
+          {activeMenu === '프로필' ? (
+            <>
+              <TechStackSection roles={spec.techRoles} majors={spec.techMajors} skills={spec.techSkills} />
+              <RepositorySection />
+            </>
+          ) : activeMenu === '나의 보유 역량' ? (
+            <MyCompetenciesSection
+              educationHistory={spec.educationHistory}
+              jobLine={spec.jobLine}
+              careerYearsLabel={spec.careerYearsLabel}
+              roles={spec.techRoles}
+              majors={spec.techMajors}
+              skills={spec.techSkills}
             />
-        ) : null}
-      </div>
+          ) : activeMenu === '프로젝트 분석' ? (
+            <ProjectAnalysisSection />
+          ) : activeMenu === '로드맵' ? (
+            <Suspense fallback={<RoadmapSpinner />}>
+              <RoadmapTabSection />
+            </Suspense>
+          ) : (
+            <ProfileComingSoonSection title={activeMenu} />
+          )}
+        </section>
+      </main>
+
+      <LanderFooter />
+
+      {user?.id ? (
+        <UpdateProfileModal
+          open={updateProfileOpen}
+          onClose={() => setUpdateProfileOpen(false)}
+          userId={user.id}
+          onProfileUpdated={(result) => void refreshProfileSpec(result)}
+        />
+      ) : null}
+    </div>
   );
 };

@@ -23,7 +23,7 @@ const AdminCapabilityCard = ({ title, description, to, isComingSoon }: AdminCapa
             <div className="flex items-start justify-between gap-3">
                 <h2 className="text-base font-semibold text-white">{title}</h2>
                 {isComingSoon && (
-                    <span className="shrink-0 rounded-full border border-white/10 bg-white/[0.06] px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-zinc-400">
+                    <span className="shrink-0 rounded-full border border-white/10 bg-white/6 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-zinc-400">
                         출시 예정
                     </span>
                 )}
@@ -33,7 +33,7 @@ const AdminCapabilityCard = ({ title, description, to, isComingSoon }: AdminCapa
     );
 
     const className =
-        'block rounded-2xl border border-white/[0.08] bg-[#141518]/90 p-5 transition-colors hover:border-white/[0.14] hover:bg-[#18191d]';
+        'block rounded-2xl border border-white/8 bg-[#141518]/90 p-5 transition-colors hover:border-white/[0.14] hover:bg-[#18191d]';
 
     if (to && !isComingSoon) {
         return (
@@ -57,8 +57,8 @@ export const AdminProfilePage = () => {
 
     return (
         <div className="flex min-h-screen flex-col bg-[#0d0d0f] text-white">
-            <main className="relative z-[1] mx-auto w-full max-w-[960px] flex-1 px-4 pb-20 pt-24 md:px-6 md:pt-28">
-                <header className="mb-10 flex flex-col gap-6 border-b border-white/[0.08] pb-10 md:flex-row md:items-center md:gap-8">
+            <main className="relative z-1 mx-auto w-full max-w-[960px] flex-1 px-4 pb-20 pt-24 md:px-6 md:pt-28">
+                <header className="mb-10 flex flex-col gap-6 border-b border-white/8 pb-10 md:flex-row md:items-center md:gap-8">
                     <img
                         src={avatarSrc}
                         alt=""
@@ -145,6 +145,13 @@ export const AdminProfilePage = () => {
                                 title="Project Precheck Test"
                                 description="공개 저장소로 분석 가능성 사전 점검을 토큰 없이 테스트합니다."
                                 to={ADMIN_PORTAL_PRECHECK_TEST_PATH}
+                            />
+                        </li>
+                        <li>
+                            <AdminCapabilityCard
+                                title="로드맵 테스트"
+                                description="RoadmapTimeline 컴포넌트와 AI 분석 데이터를 실제 렌더링으로 검증합니다."
+                                to={`${ADMIN_PORTAL_TEST_PATH}?view=roadmap`}
                             />
                         </li>
                         <li>
