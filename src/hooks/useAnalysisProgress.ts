@@ -39,6 +39,12 @@ export type UseAnalysisProgressReturnType = {
 const toAnalysisStatus = (raw: string): AnalysisStatusType =>
     raw === 'YET' || raw === 'IN_PROGRESS' || raw === 'DONE' || raw === 'FAILED' ? raw : 'IN_PROGRESS';
 
+// 폴링 종료 신호: 분석 전원 종료 + 포폴 핸드오프 결판(in-flight 아님).
+// allTerminal만으로 멈추면 NONSTOP 핸드오프(FastAPI 호출 ~1-2s) 중에 폴링이 끊겨 portfolioJobId를
+// 못 받고 "생성 시작 실패"로 오표시된다(SSE 불능 시 영구). portfolioPending 동안은 폴링을 이어간다.
+const isSettled = (s: AnalysisBatchStatusType | null | undefined): boolean =>
+    !!s && s.allTerminal && !s.portfolioPending;
+
 /**
  * 본인 배치 진행 상태 관리.
  * - 마운트 시 GET(getUserBatchStatus)으로 시드.
@@ -68,7 +74,7 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
             const data = await getUserBatchStatus(batchId);
             setStatus(data);
             setErrorMessage(null);
-            if (data.allTerminal) clearPoll();
+            if (isSettled(data)) clearPoll();
         } catch {
             setErrorMessage('분석 상태를 불러오지 못했습니다.');
         }
@@ -77,7 +83,7 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
     const ensureSafetyPoll = useCallback(() => {
         if (pollRef.current !== null) return;
         pollRef.current = setInterval(() => {
-            if (statusRef.current?.allTerminal) {
+            if (isSettled(statusRef.current)) {
                 clearPoll();
                 return;
             }
@@ -98,7 +104,7 @@ export function useAnalysisProgress(batchId: string | undefined): UseAnalysisPro
             .then((data) => {
                 if (cancelled) return;
                 setStatus(data);
-                if (!data.allTerminal) ensureSafetyPoll();
+                if (!isSettled(data)) ensureSafetyPoll();
             })
             .catch(() => {
                 if (!cancelled) setErrorMessage('분석 상태를 불러오지 못했습니다.');
