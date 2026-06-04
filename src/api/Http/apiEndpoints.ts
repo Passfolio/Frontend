@@ -43,6 +43,7 @@ export const API_ENDPOINTS = {
         coverLetterFromPortfolio: '/api/v1/ai/jobs/cover-letter/from-portfolio',
         coverLetterToPortfolio: '/api/v1/ai/jobs/portfolio/from-cover-letter',
         status: (jobId: number) => `/api/v1/ai/jobs/${jobId}`,
+        roadmapAssess: '/api/v1/ai/jobs/roadmap/assess', // 로드맵 평가 시작(BE relay → FastAPI)
     },
     projectAnalysis: {
         precheck: '/api/v1/project-analysis/precheck', // POST(시작) / GET(상태 목록)
@@ -62,10 +63,6 @@ export const API_ENDPOINTS = {
     adminUsers: {
         signupsDaily: '/api/v1/admin/users/signups-daily',
         list: '/api/v1/admin/users',
-    },
-    roadmap: {
-        assess: '/api/v1/roadmap/assess',
-        stream: (jobId: string) => `/api/v1/roadmap/jobs/${jobId}/stream`,
     },
 } as const;
 
