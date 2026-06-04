@@ -1,48 +1,54 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { postRoadmapAssess, streamRoadmapJob } from '@/api/RoadMap/roadmapAssessApi';
+import { postRoadmapAssess, pollRoadmapResult } from '@/api/RoadMap/roadmapAssessApi';
 import type { RoadmapAssessment } from '@/types/roadmap.type';
 
 const RoadmapTabSection = lazy(() => import('@/components/Profile/RoadmapTabSection'));
 
-const CDN_JSON_URL = 'https://cdn.passfolio.dev/analyses/hooby/deokive-be-youcu-1/final.json';
-
-type Phase = 'idle' | 'posting' | 'streaming' | 'done' | 'error';
+type Phase = 'idle' | 'posting' | 'polling' | 'done' | 'error';
 
 const PHASE_LABEL: Record<Phase, string> = {
     idle: '',
     posting: '서버에 분석 요청 중...',
-    streaming: 'Job 결과 수신 중...',
+    polling: 'Job 결과 대기 중...',
     done: '',
     error: '',
 };
 
 export function AdminRoadmapTestView() {
+    const [analysisIdsInput, setAnalysisIdsInput] = useState('');
+    const [merge, setMerge] = useState(true);
     const [phase, setPhase] = useState<Phase>('idle');
-    const [jobId, setJobId] = useState<string | null>(null);
+    const [jobId, setJobId] = useState<number | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [result, setResult] = useState<RoadmapAssessment | null>(null);
-    const esCleanupRef = useRef<(() => void) | null>(null);
+    const pollCleanupRef = useRef<(() => void) | null>(null);
 
     useEffect(() => {
         return () => {
-            esCleanupRef.current?.();
+            pollCleanupRef.current?.();
         };
     }, []);
 
     const handleStart = async () => {
-        esCleanupRef.current?.();
+        pollCleanupRef.current?.();
+        const analysisIds = analysisIdsInput.split(',').map((s) => s.trim()).filter(Boolean);
+        if (analysisIds.length === 0) {
+            setErrorMsg('분석 ID를 1개 이상 입력하세요(콤마 구분).');
+            setPhase('error');
+            return;
+        }
         setPhase('posting');
         setErrorMsg(null);
         setResult(null);
         setJobId(null);
 
         try {
-            const { job_id } = await postRoadmapAssess({ analysis_url: CDN_JSON_URL });
-            setJobId(job_id);
+            const { jobId: id } = await postRoadmapAssess(analysisIds, merge);
+            setJobId(id);
 
-            setPhase('streaming');
-            const cleanup = streamRoadmapJob(
-                job_id,
+            setPhase('polling');
+            const cleanup = pollRoadmapResult(
+                id,
                 (data) => {
                     setResult(data);
                     setPhase('done');
@@ -52,19 +58,35 @@ export function AdminRoadmapTestView() {
                     setPhase('error');
                 },
             );
-            esCleanupRef.current = cleanup;
+            pollCleanupRef.current = cleanup;
         } catch (e) {
             setErrorMsg(e instanceof Error ? e.message : '알 수 없는 오류');
             setPhase('error');
         }
     };
 
-    const isRunning = phase === 'posting' || phase === 'streaming';
+    const isRunning = phase === 'posting' || phase === 'polling';
 
     return (
         <div className="flex flex-col gap-6">
             {/* 컨트롤 영역 */}
             <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-[#16171a] p-4">
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-xs text-zinc-400">완료된 분석 ID (콤마 구분)</label>
+                    <input
+                        type="text"
+                        value={analysisIdsInput}
+                        onChange={(e) => setAnalysisIdsInput(e.target.value)}
+                        disabled={isRunning}
+                        placeholder="예: 2f1ac9fd-..., 957e7ab9-..."
+                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-white/20 disabled:opacity-50"
+                    />
+                    <label className="flex items-center gap-2 text-xs text-zinc-400">
+                        <input type="checkbox" checked={merge} onChange={(e) => setMerge(e.target.checked)} disabled={isRunning} className="accent-white" />
+                        merge (여러 분석을 하나로 합쳐 평가)
+                    </label>
+                </div>
+
                 <div className="flex flex-wrap items-center gap-3">
                     <button
                         type="button"
@@ -91,10 +113,6 @@ export function AdminRoadmapTestView() {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-500">
-                    <span>
-                        <span className="text-zinc-400">소스: </span>
-                        <code className="text-zinc-300">{CDN_JSON_URL}</code>
-                    </span>
                     {jobId && (
                         <span>
                             <span className="text-zinc-400">Job ID: </span>

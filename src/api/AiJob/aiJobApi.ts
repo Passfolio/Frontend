@@ -11,6 +11,7 @@ export type AiJobStatusResponseType = {
     jobId: number;
     status: AiJobStatus;
     outputPdfUrl: string | null;
+    resultJson: string | null; // 로드맵 등 JSON 결과(DONE일 때 non-null)
     errorMessage: string | null;
 };
 
