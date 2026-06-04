@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { getAssessment } from '@/api/RoadMap/roadmapApi';
+import { useState } from 'react';
 import { RoadmapTimeline } from '@/components/RoadMap/RoadmapTimeline';
+import { useRoadmapGeneration } from '@/hooks/useRoadmapGeneration';
 import type { RoadmapAssessment, MarketTier } from '@/types/roadmap.type';
 
 /* ─── 상수 ───────────────────────────────────────────────── */
@@ -18,6 +18,13 @@ const MARKET_COLOR: Record<MarketTier, string> = {
   '성장':   '#4ade80',
   '중간':   '#a1a1aa',
 };
+
+/** github URL → 짧은 owner/repo 표기 (https://github.com/ prefix + .git suffix 제거). */
+function shortenRepo(repoUrl: string): string {
+  return repoUrl
+    .replace(/^https:\/\/github\.com\//, '')
+    .replace(/\.git$/, '');
+}
 
 /* ─── 서브 컴포넌트 ─────────────────────────────────────── */
 
@@ -61,56 +68,117 @@ function CoverageBar({ pct }: { pct: number }) {
 /* ─── 메인 컴포넌트 ─────────────────────────────────────── */
 
 export function RoadmapTabSection({
-  serviceKey,
   data: propData,
 }: {
-  serviceKey?: string;
+  /** AdminRoadmapTestView가 직접 주입하는 평가 결과. 주어지면 이력 조회/생성 없이 바로 렌더. */
   data?: RoadmapAssessment;
 }) {
-  const [data, setData]       = useState<RoadmapAssessment | null>(propData ?? null);
-  const [loading, setLoading] = useState(!propData);
-  const [error, setError]     = useState<string | null>(null);
-  const [activeRole, setActiveRole] = useState(propData?.primary_roles[0] ?? '');
+  /* propData가 있으면 이력 조회를 끈다 (훅은 무조건 호출하되 fetch만 생략). */
+  const hook = useRoadmapGeneration({ enabled: !propData });
 
-  useEffect(() => {
-    if (propData) {
-      setData(propData);
-      setActiveRole(propData.primary_roles[0] ?? '');
-      setLoading(false);
-      return;
+  /* propData가 직접 주입된 경우 로컬 activeRole로 역할 탭을 제어. */
+  const [propRole, setPropRole] = useState(propData?.primary_roles[0] ?? '');
+
+  /* propData(주입) 우선, 없으면 훅의 생성 결과 사용. */
+  const assessment   = propData ?? hook.data;
+  const activeRole   = propData ? propRole : hook.activeRole;
+  const setActiveRole = propData ? setPropRole : hook.setActiveRole;
+
+  /* ── propData가 없을 때(프로필 탭): 선택 → 생성 → 폴링 위상 UI ─── */
+  if (!propData) {
+    if (hook.phase === 'select') {
+      if (hook.historyLoading) {
+        return (
+          <div className="flex flex-col items-center justify-center gap-3 py-20">
+            <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
+            <p className="text-sm text-zinc-500">분석 이력을 불러오는 중...</p>
+          </div>
+        );
+      }
+
+      return (
+        <div className="flex flex-col gap-5">
+          <p className="text-sm leading-relaxed text-zinc-400">
+            완료된 프로젝트 분석을 선택하면, 해당 분석을 토대로 맞춤형 학습 로드맵을 생성합니다.
+          </p>
+
+          {hook.error && (
+            <div className="flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-4 py-3">
+              <i className="fa-solid fa-triangle-exclamation text-sm text-red-400" />
+              <p className="text-sm text-red-400">{hook.error}</p>
+            </div>
+          )}
+
+          {hook.history.length === 0 ? (
+            <div className="rounded-xl border border-white/8 bg-[#16171a] px-5 py-8 text-center">
+              <p className="text-sm leading-relaxed text-zinc-400">
+                완료된 프로젝트 분석이 없습니다. 먼저 프로젝트 분석을 완료한 뒤 다시 시도해 주세요.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-2">
+                {hook.history.map((it) => {
+                  const checked = hook.selectedIds.has(it.analysisId);
+                  const short = shortenRepo(it.repoUrl);
+                  return (
+                    <button
+                      key={it.analysisId}
+                      type="button"
+                      onClick={() => hook.toggleSelect(it.analysisId)}
+                      className={`flex items-center gap-3.5 rounded-xl border px-4 py-3 text-left transition-all ${
+                        checked
+                          ? 'border-white/20 bg-white/[0.06]'
+                          : 'border-white/8 bg-[#16171a] hover:border-white/15'
+                      }`}
+                    >
+                      <span
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border ${
+                          checked
+                            ? 'border-orange-400 bg-orange-400 text-[#0d0d0f]'
+                            : 'border-white/20 bg-transparent'
+                        }`}
+                      >
+                        {checked && <i className="fa-solid fa-check text-[10px]" />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-semibold text-white">
+                          {it.serviceName || short}
+                        </span>
+                        <span className="block truncate text-xs text-zinc-500">{short}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => void hook.generate()}
+                disabled={hook.selectedIds.size === 0}
+                className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                선택한 {hook.selectedIds.size}개 분석으로 로드맵 생성
+              </button>
+            </>
+          )}
+        </div>
+      );
     }
-    setLoading(true);
-    setError(null);
-    getAssessment(serviceKey ?? '')
-      .then((res) => {
-        setData(res);
-        setActiveRole(res.primary_roles[0] ?? '');
-      })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [serviceKey, propData]);
 
-  /* ── 상태별 렌더 ─── */
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-20">
-        <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
-        <p className="text-sm text-zinc-500">로드맵을 불러오는 중...</p>
-      </div>
-    );
+    if (hook.phase === 'generating') {
+      return (
+        <div className="flex flex-col items-center justify-center gap-3 py-20">
+          <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
+          <p className="text-sm text-zinc-500">로드맵을 생성하는 중입니다... (최대 수 분 소요)</p>
+        </div>
+      );
+    }
   }
 
-  if (error) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-20">
-        <i className="fa-solid fa-triangle-exclamation text-2xl text-red-400" />
-        <p className="text-sm text-red-400">{error}</p>
-      </div>
-    );
-  }
+  if (!assessment) return null;
 
-  if (!data) return null;
-
+  const data       = assessment;
   const roleData   = activeRole ? data.per_role[activeRole] : null;
   const isPrimary  = data.primary_roles.includes(activeRole);
   const allRoles   = [...data.primary_roles, ...data.secondary_roles];
@@ -119,6 +187,17 @@ export function RoadmapTabSection({
 
   return (
     <div className="flex flex-col gap-7">
+
+      {/* ── 다시 만들기 (생성 경로 전용) ── */}
+      {!propData && (
+        <button
+          type="button"
+          onClick={hook.reset}
+          className="self-start text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-300"
+        >
+          ← 다른 분석으로 다시 만들기
+        </button>
+      )}
 
       {/* ── 서비스 헤더 ── */}
       <div>
