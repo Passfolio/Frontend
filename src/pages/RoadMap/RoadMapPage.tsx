@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { getAssessment } from '@/api/RoadMap/roadmapApi';
+import { useEffect, useRef, useState } from 'react';
 import { RoadmapTimeline } from '@/components/RoadMap/RoadmapTimeline';
+import { getAnalysisHistory } from '@/api/ProjectAnalysis/projectAnalysisApi';
+import { postRoadmapAssess, pollRoadmapResult } from '@/api/RoadMap/roadmapAssessApi';
+import type { AnalysisHistoryItemType } from '@/types/userProjectAnalysis.type';
 import type {
   RoadmapAssessment,
   MarketTier,
@@ -35,6 +36,15 @@ const MARKET_COLOR: Record<MarketTier, string> = {
   '성장':   '#4ade80',
   '중간':   '#a1a1aa',
 };
+
+/** github URL → 짧은 owner/repo 표기 (https://github.com/ prefix + .git suffix 제거). */
+function shortenRepo(repoUrl: string): string {
+  return repoUrl
+    .replace(/^https:\/\/github\.com\//, '')
+    .replace(/\.git$/, '');
+}
+
+type Phase = 'select' | 'generating' | 'done';
 
 /* ─── 서브 컴포넌트 ─────────────────────────────────────── */
 
@@ -78,65 +88,206 @@ function CoverageBar({ pct }: { pct: number }) {
 /* ─── 메인 페이지 ───────────────────────────────────────── */
 
 export function RoadMapPage() {
-  const [params] = useSearchParams();
-  const serviceKey = params.get('service') ?? '';
+  /* 분석 선택 → 생성 → 렌더 위상 머신 */
+  const [phase, setPhase] = useState<Phase>('select');
 
+  /* 선택 화면 상태 */
+  const [history, setHistory] = useState<AnalysisHistoryItemType[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  /* 결과 / 에러 상태 */
   const [data, setData] = useState<RoadmapAssessment | null>(null);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState('');
 
+  /* 폴링 중단 함수 보관 — 언마운트/재생성 시 호출 */
+  const stopPollRef = useRef<(() => void) | null>(null);
+
+  /* 마운트 시: 완료(DONE) 분석 이력 로드 + 전체 기본 선택 */
   useEffect(() => {
-    if (!serviceKey) return;
-    setLoading(true);
-    setError(null);
-    getAssessment(serviceKey)
-      .then((res) => {
-        setData(res);
-        setActiveRole(res.primary_roles[0] ?? '');
+    let alive = true;
+    setHistoryLoading(true);
+    getAnalysisHistory()
+      .then((items) => {
+        if (!alive) return;
+        const done = items.filter((it) => it.status === 'DONE');
+        setHistory(done);
+        setSelectedIds(new Set(done.map((it) => it.analysisId)));
       })
-      .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [serviceKey]);
+      .catch((e: Error) => {
+        if (alive) setError(e.message);
+      })
+      .finally(() => {
+        if (alive) setHistoryLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
 
-  const roleData = data && activeRole ? data.per_role[activeRole] : null;
-  const isPrimary = data?.primary_roles.includes(activeRole);
-  const allRoles = data ? [...data.primary_roles, ...data.secondary_roles] : [];
+  /* 언마운트 시 폴링 정리 */
+  useEffect(() => {
+    return () => {
+      stopPollRef.current?.();
+    };
+  }, []);
 
-  /* ── 빈 / 로딩 / 에러 ─── */
-  if (!serviceKey) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0d0d0f]">
-        <p className="text-sm text-zinc-500">
-          URL에 <code className="text-zinc-300">?service=</code> 파라미터가 필요합니다.
-        </p>
-      </div>
-    );
-  }
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
-  if (loading) {
+  const handleGenerate = async () => {
+    if (selectedIds.size === 0) return;
+    /* 진행 중인 이전 폴링이 있으면 먼저 중단 */
+    stopPollRef.current?.();
+    stopPollRef.current = null;
+
+    setError(null);
+    setData(null);
+    setPhase('generating');
+
+    try {
+      const { jobId } = await postRoadmapAssess([...selectedIds], true);
+      stopPollRef.current = pollRoadmapResult(
+        jobId,
+        (res) => {
+          setData(res);
+          setActiveRole(res.primary_roles[0] ?? '');
+          setPhase('done');
+        },
+        (msg) => {
+          setError(msg);
+          setPhase('select');
+        },
+      );
+    } catch (e) {
+      setError((e as Error).message);
+      setPhase('select');
+    }
+  };
+
+  /* ── 'generating' 위상 ─── */
+  if (phase === 'generating') {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#0d0d0f]">
         <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
-        <p className="text-sm text-zinc-500">분석 결과를 불러오는 중...</p>
+        <p className="text-sm text-zinc-500">로드맵을 생성하는 중입니다... (최대 수 분 소요)</p>
       </div>
     );
   }
 
-  if (error) {
+  /* ── 'select' 위상 ─── */
+  if (phase !== 'done') {
+    if (historyLoading) {
+      return (
+        <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#0d0d0f]">
+          <i className="fa-solid fa-spinner animate-spin text-2xl text-zinc-500" />
+          <p className="text-sm text-zinc-500">분석 이력을 불러오는 중...</p>
+        </div>
+      );
+    }
+
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 bg-[#0d0d0f]">
-        <i className="fa-solid fa-triangle-exclamation text-2xl text-red-400" />
-        <p className="text-sm text-red-400">{error}</p>
+      <div className="min-h-screen bg-[#0d0d0f]">
+        <div className="mx-auto max-w-[680px] px-6 py-12">
+          <h1 className="mb-1.5 text-2xl font-bold text-white">학습 로드맵 생성</h1>
+          <p className="mb-7 text-sm text-zinc-500">
+            완료된 프로젝트 분석을 선택하면, 해당 분석을 토대로 맞춤형 학습 로드맵을 생성합니다.
+          </p>
+
+          {error && (
+            <div className="mb-5 flex items-center gap-2 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-4 py-3">
+              <i className="fa-solid fa-triangle-exclamation text-sm text-red-400" />
+              <p className="text-sm text-red-400">{error}</p>
+            </div>
+          )}
+
+          {history.length === 0 ? (
+            <div className="rounded-xl border border-white/[0.08] bg-[#16171a] px-5 py-8 text-center">
+              <p className="text-sm leading-relaxed text-zinc-400">
+                완료된 프로젝트 분석이 없습니다. 먼저 프로젝트 분석을 완료한 뒤 다시 시도해 주세요.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="mb-6 flex flex-col gap-2">
+                {history.map((it) => {
+                  const checked = selectedIds.has(it.analysisId);
+                  const short = shortenRepo(it.repoUrl);
+                  return (
+                    <button
+                      key={it.analysisId}
+                      type="button"
+                      onClick={() => toggleSelect(it.analysisId)}
+                      className={`flex items-center gap-3.5 rounded-xl border px-4 py-3 text-left transition-all ${
+                        checked
+                          ? 'border-white/20 bg-white/[0.06]'
+                          : 'border-white/[0.08] bg-[#16171a] hover:border-white/15'
+                      }`}
+                    >
+                      <span
+                        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border ${
+                          checked
+                            ? 'border-orange-400 bg-orange-400 text-[#0d0d0f]'
+                            : 'border-white/20 bg-transparent'
+                        }`}
+                      >
+                        {checked && <i className="fa-solid fa-check text-[10px]" />}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-semibold text-white">
+                          {it.serviceName || short}
+                        </span>
+                        <span className="block truncate text-xs text-zinc-500">{short}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => void handleGenerate()}
+                disabled={selectedIds.size === 0}
+                className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                선택한 {selectedIds.size}개 분석으로 로드맵 생성
+              </button>
+            </>
+          )}
+        </div>
       </div>
     );
   }
+
+  /* ── 'done' 위상 ─── */
+  const roleData = data && activeRole ? data.per_role[activeRole] : null;
+  const isPrimary = data?.primary_roles.includes(activeRole);
+  const allRoles = data ? [...data.primary_roles, ...data.secondary_roles] : [];
 
   if (!data || !roleData) return null;
 
   return (
     <div className="min-h-screen bg-[#0d0d0f]">
       <div className="mx-auto max-w-[1100px] px-6 py-10 pb-20">
+
+        {/* ── 뒤로가기 ──────────────────────────────────── */}
+        <button
+          type="button"
+          onClick={() => {
+            setPhase('select');
+            setData(null);
+          }}
+          className="mb-6 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-300"
+        >
+          ← 다른 분석으로 다시 만들기
+        </button>
 
         {/* ── 서비스 헤더 ──────────────────────────────── */}
         <div className="mb-8">
