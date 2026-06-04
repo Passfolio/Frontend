@@ -1,10 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
 import { RoadmapTimeline } from '@/components/RoadMap/RoadmapTimeline';
-import { getAnalysisHistory } from '@/api/ProjectAnalysis/projectAnalysisApi';
-import { postRoadmapAssess, pollRoadmapResult } from '@/api/RoadMap/roadmapAssessApi';
-import type { AnalysisHistoryItemType } from '@/types/userProjectAnalysis.type';
+import { useRoadmapGeneration } from '@/hooks/useRoadmapGeneration';
 import type {
-  RoadmapAssessment,
   MarketTier,
   AssessmentReliability,
 } from '@/types/roadmap.type';
@@ -43,8 +39,6 @@ function shortenRepo(repoUrl: string): string {
     .replace(/^https:\/\/github\.com\//, '')
     .replace(/\.git$/, '');
 }
-
-type Phase = 'select' | 'generating' | 'done';
 
 /* ─── 서브 컴포넌트 ─────────────────────────────────────── */
 
@@ -88,89 +82,19 @@ function CoverageBar({ pct }: { pct: number }) {
 /* ─── 메인 페이지 ───────────────────────────────────────── */
 
 export function RoadMapPage() {
-  /* 분석 선택 → 생성 → 렌더 위상 머신 */
-  const [phase, setPhase] = useState<Phase>('select');
-
-  /* 선택 화면 상태 */
-  const [history, setHistory] = useState<AnalysisHistoryItemType[]>([]);
-  const [historyLoading, setHistoryLoading] = useState(true);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-
-  /* 결과 / 에러 상태 */
-  const [data, setData] = useState<RoadmapAssessment | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [activeRole, setActiveRole] = useState('');
-
-  /* 폴링 중단 함수 보관 — 언마운트/재생성 시 호출 */
-  const stopPollRef = useRef<(() => void) | null>(null);
-
-  /* 마운트 시: 완료(DONE) 분석 이력 로드 + 전체 기본 선택 */
-  useEffect(() => {
-    let alive = true;
-    setHistoryLoading(true);
-    getAnalysisHistory()
-      .then((items) => {
-        if (!alive) return;
-        const done = items.filter((it) => it.status === 'DONE');
-        setHistory(done);
-        setSelectedIds(new Set(done.map((it) => it.analysisId)));
-      })
-      .catch((e: Error) => {
-        if (alive) setError(e.message);
-      })
-      .finally(() => {
-        if (alive) setHistoryLoading(false);
-      });
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  /* 언마운트 시 폴링 정리 */
-  useEffect(() => {
-    return () => {
-      stopPollRef.current?.();
-    };
-  }, []);
-
-  const toggleSelect = (id: string) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
-  const handleGenerate = async () => {
-    if (selectedIds.size === 0) return;
-    /* 진행 중인 이전 폴링이 있으면 먼저 중단 */
-    stopPollRef.current?.();
-    stopPollRef.current = null;
-
-    setError(null);
-    setData(null);
-    setPhase('generating');
-
-    try {
-      const { jobId } = await postRoadmapAssess([...selectedIds], true);
-      stopPollRef.current = pollRoadmapResult(
-        jobId,
-        (res) => {
-          setData(res);
-          setActiveRole(res.primary_roles[0] ?? '');
-          setPhase('done');
-        },
-        (msg) => {
-          setError(msg);
-          setPhase('select');
-        },
-      );
-    } catch (e) {
-      setError((e as Error).message);
-      setPhase('select');
-    }
-  };
+  const {
+    phase,
+    history,
+    historyLoading,
+    selectedIds,
+    toggleSelect,
+    data,
+    error,
+    activeRole,
+    setActiveRole,
+    generate,
+    reset,
+  } = useRoadmapGeneration();
 
   /* ── 'generating' 위상 ─── */
   if (phase === 'generating') {
@@ -253,7 +177,7 @@ export function RoadMapPage() {
 
               <button
                 type="button"
-                onClick={() => void handleGenerate()}
+                onClick={() => void generate()}
                 disabled={selectedIds.size === 0}
                 className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -280,10 +204,7 @@ export function RoadMapPage() {
         {/* ── 뒤로가기 ──────────────────────────────────── */}
         <button
           type="button"
-          onClick={() => {
-            setPhase('select');
-            setData(null);
-          }}
+          onClick={reset}
           className="mb-6 text-sm font-medium text-zinc-500 transition-colors hover:text-zinc-300"
         >
           ← 다른 분석으로 다시 만들기
