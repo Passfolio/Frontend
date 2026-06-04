@@ -268,7 +268,7 @@ export function RoadmapTimeline({ nodes, llmPath }: Props) {
   }
 
   return (
-    <>
+    <div className="relative">
       {/* 다이어그램 */}
       <div className="flex justify-center">
         <div className="min-w-0">
@@ -285,16 +285,16 @@ export function RoadmapTimeline({ nodes, llmPath }: Props) {
         </div>
       </div>
 
-      {/* 디테일 패널 — fixed 모달 */}
+      {/* 디테일 패널 — absolute, 다이어그램 기준 우측 상단 */}
       {selected && (
         <>
           {/* 백드롭 */}
           <div
-            className="fixed inset-0 z-40"
+            className="absolute inset-0 z-90"
             onClick={() => setSelectedLabel(null)}
           />
           {/* 패널 */}
-          <div className="fixed right-6 top-24 z-50 animate-in fade-in slide-in-from-right-4 duration-200">
+          <div className="absolute right-0 top-0 z-100 animate-in fade-in slide-in-from-right-4 duration-200">
             <DetailPanel
               group={selected}
               llmPath={llmPath}
@@ -303,6 +303,6 @@ export function RoadmapTimeline({ nodes, llmPath }: Props) {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
