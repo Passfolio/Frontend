@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { RoadmapNode, NodeStatus, MarketTier, LLMRoadmapStep } from '@/types/roadmap.type';
 
 /* ─── 색상 ───────────────────────────────────────────────── */
@@ -70,14 +70,15 @@ function DiagramRow({
   isSelected: boolean;
   isFirst: boolean;
   isLast: boolean;
-  onClick: () => void;
+  onClick: (el: HTMLDivElement | null) => void;
 }) {
+  const rowRef = useRef<HTMLDivElement>(null);
   const { topic, subtopics } = group;
   const mt   = TIER_STYLE[topic.market_tier] ?? TIER_STYLE['중간'];
   const n    = subtopics.length;
 
   return (
-    <div className="relative flex items-start" style={{ paddingBottom: isLast ? 0 : 32 }}>
+    <div ref={rowRef} className="relative flex items-start" style={{ paddingBottom: isLast ? 0 : 32 }}>
 
       {/* ── 세로 스파인 ── */}
       <div
@@ -109,7 +110,7 @@ function DiagramRow({
 
         <button
           type="button"
-          onClick={onClick}
+          onClick={() => onClick(rowRef.current)}
           className={`w-full rounded-xl border p-3.5 text-left transition-all duration-150 ${
             isSelected
               ? 'border-white/30 bg-white/[0.07] shadow-[0_0_0_2px_rgba(255,255,255,0.08)]'
@@ -259,16 +260,22 @@ type Props = {
 
 export function RoadmapTimeline({ nodes, llmPath }: Props) {
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
+  const [panelY, setPanelY] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const groups  = buildGroups(nodes);
   const selected = groups.find((g) => g.topic.label === selectedLabel) ?? null;
 
-  function toggle(label: string) {
+  function toggle(label: string, rowEl: HTMLDivElement | null) {
     setSelectedLabel((prev) => (prev === label ? null : label));
+    if (rowEl && containerRef.current) {
+      const relY = rowEl.getBoundingClientRect().top - containerRef.current.getBoundingClientRect().top;
+      setPanelY(relY);
+    }
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       {/* 다이어그램 */}
       <div className="flex justify-center">
         <div className="min-w-0">
@@ -279,13 +286,13 @@ export function RoadmapTimeline({ nodes, llmPath }: Props) {
               isSelected={selectedLabel === g.topic.label}
               isFirst={i === 0}
               isLast={i === groups.length - 1}
-              onClick={() => toggle(g.topic.label)}
+              onClick={(el) => toggle(g.topic.label, el)}
             />
           ))}
         </div>
       </div>
 
-      {/* 디테일 패널 — absolute, 다이어그램 기준 우측 상단 */}
+      {/* 디테일 패널 — 클릭한 노드 옆에 위치 */}
       {selected && (
         <>
           {/* 백드롭 */}
@@ -294,7 +301,10 @@ export function RoadmapTimeline({ nodes, llmPath }: Props) {
             onClick={() => setSelectedLabel(null)}
           />
           {/* 패널 */}
-          <div className="absolute right-0 top-0 z-100 animate-in fade-in slide-in-from-right-4 duration-200">
+          <div
+            className="absolute right-0 z-100 animate-in fade-in slide-in-from-right-4 duration-200"
+            style={{ top: panelY }}
+          >
             <DetailPanel
               group={selected}
               llmPath={llmPath}

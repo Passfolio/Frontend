@@ -239,7 +239,7 @@ export const ProfilePage = () => {
             <ProjectAnalysisSection />
           ) : activeMenu === '로드맵' ? (
             <Suspense fallback={<RoadmapSpinner />}>
-              <RoadmapTabSection />
+              <RoadmapTabSection hookState={roadmapHook} />
             </Suspense>
           ) : (
             <ProfileComingSoonSection title={activeMenu} />

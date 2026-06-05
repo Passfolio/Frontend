@@ -13,7 +13,7 @@ type AnalysisStartModalProps = {
 
 const MODE_OPTIONS: { value: AnalysisModeType; label: string; description: string }[] = [
     { value: 'NONSTOP', label: '논스톱', description: '분석 후 포트폴리오까지 자동 생성합니다.' },
-    { value: 'STEP', label: '단계별', description: '분석만 수행하고 결과를 확인합니다.' },
+    { value: 'STEP', label: '프로젝트 분석만', description: '분석만 수행하고 결과를 확인합니다.' },
 ];
 
 // NONSTOP 포트폴리오 목적 — 결과물이 포트폴리오인 2가지(자소서·포폴 동시 업로드 불가).
