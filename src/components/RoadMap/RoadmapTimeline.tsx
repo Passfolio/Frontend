@@ -140,14 +140,14 @@ function DiagramRow({
       {/* ── 서브토픽 ── */}
       {n > 0 && (
         <div className="relative ml-10 flex flex-col" style={{ gap: 8, paddingTop: 2 }}>
-          {/* 수직 커넥터 */}
+          {/* 수직 커넥터 — top/bottom 앵커로 실제 높이에 맞게 자동 조절 */}
           {n > 1 && (
             <div
               className="absolute"
               style={{
                 left: 0,
-                top: 17,
-                height: (n - 1) * (36 + 8),
+                top: 17,    /* 첫 번째 서브토픽 중심 */
+                bottom: 15, /* 마지막 서브토픽 중심 */
                 width: 1,
                 borderLeft: `1.5px dashed ${CONN}`,
               }}
