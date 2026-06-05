@@ -26,6 +26,7 @@ import type {
   EducationHistoryItemType,
 } from '@/api/Spec/specApi';
 import { getMyCareer, getMyEducationHistory } from '@/api/Spec/specApi';
+import { useRoadmapGeneration } from '@/hooks/useRoadmapGeneration';
 import '@/pages/Lander/landerPage.css';
 
 const RoadmapTabSection = lazy(() => import('@/components/Profile/RoadmapTabSection'));
@@ -113,6 +114,7 @@ function specFromPatch(patch: DevSpecUpdateResponseType) {
 
 export const ProfilePage = () => {
   const { user } = useAuth();
+  const roadmapHook = useRoadmapGeneration();
   const [searchParams, setSearchParams] = useSearchParams();
   const [spec, setSpec] = useState(EMPTY_SPEC);
   const [updateProfileOpen, setUpdateProfileOpen] = useState(false);
@@ -199,7 +201,7 @@ export const ProfilePage = () => {
               <ProjectAnalysisSection />
             ) : activeMenu === '로드맵' ? (
               <Suspense fallback={<RoadmapSpinner />}>
-                <RoadmapTabSection />
+                <RoadmapTabSection hookState={roadmapHook} />
               </Suspense>
             ) : (
               <ProfileComingSoonSection title={activeMenu} />
