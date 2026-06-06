@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { RoadmapTimeline } from '@/components/RoadMap/RoadmapTimeline';
-import { useRoadmapGeneration } from '@/hooks/useRoadmapGeneration';
+import { useRoadmapGeneration, type UseRoadmapGeneration } from '@/hooks/useRoadmapGeneration';
 import type { RoadmapAssessment, MarketTier } from '@/types/roadmap.type';
 
 /* ─── 상수 ───────────────────────────────────────────────── */
@@ -69,12 +69,16 @@ function CoverageBar({ pct }: { pct: number }) {
 
 export function RoadmapTabSection({
   data: propData,
+  hookState,
 }: {
   /** AdminRoadmapTestView가 직접 주입하는 평가 결과. 주어지면 이력 조회/생성 없이 바로 렌더. */
   data?: RoadmapAssessment;
+  /** ProfilePage에서 끌어올린 훅 상태. 제공되면 내부 훅 대신 이 값을 사용한다. */
+  hookState?: UseRoadmapGeneration;
 }) {
-  /* propData가 있으면 이력 조회를 끈다 (훅은 무조건 호출하되 fetch만 생략). */
-  const hook = useRoadmapGeneration({ enabled: !propData });
+  /* 항상 훅을 호출하되, 외부 상태가 주입된 경우에는 fetch를 끈다 (조건부 훅 금지 규칙 준수). */
+  const internalHook = useRoadmapGeneration({ enabled: !propData && !hookState });
+  const hook = hookState ?? internalHook;
 
   /* propData가 직접 주입된 경우 로컬 activeRole로 역할 탭을 제어. */
   const [propRole, setPropRole] = useState(propData?.primary_roles[0] ?? '');
