@@ -61,7 +61,7 @@ export type AnalysisReportType = {
         contribute: { contribute_titles: string[] };
     };
     user_role: string;
-    contribute_share_percent: number;
+    contribute_share_percent: number | null;
     contribute_breakdown: ContributeBreakdownType[];
     github_username_resolved: string;
     analysis_period: AnalysisPeriodType;

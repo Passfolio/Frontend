@@ -162,6 +162,7 @@ const ContributionRole = memo(function ContributionRole({ report }: { report: An
         if (!revealed) return;
         const c = barRef.current;
         if (!c) return;
+        const target = mineShare ?? 0;
         const r = c.r.baseVal.value;
         const circumference = 2 * Math.PI * r;
         c.style.transition = 'none';
@@ -170,17 +171,17 @@ const ContributionRole = memo(function ContributionRole({ report }: { report: An
         void c.getBoundingClientRect();
         const fill = setTimeout(() => {
             c.style.transition = 'stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1)';
-            c.style.strokeDashoffset = String(circumference - (mineShare / 100) * circumference);
+            c.style.strokeDashoffset = String(circumference - (target / 100) * circumference);
         }, 60);
         const dur = 1500;
         const stepMs = 20;
-        const inc = mineShare / (dur / stepMs);
+        const inc = target / (dur / stepMs);
         let cur = 0;
         setNum(0);
         const iv = setInterval(() => {
             cur += inc;
-            if (cur >= mineShare) {
-                cur = mineShare;
+            if (cur >= target) {
+                cur = target;
                 clearInterval(iv);
             }
             setNum(cur);
@@ -209,7 +210,7 @@ const ContributionRole = memo(function ContributionRole({ report }: { report: An
                     <div className="ar-donut-center">
                         <div className="ar-donut-lb">내 기여도</div>
                         <div className="ar-percent-wrap">
-                            <strong className="ar-donut-num">{num.toFixed(1)}</strong>
+                            <strong className="ar-donut-num">{(num ?? 0).toFixed(1)}</strong>
                             <span className="ar-donut-pct">%</span>
                         </div>
                     </div>
