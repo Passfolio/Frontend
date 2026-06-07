@@ -98,6 +98,9 @@ export const AdminAnalysisMetricsPage = () => {
     const [isDispatching, setIsDispatching] = useState<boolean>(false);
     const [dispatchErrorMessage, setDispatchErrorMessage] = useState<string | null>(null);
     const [nowMs, setNowMs] = useState<number>(() => Date.now());
+    // 단건 정밀 테스트(repo URL + username 직접 지정)
+    const [customRepoUrl, setCustomRepoUrl] = useState<string>('');
+    const [customUsername, setCustomUsername] = useState<string>('');
 
     const { status, isPolling, errorMessage, startPolling } = useAnalysisBatchPolling();
 
@@ -137,6 +140,29 @@ export const AdminAnalysisMetricsPage = () => {
             startPolling(result.batchId);
         } catch {
             setDispatchErrorMessage('테스트 디스패치에 실패했습니다. 로그인·ADMIN 권한 상태를 확인하세요.');
+        } finally {
+            setIsDispatching(false);
+        }
+    };
+
+    // 단건 정밀 테스트: repo URL + username을 직접 지정해 1건 디스패치(STEP, dominant 미사용).
+    // 기존 결과/폴링 UI를 그대로 재사용한다.
+    const handleCustomTest = async () => {
+        const repoUrl = customRepoUrl.trim();
+        const username = customUsername.trim();
+        if (!repoUrl || !username) {
+            setDispatchErrorMessage('repo URL과 username을 모두 입력하세요.');
+            return;
+        }
+        setIsDispatching(true);
+        setDispatchErrorMessage(null);
+        try {
+            const result = await dispatchAdminTestBatch([repoUrl], 'STEP', username);
+            setDispatchedList(result.analyses);
+            setNowMs(Date.now());
+            startPolling(result.batchId);
+        } catch {
+            setDispatchErrorMessage('단건 테스트 디스패치에 실패했습니다. repo URL·username·ADMIN 권한을 확인하세요.');
         } finally {
             setIsDispatching(false);
         }
@@ -250,6 +276,63 @@ export const AdminAnalysisMetricsPage = () => {
                         {dispatchErrorMessage && (
                             <p className="text-sm text-red-400">{dispatchErrorMessage}</p>
                         )}
+                    </div>
+                </section>
+
+                {/* 단건 정밀 테스트: repo URL + username 직접 지정 */}
+                <section
+                    aria-labelledby="analysis-custom-test-heading"
+                    className="mt-6 rounded-2xl border border-white/[0.08] bg-[#141518]/90 p-5 sm:p-6"
+                >
+                    <h2 id="analysis-custom-test-heading" className="text-base font-semibold text-white">
+                        단건 정밀 테스트
+                    </h2>
+                    <p className="mt-1 text-sm text-zinc-500">
+                        repo URL과 분석 대상 GitHub username을 직접 지정해 1건 분석(STEP)합니다. 지정한 username을
+                        정확 해석하므로(최다 기여자 대체 없음) 특정 기여자 기준 결과를 검증할 수 있습니다.
+                    </p>
+
+                    <div className="mt-5 flex flex-col gap-4">
+                        <div className="flex flex-col gap-1.5">
+                            <label htmlFor="custom-repo-url" className="text-sm text-zinc-300">
+                                Repo URL
+                            </label>
+                            <input
+                                id="custom-repo-url"
+                                type="text"
+                                value={customRepoUrl}
+                                disabled={isControlDisabled}
+                                onChange={(event) => setCustomRepoUrl(event.target.value)}
+                                placeholder="https://github.com/owner/repo"
+                                className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-white/25 disabled:opacity-40"
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-1.5">
+                            <label htmlFor="custom-username" className="text-sm text-zinc-300">
+                                GitHub username
+                            </label>
+                            <input
+                                id="custom-username"
+                                type="text"
+                                value={customUsername}
+                                disabled={isControlDisabled}
+                                onChange={(event) => setCustomUsername(event.target.value)}
+                                placeholder="예: parkjunwoo0209"
+                                className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-white/25 disabled:opacity-40"
+                            />
+                        </div>
+
+                        <div>
+                            <button
+                                type="button"
+                                onClick={handleCustomTest}
+                                disabled={isControlDisabled}
+                                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/[0.10] px-5 py-2 text-sm font-medium text-white transition-colors hover:border-white/30 hover:bg-white/[0.16] disabled:cursor-not-allowed disabled:opacity-40"
+                            >
+                                {isDispatching ? '디스패치 중…' : isPolling ? '진행 중…' : '단건 테스트 실행'}
+                            </button>
+                        </div>
                     </div>
                 </section>
 

@@ -8,13 +8,15 @@ import type {
 
 // ADMIN 전용: 공개 repo 목록을 테스트 배치로 디스패치(토큰 없이, mode=STEP).
 // 인증은 axiosInstance(withCredentials) 쿠키 JWT로 처리, 역할 검증은 BE assertAdmin.
+// githubUsername 지정 시(단건 정밀 테스트) 그 핸들을 정확 해석(dominant 미사용) — 미지정이면 repo owner + dominant.
 export const dispatchAdminTestBatch = async (
     repoUrlList: string[],
     mode?: string,
+    githubUsername?: string,
 ): Promise<AdminTestBatchResponseType> => {
     const { data } = await axiosInstance.post<AdminTestBatchResponseType>(
         API_ENDPOINTS.adminProjectAnalysis.testBatch,
-        { repoUrls: repoUrlList, mode },
+        { repoUrls: repoUrlList, mode, githubUsername },
     );
     return data;
 };
