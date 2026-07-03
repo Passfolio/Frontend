@@ -32,8 +32,14 @@ import { AdminAnalysisMetricsPage } from '@/pages/AdminPortal/AdminAnalysisMetri
 import { AdminUsersPage } from '@/pages/AdminPortal/AdminUsersPage';
 import { AdminPrecheckTestPage } from '@/pages/AdminPortal/AdminPrecheckTestPage';
 import { AnalysisProgressPage } from '@/pages/Analysis/AnalysisProgressPage';
+import { DocsPage } from '@/pages/Documentation/DocsPage';
 // 리포트 페이지는 전용 CSS·플립카드 등 무게가 있어 라우트 단위 코드 스플릿(lazy).
 const AnalysisReportPage = lazy(() => import('@/pages/Analysis/AnalysisReportPage'));
+// PPT 덱은 reveal.js + 슬라이드 17장 + 이미지가 실려 라우트 단위 코드 스플릿(lazy).
+const DeckPage = lazy(() => import('@/pages/Documentation/DeckPage'));
+
+// 풀스크린 몰입형 라우트(발표 덱 등)는 전역 Header를 렌더하지 않는다.
+const CHROMELESS_PATH_LIST = ['/docs/passfolio-deck'];
 import {
     ADMIN_PORTAL_LOGIN_PATH,
     ADMIN_PORTAL_PROFILE_PATH,
@@ -55,11 +61,14 @@ function ScrollToTopOnPathChange() {
 }
 
 export const App = () => {
+    const { pathname } = useLocation();
+    const isChromelessRoute = CHROMELESS_PATH_LIST.includes(pathname);
+
     return (
         <AuthProvider>
             <ErrorBoundary>
                 <ScrollToTopOnPathChange />
-                <Header />
+                {!isChromelessRoute && <Header />}
                 <Routes>
                     {/* --- 공개 라우트 --- */}
                     <Route path="/" element={<LanderPage />} />
@@ -70,6 +79,15 @@ export const App = () => {
                     <Route path="/terms" element={<TermsOfServicePage />} />
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
                     <Route path="/roadmap" element={<RoadMapPage />} />
+                    <Route path="/docs" element={<DocsPage />} />
+                    <Route
+                        path="/docs/passfolio-deck"
+                        element={
+                            <Suspense fallback={null}>
+                                <DeckPage />
+                            </Suspense>
+                        }
+                    />
                     <Route path="/oauth/callback" element={<OAuthCallback />} />
 
                     {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}

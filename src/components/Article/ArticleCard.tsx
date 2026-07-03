@@ -5,6 +5,13 @@ type ArticleCardProps = {
     article: ArticlePageItemType;
 };
 
+export type ContentCardProps = {
+    to: string;
+    title: string;
+    thumbnail: string | null;
+    createdAt?: string;
+};
+
 function formatDisplayDate(isoDate: string) {
     const d = new Date(isoDate);
     const y = d.getFullYear();
@@ -13,10 +20,11 @@ function formatDisplayDate(isoDate: string) {
     return `${y}.${m}.${day}`;
 }
 
-export function ArticleCard({ article }: ArticleCardProps) {
+/** Article 외 정적 콘텐츠(Documentation 등)에서도 쓰는 범용 카드 — 디자인은 ArticleCard와 동일 */
+export function ContentCard({ to, title, thumbnail, createdAt }: ContentCardProps) {
     return (
         <Link
-            to={`/articles/${article.id}`}
+            to={to}
             className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.09] transition-colors hover:border-white/[0.18]"
             style={{
                 background: 'rgba(18,18,22,0.92)',
@@ -25,11 +33,11 @@ export function ArticleCard({ article }: ArticleCardProps) {
         >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
-            {article.thumbnail ? (
+            {thumbnail ? (
                 <div className="aspect-video w-full overflow-hidden">
                     <img
-                        src={article.thumbnail}
-                        alt={article.title}
+                        src={thumbnail}
+                        alt={title}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </div>
@@ -43,15 +51,28 @@ export function ArticleCard({ article }: ArticleCardProps) {
 
             <div className="flex flex-1 flex-col gap-2 px-5 py-4">
                 <h2 className="line-clamp-2 text-base font-semibold leading-snug tracking-tight text-white">
-                    {article.title}
+                    {title}
                 </h2>
-                <time
-                    className="mt-auto text-[0.75rem] tabular-nums text-zinc-500"
-                    dateTime={article.createdAt}
-                >
-                    {formatDisplayDate(article.createdAt)}
-                </time>
+                {createdAt && (
+                    <time
+                        className="mt-auto text-[0.75rem] tabular-nums text-zinc-500"
+                        dateTime={createdAt}
+                    >
+                        {formatDisplayDate(createdAt)}
+                    </time>
+                )}
             </div>
         </Link>
+    );
+}
+
+export function ArticleCard({ article }: ArticleCardProps) {
+    return (
+        <ContentCard
+            to={`/articles/${article.id}`}
+            title={article.title}
+            thumbnail={article.thumbnail}
+            createdAt={article.createdAt}
+        />
     );
 }

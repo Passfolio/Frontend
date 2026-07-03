@@ -1,0 +1,138 @@
+/* Passfolio Purpose B — 원본 "Passfolio Purpose B.html"의 스타일을 .sl-purpose-b로 스코핑.
+   도넛 차트는 JS 계산 → 상수 CSS로 재구현 (r=120, C=2π·120≈753.982, parts 60/32/8%, seg gap 6). */
+
+.sl-purpose-b {
+    --bg: #131418;
+    --surface: #1b1c21;
+    --card: #191a1f;
+    --text-primary: #ececf0;
+    --text-secondary: #a6a7ad;
+    --text-tertiary: #6f7077;
+    --brand-gradient: linear-gradient(135deg, #ffffff 0%, #b3b4ba 100%);
+    --hair: rgba(255, 255, 255, 0.08);
+    background: var(--bg);
+}
+
+/* chrome */
+.sl-purpose-b .corner { position: absolute; top: 64px; z-index: 10; display: flex; align-items: center; gap: 14px;
+    font-size: 19px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap; }
+.sl-purpose-b .corner.left { left: 96px; }
+.sl-purpose-b .corner.right { right: 96px; }
+.sl-purpose-b .corner.left .num { color: var(--text-secondary); font-weight: 700; }
+.sl-purpose-b .corner.left .sep { color: var(--text-tertiary); margin: 0 -4px; }
+.sl-purpose-b .corner.right .pg { color: var(--text-secondary); font-weight: 600; }
+
+/* split layout */
+.sl-purpose-b .grid { position: absolute; left: 96px; right: 96px; top: 0; bottom: 0; z-index: 5;
+    display: grid; grid-template-columns: 700px 1fr; column-gap: 88px; align-items: center; }
+
+/* left column */
+.sl-purpose-b .eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 600;
+    letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 26px; white-space: nowrap; }
+.sl-purpose-b .eyebrow .bar { width: 46px; height: 1px; background: rgba(255,255,255,0.28); }
+.sl-purpose-b .headline { font-family: var(--font-kr); font-size: 54px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.22; color: var(--text-primary); }
+.sl-purpose-b .headline .accent { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.sl-purpose-b .sub { font-family: var(--font-kr); margin-top: 26px; font-size: 21px; font-weight: 400; line-height: 1.66; color: var(--text-secondary); max-width: 640px; }
+.sl-purpose-b .sub b { color: var(--text-primary); font-weight: 600; }
+
+.sl-purpose-b .meta { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
+.sl-purpose-b .meta-row { display: flex; align-items: baseline; gap: 18px; }
+.sl-purpose-b .meta-row .k { font-family: var(--font-display); font-size: 13px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-tertiary); width: 132px; flex: none; }
+.sl-purpose-b .meta-row .v { font-family: var(--font-kr); font-size: 18px; font-weight: 500; color: var(--text-secondary); }
+.sl-purpose-b .meta-row .v b { color: var(--text-primary); font-weight: 600; }
+
+/* right card */
+.sl-purpose-b .card {
+    background: linear-gradient(160deg, #1d1e24 0%, var(--card) 60%, #15161a 100%);
+    border: 1px solid var(--hair); border-radius: 24px;
+    box-shadow: 0 30px 70px -30px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+    padding: 46px 56px 40px; position: relative;
+}
+.sl-purpose-b .card-q { font-family: var(--font-kr); font-size: 18px; font-weight: 500; line-height: 1.5; color: var(--text-secondary); margin-bottom: 30px; }
+.sl-purpose-b .card-q .quote { color: var(--text-tertiary); font-weight: 600; }
+
+/* donut + legend row */
+.sl-purpose-b .donut-row { display: flex; align-items: center; gap: 52px; }
+.sl-purpose-b .donut { position: relative; width: 280px; height: 280px; flex: none; }
+.sl-purpose-b .donut svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.sl-purpose-b .donut .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.sl-purpose-b .donut .center .pct { font-family: var(--font-display); font-size: 78px; font-weight: 700; letter-spacing: -0.04em; line-height: 1;
+    background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.sl-purpose-b .donut .center .lab { font-family: var(--font-kr); font-size: 16px; font-weight: 600; color: var(--text-secondary); margin-top: 8px; letter-spacing: 0.01em; }
+
+.sl-purpose-b .legend { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+.sl-purpose-b .leg { display: flex; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--hair); }
+.sl-purpose-b .leg:last-child { border-bottom: none; padding-bottom: 0; }
+.sl-purpose-b .leg .sw { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.sl-purpose-b .leg.s1 .sw { background: #ffffff; }
+.sl-purpose-b .leg.s2 .sw { background: rgba(255,255,255,0.46); }
+.sl-purpose-b .leg.s3 .sw { background: rgba(255,255,255,0.16); }
+.sl-purpose-b .leg .name { flex: 1; font-family: var(--font-kr); font-size: 18px; font-weight: 500; color: var(--text-secondary); }
+.sl-purpose-b .leg .num { font-family: var(--font-display); font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary); }
+.sl-purpose-b .leg.s3 .num { color: var(--text-secondary); }
+
+/* supporting stats */
+.sl-purpose-b .support { margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--hair); }
+.sl-purpose-b .support-label { font-family: var(--font-kr); font-size: 14px; font-weight: 600; letter-spacing: 0.04em; color: var(--text-tertiary); margin-bottom: 20px; }
+.sl-purpose-b .support-grid { display: flex; gap: 28px; }
+.sl-purpose-b .sstat { flex: 1; display: flex; align-items: center; gap: 16px; }
+.sl-purpose-b .sstat .big { font-family: var(--font-display); font-size: 44px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; flex: none;
+    background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.sl-purpose-b .sstat .desc { font-family: var(--font-kr); font-size: 16px; font-weight: 500; line-height: 1.4; color: var(--text-tertiary); }
+.sl-purpose-b .sstat .desc b { color: var(--text-secondary); font-weight: 600; }
+.sl-purpose-b .sstat + .sstat { padding-left: 28px; border-left: 1px solid var(--hair); }
+
+.sl-purpose-b .source { margin-top: 28px; font-family: var(--font-kr); font-size: 14px; color: var(--text-tertiary); }
+
+/* entrance */
+.sl-purpose-b .corner, .sl-purpose-b .eyebrow, .sl-purpose-b .headline, .sl-purpose-b .sub, .sl-purpose-b .meta, .sl-purpose-b .card {
+    transition-property: opacity, transform, filter; transition-duration: 0.85s; transition-timing-function: cubic-bezier(0.2,0.7,0.2,1);
+}
+.sl-purpose-b .corner.left { transition-delay: 0.10s; }
+.sl-purpose-b .corner.right { transition-delay: 0.16s; }
+.sl-purpose-b .eyebrow { transition-delay: 0.16s; }
+.sl-purpose-b .headline { transition-delay: 0.24s; }
+.sl-purpose-b .sub { transition-delay: 0.34s; }
+.sl-purpose-b .meta { transition-delay: 0.44s; }
+.sl-purpose-b .card { transition-delay: 0.40s; }
+
+.sl-purpose-b.is-loading .corner { opacity: 0; transform: translateY(-12px); }
+.sl-purpose-b.is-loading .eyebrow { opacity: 0; transform: translateY(18px); }
+.sl-purpose-b.is-loading .headline { opacity: 0; transform: translateY(22px); filter: blur(9px); }
+.sl-purpose-b.is-loading .sub, .sl-purpose-b.is-loading .meta { opacity: 0; transform: translateY(18px); }
+.sl-purpose-b.is-loading .card { opacity: 0; transform: translateY(28px); }
+
+/* ---- donut arcs: 원본 play()의 dasharray 성장 애니메이션을 CSS 전환으로 재현 ----
+   C = 753.982 / seg = 비율·C − 6(gap) / offset = −누적비율·C
+   딜레이 = 0.7s(원본 setTimeout) + i·0.18s */
+.sl-purpose-b .arc {
+    transition: stroke-dasharray 0.85s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.sl-purpose-b .arc.a1 {
+    stroke-dasharray: 446.389 307.593;
+    stroke-dashoffset: 0;
+    transition-delay: 0.7s;
+}
+.sl-purpose-b .arc.a2 {
+    stroke-dasharray: 235.274 518.708;
+    stroke-dashoffset: -452.389;
+    transition-delay: 0.88s;
+}
+.sl-purpose-b .arc.a3 {
+    stroke-dasharray: 54.319 699.663;
+    stroke-dashoffset: -693.664;
+    transition-delay: 1.06s;
+}
+.sl-purpose-b.is-loading .arc { stroke-dasharray: 0 753.982; transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sl-purpose-b .corner, .sl-purpose-b .eyebrow, .sl-purpose-b .headline, .sl-purpose-b .sub,
+    .sl-purpose-b .meta, .sl-purpose-b .card, .sl-purpose-b .arc { transition: none !important; }
+    .sl-purpose-b.is-loading .corner, .sl-purpose-b.is-loading .eyebrow, .sl-purpose-b.is-loading .headline,
+    .sl-purpose-b.is-loading .sub, .sl-purpose-b.is-loading .meta, .sl-purpose-b.is-loading .card {
+        opacity: 1 !important; transform: none !important; filter: none !important; }
+    .sl-purpose-b.is-loading .arc.a1 { stroke-dasharray: 446.389 307.593; }
+    .sl-purpose-b.is-loading .arc.a2 { stroke-dasharray: 235.274 518.708; }
+    .sl-purpose-b.is-loading .arc.a3 { stroke-dasharray: 54.319 699.663; }
+}
