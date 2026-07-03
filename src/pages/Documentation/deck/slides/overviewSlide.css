@@ -1,0 +1,93 @@
+/* Passfolio Overview — 원본 "Passfolio Overview.html"의 스타일을 .sl-overview로 스코핑 */
+
+.sl-overview {
+  --bg: #131418;
+  --surface: #1b1c21;
+  --text-primary: #ececf0;
+  --text-secondary: #a6a7ad;
+  --text-tertiary: #6f7077;
+  --brand-gradient: linear-gradient(135deg, #ffffff 0%, #b3b4ba 100%);
+  --hair: rgba(255, 255, 255, 0.08);
+  background: var(--bg);
+}
+
+/* chrome */
+.sl-overview .corner { position: absolute; top: 64px; z-index: 10; display: flex; align-items: center; gap: 16px;
+  font-size: 19px; font-weight: 600; letter-spacing: 0.4em; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap; }
+.sl-overview .corner.left { left: 96px; }
+.sl-overview .corner.right { right: 96px; }
+.sl-overview .corner.right .pg { color: var(--text-secondary); }
+
+/* thinker — atmospheric, subtle, faded into the dark */
+.sl-overview .thinker {
+  position: absolute; left: -230px; bottom: -10px; height: 1010px; width: auto;
+  z-index: 1; pointer-events: none;
+  opacity: 0.58;
+  filter: grayscale(1) contrast(1.04) brightness(1.18);
+  -webkit-mask-image: linear-gradient(104deg, #000 30%, rgba(0,0,0,0.55) 54%, transparent 76%);
+  mask-image: linear-gradient(104deg, #000 30%, rgba(0,0,0,0.55) 54%, transparent 76%);
+}
+
+/* content */
+.sl-overview .content {
+  position: absolute; z-index: 5;
+  left: 800px; top: 50%; transform: translateY(-50%);
+  width: 940px;
+}
+.sl-overview .eyebrow { display: inline-flex; align-items: center; gap: 14px;
+  font-size: 16px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase;
+  color: var(--text-tertiary); margin-bottom: 30px; white-space: nowrap; }
+.sl-overview .eyebrow .bar { width: 46px; height: 1px; background: rgba(255,255,255,0.28); }
+
+.sl-overview .headline {
+  font-family: var(--font-kr);
+  font-size: 56px; font-weight: 700; line-height: 1.28; letter-spacing: -0.02em;
+  color: var(--text-primary); margin-bottom: 34px;
+}
+.sl-overview .headline .accent {
+  background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.sl-overview .sub {
+  font-family: var(--font-kr);
+  font-size: 23px; font-weight: 400; line-height: 1.72; letter-spacing: -0.01em;
+  color: var(--text-secondary); max-width: 920px; margin-bottom: 56px;
+}
+.sl-overview .sub b { color: var(--text-primary); font-weight: 600; }
+.sl-overview .sub .brand { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+
+/* survey stats */
+.sl-overview .survey { border-left: 2px solid rgba(255,255,255,0.2); padding-left: 30px; }
+.sl-overview .survey-label { font-family: var(--font-kr); font-size: 15px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 22px; }
+.sl-overview .stats { display: flex; align-items: flex-start; gap: 0; }
+.sl-overview .stat { display: flex; flex-direction: column; gap: 10px; padding-right: 48px; }
+.sl-overview .stat + .stat { padding-left: 48px; border-left: 1px solid var(--hair); }
+.sl-overview .stat .n { font-size: 58px; font-weight: 700; letter-spacing: -0.03em; line-height: 1;
+  background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+.sl-overview .stat .l { font-family: var(--font-kr); font-size: 19px; font-weight: 500; color: var(--text-secondary); }
+.sl-overview .survey-cap { font-family: var(--font-kr); margin-top: 22px; font-size: 15px; color: var(--text-tertiary); }
+
+/* entrance */
+.sl-overview .corner, .sl-overview .thinker, .sl-overview .eyebrow, .sl-overview .headline, .sl-overview .sub, .sl-overview .survey {
+  transition-property: opacity, transform, filter; transition-duration: 0.85s; transition-timing-function: cubic-bezier(0.2,0.7,0.2,1);
+}
+.sl-overview .corner.left { transition-delay: 0.10s; }
+.sl-overview .corner.right { transition-delay: 0.16s; }
+.sl-overview .thinker { transition-delay: 0.10s; transition-duration: 1.2s; }
+.sl-overview .eyebrow { transition-delay: 0.18s; }
+.sl-overview .headline { transition-delay: 0.28s; }
+.sl-overview .sub { transition-delay: 0.40s; }
+.sl-overview .survey { transition-delay: 0.52s; }
+
+.sl-overview.is-loading .corner { opacity: 0; transform: translateY(-12px); }
+.sl-overview.is-loading .thinker { opacity: 0; transform: translateX(-26px); }
+.sl-overview.is-loading .eyebrow { opacity: 0; transform: translateY(20px); }
+.sl-overview.is-loading .headline { opacity: 0; transform: translateY(24px); filter: blur(9px); }
+.sl-overview.is-loading .sub, .sl-overview.is-loading .survey { opacity: 0; transform: translateY(20px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-overview .corner, .sl-overview .thinker, .sl-overview .eyebrow, .sl-overview .headline, .sl-overview .sub, .sl-overview .survey { transition: none !important; }
+  .sl-overview.is-loading .corner, .sl-overview.is-loading .thinker, .sl-overview.is-loading .eyebrow,
+  .sl-overview.is-loading .headline, .sl-overview.is-loading .sub, .sl-overview.is-loading .survey { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .sl-overview.is-loading .thinker { opacity: 0.6 !important; }
+}

@@ -1,0 +1,99 @@
+/* Passfolio Service Introduction — 원본 "Passfolio Service Intro.html"의 스타일을 .sl-service-intro로 스코핑 */
+
+.sl-service-intro {
+  --bg: #131418;
+  --surface: #1b1c21;
+  --card: #191a1f;
+  --text-primary: #ececf0;
+  --text-secondary: #a6a7ad;
+  --text-tertiary: #6f7077;
+  --brand-gradient: linear-gradient(135deg, #ffffff 0%, #b3b4ba 100%);
+  --hair: rgba(255, 255, 255, 0.08);
+  background: var(--bg);
+}
+
+/* chrome */
+.sl-service-intro .corner { position: absolute; top: 64px; z-index: 10; display: flex; align-items: center; gap: 14px;
+  font-size: 19px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap; }
+.sl-service-intro .corner.left { left: 96px; }
+.sl-service-intro .corner.right { right: 96px; }
+.sl-service-intro .corner.left .num { color: var(--text-secondary); font-weight: 700; }
+.sl-service-intro .corner.left .sep { color: var(--text-tertiary); margin: 0 2px; }
+.sl-service-intro .corner.right .pg { color: var(--text-secondary); font-weight: 600; }
+
+/* left brand column: lockup + name etymology */
+.sl-service-intro .brand-col { position: absolute; left: 96px; top: 232px; z-index: 5; width: 800px; }
+.sl-service-intro .intro { height: 316px; display: flex; align-items: center; }
+.sl-service-intro .lockup { display: flex; align-items: center; gap: 30px; }
+.sl-service-intro .lockup img { height: 130px; width: auto; display: block; filter: drop-shadow(0 13px 24px rgba(0,0,0,0.5)); }
+.sl-service-intro .lockup .wm { font-family: var(--font-display); font-weight: 600; font-size: 118px; line-height: 1; letter-spacing: -0.03em; white-space: nowrap;
+  background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 13px 24px rgba(0,0,0,0.5)); }
+
+.sl-service-intro .etym { position: relative; padding-top: 56px; border-top: 1px solid var(--hair); display: flex; align-items: flex-start; gap: 38px; }
+.sl-service-intro .etym .term { display: flex; flex-direction: column; gap: 11px; }
+.sl-service-intro .etym .en { font-family: var(--font-display); font-size: 46px; font-weight: 600; line-height: 0.96; letter-spacing: -0.02em; color: var(--text-secondary); }
+.sl-service-intro .etym .term.t1 .en { color: var(--text-secondary); }
+.sl-service-intro .etym .term.t2 .en { color: var(--text-secondary); -webkit-text-fill-color: var(--text-secondary); }
+.sl-service-intro .etym .ko { font-family: var(--font-kr); font-size: 16px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-tertiary); }
+.sl-service-intro .etym .plus { font-family: var(--font-display); font-size: 30px; font-weight: 300; color: var(--text-tertiary); line-height: 1; margin-top: 8px; }
+
+/* etymology synthesis (fills lower-left) */
+.sl-service-intro .synth { margin-top: 64px; }
+.sl-service-intro .synth .row { display: flex; align-items: baseline; gap: 20px; }
+.sl-service-intro .synth .eq { font-family: var(--font-display); font-size: 30px; font-weight: 300; color: var(--text-tertiary); line-height: 1; }
+.sl-service-intro .synth .result { font-family: var(--font-kr); font-size: 40px; font-weight: 700; letter-spacing: -0.015em; line-height: 1;
+  color: var(--text-secondary); }
+.sl-service-intro .synth .stmt { margin-top: 24px; max-width: 620px; font-family: var(--font-kr); font-size: 18px; font-weight: 400; line-height: 1.66; color: rgba(255,255,255,0.32); }
+.sl-service-intro .synth .stmt b { color: var(--text-secondary); font-weight: 600; }
+
+/* content (right) */
+.sl-service-intro .content { position: absolute; right: 96px; top: 232px; width: 880px; z-index: 5; }
+.sl-service-intro .content .intro { flex-direction: column; align-items: stretch; justify-content: center; }
+.sl-service-intro .eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 600;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 24px; white-space: nowrap; }
+.sl-service-intro .eyebrow .bar { width: 46px; height: 1px; background: rgba(255,255,255,0.28); }
+.sl-service-intro .headline { font-family: var(--font-kr); font-size: 52px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; color: var(--text-primary); }
+.sl-service-intro .headline .accent { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.sl-service-intro .sub { font-family: var(--font-kr); margin-top: 22px; font-size: 21px; font-weight: 400; line-height: 1.62; color: var(--text-secondary); }
+.sl-service-intro .sub b { color: var(--text-primary); font-weight: 600; }
+
+/* compact feature list */
+.sl-service-intro .feat-strip { padding-top: 56px; border-top: 1px solid var(--hair); display: flex; flex-direction: column; gap: 4px; }
+.sl-service-intro .fitem { display: flex; align-items: center; gap: 20px; padding: 14px 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.sl-service-intro .fitem:last-child { border-bottom: none; }
+.sl-service-intro .fitem .fn { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: 0.02em; color: var(--text-tertiary); width: 30px; flex: none; }
+.sl-service-intro .fitem .ft { font-family: var(--font-kr); font-size: 23px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-primary); width: 250px; flex: none; }
+.sl-service-intro .fitem .fd { font-family: var(--font-kr); font-size: 17px; font-weight: 400; color: var(--text-tertiary); }
+.sl-service-intro .fitem.ext .fn { color: var(--text-secondary); }
+.sl-service-intro .fitem.ext .ft { color: var(--text-secondary); }
+.sl-service-intro .fitem .tag { margin-left: auto; font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-tertiary); border: 1px solid var(--hair); border-radius: 999px; padding: 5px 11px; white-space: nowrap; }
+
+/* entrance */
+.sl-service-intro .corner, .sl-service-intro .lockup, .sl-service-intro .etym, .sl-service-intro .synth, .sl-service-intro .eyebrow, .sl-service-intro .headline, .sl-service-intro .sub, .sl-service-intro .feat-strip {
+  transition-property: opacity, transform, filter; transition-duration: 0.85s; transition-timing-function: cubic-bezier(0.2,0.7,0.2,1);
+}
+.sl-service-intro .corner.left { transition-delay: 0.10s; }
+.sl-service-intro .corner.right { transition-delay: 0.16s; }
+.sl-service-intro .lockup { transition-delay: 0.16s; }
+.sl-service-intro .etym { transition-delay: 0.30s; }
+.sl-service-intro .eyebrow { transition-delay: 0.22s; }
+.sl-service-intro .headline { transition-delay: 0.32s; }
+.sl-service-intro .sub { transition-delay: 0.44s; }
+.sl-service-intro .feat-strip { transition-delay: 0.56s; }
+
+.sl-service-intro.is-loading .corner { opacity: 0; transform: translateY(-12px); }
+.sl-service-intro.is-loading .lockup { opacity: 0; transform: translateY(18px); }
+.sl-service-intro.is-loading .etym { opacity: 0; transform: translateY(18px); }
+.sl-service-intro.is-loading .synth { opacity: 0; transform: translateY(18px); }
+.sl-service-intro.is-loading .eyebrow { opacity: 0; transform: translateY(18px); }
+.sl-service-intro.is-loading .headline { opacity: 0; transform: translateY(22px); filter: blur(9px); }
+.sl-service-intro.is-loading .sub { opacity: 0; transform: translateY(18px); }
+.sl-service-intro.is-loading .feat-strip { opacity: 0; transform: translateY(20px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-service-intro .corner, .sl-service-intro .lockup, .sl-service-intro .etym, .sl-service-intro .synth, .sl-service-intro .eyebrow, .sl-service-intro .headline, .sl-service-intro .sub, .sl-service-intro .feat-strip { transition: none !important; }
+  .sl-service-intro.is-loading .corner, .sl-service-intro.is-loading .lockup, .sl-service-intro.is-loading .etym, .sl-service-intro.is-loading .synth, .sl-service-intro.is-loading .eyebrow, .sl-service-intro.is-loading .headline, .sl-service-intro.is-loading .sub, .sl-service-intro.is-loading .feat-strip {
+    opacity: 1 !important; transform: none !important; filter: none !important; }
+}

@@ -1,0 +1,84 @@
+/* Passfolio Purpose · Competitive Gap — 원본 "Passfolio Purpose E.html"의 스타일을 .sl-purpose-e로 스코핑 */
+
+.sl-purpose-e {
+  --bg: #131418;
+  --surface: #1b1c21;
+  --card: #191a1f;
+  --text-primary: #ececf0;
+  --text-secondary: #a6a7ad;
+  --text-tertiary: #6f7077;
+  --brand-gradient: linear-gradient(135deg, #ffffff 0%, #b3b4ba 100%);
+  --hair: rgba(255, 255, 255, 0.08);
+  background: var(--bg);
+}
+
+/* chrome */
+.sl-purpose-e .corner { position: absolute; top: 64px; z-index: 10; display: flex; align-items: center; gap: 14px;
+  font-size: 19px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap; }
+.sl-purpose-e .corner.left { left: 96px; }
+.sl-purpose-e .corner.right { right: 96px; }
+.sl-purpose-e .corner.left .num { color: var(--text-secondary); font-weight: 700; }
+.sl-purpose-e .corner.left .sep { color: var(--text-tertiary); margin: 0 -4px; }
+.sl-purpose-e .corner.right .pg { color: var(--text-secondary); font-weight: 600; }
+
+/* header */
+.sl-purpose-e .head { position: absolute; left: 96px; right: 96px; top: 196px; z-index: 5; }
+.sl-purpose-e .eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 600;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 24px; white-space: nowrap; }
+.sl-purpose-e .eyebrow .bar { width: 46px; height: 1px; background: rgba(255,255,255,0.28); }
+.sl-purpose-e .headline { font-family: var(--font-kr); font-size: 52px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); }
+.sl-purpose-e .headline .accent { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.sl-purpose-e .sub { font-family: var(--font-kr); margin-top: 20px; font-size: 21px; font-weight: 400; line-height: 1.6; color: var(--text-secondary); max-width: 1120px; }
+.sl-purpose-e .sub b { color: var(--text-primary); font-weight: 600; }
+
+/* comparison cards */
+.sl-purpose-e .cards { position: absolute; left: 96px; right: 360px; top: 446px; z-index: 5;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.sl-purpose-e .card {
+  position: relative; border-radius: 22px; padding: 38px 44px 34px;
+  background: linear-gradient(160deg, #1d1e24 0%, var(--card) 60%, #15161a 100%);
+  border: 1px solid var(--hair);
+  box-shadow: 0 30px 70px -34px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.sl-purpose-e .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.sl-purpose-e .cname { font-family: var(--font-display); font-size: 30px; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); }
+.sl-purpose-e .asis { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-tertiary); border: 1px solid var(--hair); border-radius: 999px; padding: 6px 14px; white-space: nowrap; }
+.sl-purpose-e .capproach { font-family: var(--font-kr); font-size: 19px; font-weight: 500; color: var(--text-secondary); padding-bottom: 26px; border-bottom: 1px solid var(--hair); }
+.sl-purpose-e .clist { margin-top: 26px; display: flex; flex-direction: column; gap: 18px; }
+.sl-purpose-e .citem { display: flex; align-items: flex-start; gap: 16px; }
+.sl-purpose-e .citem .dash { flex: none; font-family: var(--font-kr); font-size: 21px; font-weight: 500; line-height: 1.4; color: var(--text-tertiary); }
+.sl-purpose-e .citem .ctext { font-family: var(--font-kr); font-size: 21px; font-weight: 500; line-height: 1.4; color: var(--text-primary); letter-spacing: -0.01em; }
+
+/* conclusion */
+.sl-purpose-e .conclusion { position: absolute; left: 96px; right: 96px; bottom: 188px; z-index: 5;
+  display: flex; align-items: center; gap: 18px; }
+.sl-purpose-e .conclusion .arrow { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text-tertiary); flex: none; }
+.sl-purpose-e .conclusion .txt { font-family: var(--font-kr); font-size: 26px; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); }
+.sl-purpose-e .conclusion .txt b { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* entrance */
+.sl-purpose-e .corner, .sl-purpose-e .eyebrow, .sl-purpose-e .headline, .sl-purpose-e .sub, .sl-purpose-e .card, .sl-purpose-e .conclusion {
+  transition-property: opacity, transform, filter; transition-duration: 0.85s; transition-timing-function: cubic-bezier(0.2,0.7,0.2,1);
+}
+.sl-purpose-e .corner.left { transition-delay: 0.10s; }
+.sl-purpose-e .corner.right { transition-delay: 0.16s; }
+.sl-purpose-e .eyebrow { transition-delay: 0.16s; }
+.sl-purpose-e .headline { transition-delay: 0.24s; }
+.sl-purpose-e .sub { transition-delay: 0.34s; }
+.sl-purpose-e .card:nth-child(1) { transition-delay: 0.46s; }
+.sl-purpose-e .card:nth-child(2) { transition-delay: 0.56s; }
+.sl-purpose-e .conclusion { transition-delay: 0.70s; }
+
+.sl-purpose-e.is-loading .corner { opacity: 0; transform: translateY(-12px); }
+.sl-purpose-e.is-loading .eyebrow { opacity: 0; transform: translateY(18px); }
+.sl-purpose-e.is-loading .headline { opacity: 0; transform: translateY(22px); filter: blur(9px); }
+.sl-purpose-e.is-loading .sub { opacity: 0; transform: translateY(18px); }
+.sl-purpose-e.is-loading .card { opacity: 0; transform: translateY(28px); }
+.sl-purpose-e.is-loading .conclusion { opacity: 0; transform: translateY(18px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-purpose-e .corner, .sl-purpose-e .eyebrow, .sl-purpose-e .headline, .sl-purpose-e .sub, .sl-purpose-e .card, .sl-purpose-e .conclusion { transition: none !important; }
+  .sl-purpose-e.is-loading .corner, .sl-purpose-e.is-loading .eyebrow, .sl-purpose-e.is-loading .headline, .sl-purpose-e.is-loading .sub, .sl-purpose-e.is-loading .card, .sl-purpose-e.is-loading .conclusion {
+    opacity: 1 !important; transform: none !important; filter: none !important; }
+}

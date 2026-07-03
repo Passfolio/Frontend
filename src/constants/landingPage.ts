@@ -67,7 +67,7 @@ export type LandingNavLinkType = {
 };
 
 export const LANDING_NAV_LINK_LIST: LandingNavLinkType[] = [
-  { href: '/#documentation', label: 'Documentation' },
+  { href: '/docs', label: 'Documentation' },
   { href: '/#service', label: 'Service' },
   { href: '/articles', label: 'Article' },
 ];
@@ -112,7 +112,7 @@ export const LANDING_SERVICE_SECTION = {
     '당신의 기술적 의사결정과 문제 해결 과정을 포트폴리오에 정교하게 녹여냅니다.',
   ],
   cta: {
-    href: getOptionalLandingHref(import.meta.env.VITE_LANDING_DOCUMENTATION_CTA_HREF),
+    href: getOptionalLandingHref(import.meta.env.VITE_LANDING_DOCUMENTATION_CTA_HREF, '/docs'),
     label: 'View Documentation',
   },
 } as const satisfies {

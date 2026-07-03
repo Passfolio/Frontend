@@ -1,0 +1,78 @@
+/* Passfolio Tech Stack 1 — 원본 "Passfolio Tech Stack 1.html"의 스타일을 .sl-tech-stack-1로 스코핑 */
+
+/* 원본 :root 토큰 (슬라이드별 값 드리프트가 있어 슬라이드 루트에 유지) */
+.sl-tech-stack-1 {
+  --bg: #131418;
+  --card: #191a1f;
+  --text-primary: #ececf0;
+  --text-secondary: #a6a7ad;
+  --text-tertiary: #6f7077;
+  --brand-gradient: linear-gradient(135deg, #ffffff 0%, #b3b4ba 100%);
+  --hair: rgba(255, 255, 255, 0.08);
+  --font-display: "Poppins", "Noto Sans KR", system-ui, sans-serif;
+  --font-kr: "Noto Sans KR", "Poppins", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  background: var(--bg);
+}
+
+.sl-tech-stack-1 .corner { position: absolute; top: 64px; z-index: 10; display: flex; align-items: center; gap: 14px;
+  font-size: 19px; font-weight: 600; letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap; }
+.sl-tech-stack-1 .corner.left { left: 96px; }
+.sl-tech-stack-1 .corner.right { right: 96px; }
+.sl-tech-stack-1 .corner.left .num { color: var(--text-secondary); font-weight: 700; }
+.sl-tech-stack-1 .corner.left .sep { color: var(--text-tertiary); margin: 0 2px; }
+.sl-tech-stack-1 .corner.right .pg { color: var(--text-secondary); font-weight: 600; }
+
+.sl-tech-stack-1 .head { position: absolute; left: 96px; top: 130px; z-index: 5; }
+.sl-tech-stack-1 .eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 600;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 18px; white-space: nowrap; }
+.sl-tech-stack-1 .eyebrow .bar { width: 46px; height: 1px; background: rgba(255,255,255,0.28); }
+.sl-tech-stack-1 .headline { font-family: var(--font-kr); font-size: 44px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); }
+.sl-tech-stack-1 .headline .accent { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* two system columns */
+.sl-tech-stack-1 .cols { position: absolute; left: 96px; right: 96px; top: 300px; bottom: 70px; z-index: 5;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.sl-tech-stack-1 .sys {
+  border-radius: 24px; padding: 44px 46px;
+  background: linear-gradient(160deg, #1d1e24 0%, var(--card) 60%, #15161a 100%);
+  border: 1px solid var(--hair);
+  box-shadow: 0 30px 70px -34px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.04);
+  display: flex; flex-direction: column;
+}
+.sl-tech-stack-1 .sys-head { display: flex; align-items: baseline; gap: 16px; padding-bottom: 26px; margin-bottom: 28px; border-bottom: 1px solid var(--hair); }
+.sl-tech-stack-1 .sys-name { font-family: var(--font-display); font-size: 34px; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); }
+.sl-tech-stack-1 .sys-role { font-family: var(--font-kr); font-size: 18px; font-weight: 500; color: var(--text-tertiary); }
+.sl-tech-stack-1 .sys-lang { margin-left: auto; font-family: var(--font-mono); font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+  color: var(--text-secondary); border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 7px 13px; white-space: nowrap; }
+
+.sl-tech-stack-1 .rows { display: flex; flex-direction: column; gap: 20px; }
+.sl-tech-stack-1 .srow { display: grid; grid-template-columns: 132px 1fr; gap: 22px; align-items: start; }
+.sl-tech-stack-1 .srow .k { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-tertiary); padding-top: 7px; }
+.sl-tech-stack-1 .chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.sl-tech-stack-1 .chip { font-family: var(--font-kr); font-size: 17px; font-weight: 500; color: var(--text-secondary);
+  padding: 6px 14px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); white-space: nowrap; }
+.sl-tech-stack-1 .chip.lead { color: var(--text-primary); border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.07); }
+
+/* entrance */
+.sl-tech-stack-1 .corner, .sl-tech-stack-1 .eyebrow, .sl-tech-stack-1 .headline, .sl-tech-stack-1 .sys {
+  transition-property: opacity, transform, filter; transition-duration: 0.85s; transition-timing-function: cubic-bezier(0.2,0.7,0.2,1);
+}
+.sl-tech-stack-1 .corner.left { transition-delay: 0.10s; }
+.sl-tech-stack-1 .corner.right { transition-delay: 0.16s; }
+.sl-tech-stack-1 .eyebrow { transition-delay: 0.16s; }
+.sl-tech-stack-1 .headline { transition-delay: 0.24s; }
+.sl-tech-stack-1 .sys:nth-child(1) { transition-delay: 0.40s; }
+.sl-tech-stack-1 .sys:nth-child(2) { transition-delay: 0.50s; }
+
+.sl-tech-stack-1.is-loading .corner { opacity: 0; transform: translateY(-12px); }
+.sl-tech-stack-1.is-loading .eyebrow { opacity: 0; transform: translateY(18px); }
+.sl-tech-stack-1.is-loading .headline { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+.sl-tech-stack-1.is-loading .sys { opacity: 0; transform: translateY(26px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-tech-stack-1 .corner, .sl-tech-stack-1 .eyebrow, .sl-tech-stack-1 .headline, .sl-tech-stack-1 .sys { transition: none !important; }
+  .sl-tech-stack-1.is-loading .corner, .sl-tech-stack-1.is-loading .eyebrow, .sl-tech-stack-1.is-loading .headline, .sl-tech-stack-1.is-loading .sys {
+    opacity: 1 !important; transform: none !important; filter: none !important; }
+}
