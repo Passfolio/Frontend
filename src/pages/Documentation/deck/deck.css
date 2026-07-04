@@ -94,6 +94,28 @@ body.reveal-viewport {
 }
 
 /* ============================================================
+   첫 재생 컴포지터 워밍 — will-change로 레이어를 트랜지션 발화 전에
+   미리 생성한다. 17장 전체 승격은 GPU 메모리 낭비이므로,
+   근접 슬라이드(pf-near: 현재 ±1, DeckPage가 부여)로만 한정한다.
+   ============================================================ */
+/* 각 슬라이드 is-loading 엔트런스 트랜지션의 대상 클래스 합집합 */
+.pf-deck section.pf-near
+    :is(
+        .corner, .eyebrow, .headline, .title, .lead, .row,
+        .thinker, .sub, .survey, .subtitle, .members-head, .member,
+        .logo-mark, .wordmark, .col, .arrow, .card, .meta,
+        .pillar, .takeaway, .photo-wrap, .panel-label, .bitem,
+        .conclusion, .qa, .lockup, .etym, .synth, .feat-strip, .sys
+    ) {
+    will-change: opacity, transform, filter;
+}
+/* 무한 keyframe 글로우(정적 blur 위에서 transform/opacity만 애니메이션)는 상시 승격 */
+.pf-deck .sl-cover .hero-glow,
+.pf-deck .sl-qna .glow {
+    will-change: transform, opacity;
+}
+
+/* ============================================================
    Print (?print-pdf) — slidechanged가 없으므로 모든 슬라이드를
    isActive로 강제하고, 전환/애니메이션을 죽여 최종 상태로 고정한다.
    ============================================================ */

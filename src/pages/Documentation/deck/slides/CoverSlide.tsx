@@ -1,6 +1,8 @@
-import logoSrc from '@/assets/deck/passfolio-logo-cropped.svg';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './coverSlide.css';
+
+const logoSrc = DECK_ASSETS.logoSrc;
 
 export function CoverSlide({ isActive }: SlideProps) {
     return (

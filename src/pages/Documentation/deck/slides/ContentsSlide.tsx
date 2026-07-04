@@ -1,6 +1,8 @@
-import logoSrc from '@/assets/deck/passfolio-logo-cropped.svg';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './contentsSlide.css';
+
+const logoSrc = DECK_ASSETS.logoSrc;
 
 const CONTENTS_ROWS = [
     { no: '01', name: 'Overview', tag: '개요' },

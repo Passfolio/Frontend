@@ -1,0 +1,58 @@
+/* 덱 진입 게이트 오버레이 — 덱 톤(#131418), .pf-deck-exit(z-50)·reveal UI 위를 덮는다 */
+.pf-deck-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: #131418;
+    transition: opacity 0.35s ease;
+}
+.pf-deck-loading.is-dismissed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 슬라이드 .corner 키커 톤 — 단, 덱 폰트 로드 전이므로 시스템 폰트 스택 */
+.pf-deck-loading .label {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: #71717a;
+    /* letter-spacing이 마지막 글자 뒤에도 붙어 시각 중심이 좌측으로 쏠리는 것 보정 */
+    margin-right: -0.34em;
+}
+
+.pf-deck-loading .track {
+    width: min(280px, 60vw);
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+}
+.pf-deck-loading .fill {
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+}
+
+.pf-deck-loading .count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #a1a1aa;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pf-deck-loading,
+    .pf-deck-loading .fill {
+        transition: none !important;
+    }
+}

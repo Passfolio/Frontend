@@ -1,6 +1,8 @@
-import thinkerSrc from '@/assets/deck/thinker.webp';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './overviewSlide.css';
+
+const thinkerSrc = DECK_ASSETS.thinkerSrc;
 
 export function OverviewSlide({ isActive }: SlideProps) {
     return (
@@ -12,7 +14,7 @@ export function OverviewSlide({ isActive }: SlideProps) {
                 <span className="pg">03</span>
             </div>
 
-            <img className="thinker" src={thinkerSrc} alt="" loading="lazy" />
+            <img className="thinker" src={thinkerSrc} alt="" />
 
             <div className="content">
                 <div className="eyebrow">MARKET PAIN</div>

@@ -1,5 +1,7 @@
-import workflowSrc from '@/assets/deck/analysis-workflow-v3.webp';
+import { DECK_ASSETS } from '../deckAssets';
 import './analysisWorkflowSlide.css';
+
+const workflowSrc = DECK_ASSETS.analysisWorkflowSrc;
 
 export function AnalysisWorkflowSlide() {
     return (
@@ -15,7 +17,7 @@ export function AnalysisWorkflowSlide() {
             </div>
 
             <div className="diagram">
-                <img src={workflowSrc} alt="Passfolio project analysis workflow diagram" loading="lazy" />
+                <img src={workflowSrc} alt="Passfolio project analysis workflow diagram" />
             </div>
 
             <div className="flow">
