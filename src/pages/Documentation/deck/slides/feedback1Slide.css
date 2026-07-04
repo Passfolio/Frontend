@@ -19,13 +19,14 @@
 .sl-feedback-1 .corner.left .sep { color: var(--text-tertiary); margin: 0 2px; }
 .sl-feedback-1 .corner.right .pg { color: var(--text-secondary); font-weight: 600; }
 
-.sl-feedback-1 .head { position: absolute; left: 96px; top: 184px; z-index: 5; }
+/* 발췌 주석(.note)을 타이틀 우측 베이스라인에 나란히 배치 */
+.sl-feedback-1 .head { position: absolute; left: 96px; top: 184px; z-index: 5; display: flex; align-items: baseline; gap: 26px; }
 .sl-feedback-1 .eyebrow { display: inline-flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 600;
   letter-spacing: 0.34em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 18px; white-space: nowrap; }
 .sl-feedback-1 .eyebrow .bar { width: 46px; height: 1px; background: rgba(255,255,255,0.28); }
 .sl-feedback-1 .headline { font-family: var(--font-kr); font-size: 44px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); }
 .sl-feedback-1 .headline .accent { background: var(--brand-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.sl-feedback-1 .note { font-family: var(--font-kr); font-size: 15px; font-weight: 500; color: var(--text-tertiary); margin-top: 10px; letter-spacing: 0.01em; }
+.sl-feedback-1 .note { font-family: var(--font-kr); font-size: 15px; font-weight: 500; color: var(--text-tertiary); letter-spacing: 0.01em; white-space: nowrap; }
 
 /* 3-column comparison */
 .sl-feedback-1 .cols { position: absolute; left: 96px; right: 96px; top: 296px; bottom: 64px; z-index: 5;
