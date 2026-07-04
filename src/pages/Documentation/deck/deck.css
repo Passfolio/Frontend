@@ -45,14 +45,11 @@
     padding: 0;
     text-align: left;
 }
+/* landerPage.css의 스크롤-리빌 유틸리티는 .scroll-reveal로 rename되어
+   reveal.js 컨테이너 클래스(.reveal)와 더 이상 충돌하지 않는다 */
 .pf-deck .reveal {
     width: 100%;
     height: 100%;
-    /* landerPage.css의 스크롤-리빌 유틸리티(.reveal { opacity:0; translateY })와
-       reveal.js 컨테이너 클래스가 충돌 — 덱 안에서는 무력화한다 */
-    opacity: 1;
-    transform: none;
-    transition: none;
 }
 /* reveal은 뷰포트 클래스를 body에 붙인다 (덱 활성 중에만 존재) */
 body.reveal-viewport {

@@ -413,7 +413,9 @@
     color: #ffffff !important;
   }
 
-  .reveal {
+  /* 스크롤-리빌 유틸리티 — reveal.js(덱)의 전역 .reveal 컨테이너 클래스와
+     충돌하므로 bare `reveal`이 아닌 `scroll-reveal`을 사용한다 */
+  .scroll-reveal {
     opacity: 0;
     transform: translateY(40px);
     transition:
@@ -422,7 +424,7 @@
     will-change: opacity, transform;
   }
 
-  .reveal.active {
+  .scroll-reveal.active {
     opacity: 1;
     transform: translateY(0);
   }
