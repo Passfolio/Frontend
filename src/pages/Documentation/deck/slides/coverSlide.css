@@ -123,6 +123,35 @@
     letter-spacing: 0.04em;
 }
 
+/* ---- 발표 크레딧 (subtitle 아래) ---- */
+.sl-cover .credits {
+    margin-top: 30px;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+}
+.sl-cover .credits .crl {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+.sl-cover .credits .crn {
+    font-family: var(--font-kr);
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+    /* crl의 letter-spacing이 마지막 글자 뒤에도 붙어 벌어진 간격 보정 */
+    margin-left: -6px;
+}
+.sl-cover .credits .crd {
+    color: rgba(255, 255, 255, 0.18);
+    font-size: 18px;
+}
+
 /* ---- Members strip ---- */
 .sl-cover .members {
     position: absolute;
@@ -210,7 +239,7 @@
    해제되어 원본과 동일한 스태거 안무가 재생된다.
    ============================================================ */
 .sl-cover .corner.left, .sl-cover .corner.right, .sl-cover .logo-mark, .sl-cover .wordmark,
-.sl-cover .subtitle, .sl-cover .members-head, .sl-cover .member {
+.sl-cover .subtitle, .sl-cover .credits, .sl-cover .members-head, .sl-cover .member {
     transition-property: opacity, transform, filter;
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -220,7 +249,8 @@
 .sl-cover .logo-mark    { transition-delay: 0.25s; }
 .sl-cover .wordmark     { transition-delay: 0.42s; }
 .sl-cover .subtitle     { transition-delay: 0.70s; }
-.sl-cover .members-head { transition-delay: 0.82s; }
+.sl-cover .credits      { transition-delay: 0.80s; }
+.sl-cover .members-head { transition-delay: 0.90s; }
 .sl-cover .member:nth-child(1) { transition-delay: 0.95s; }
 .sl-cover .member:nth-child(2) { transition-delay: 1.05s; }
 .sl-cover .member:nth-child(3) { transition-delay: 1.15s; }
@@ -229,6 +259,7 @@
 .sl-cover.is-loading .corner.left,
 .sl-cover.is-loading .corner.right,
 .sl-cover.is-loading .subtitle,
+.sl-cover.is-loading .credits,
 .sl-cover.is-loading .members-head,
 .sl-cover.is-loading .member { opacity: 0; transform: translateY(22px); }
 .sl-cover.is-loading .logo-mark { opacity: 0; transform: translateY(26px) scale(0.94); filter: blur(9px); }
@@ -264,10 +295,10 @@
 
 @media (prefers-reduced-motion: reduce) {
     .sl-cover .corner.left, .sl-cover .corner.right, .sl-cover .logo-mark, .sl-cover .wordmark,
-    .sl-cover .subtitle, .sl-cover .members-head, .sl-cover .member { transition: none !important; }
+    .sl-cover .subtitle, .sl-cover .credits, .sl-cover .members-head, .sl-cover .member { transition: none !important; }
     .sl-cover.is-loading .corner.left, .sl-cover.is-loading .corner.right, .sl-cover.is-loading .logo-mark,
-    .sl-cover.is-loading .wordmark, .sl-cover.is-loading .subtitle, .sl-cover.is-loading .members-head,
-    .sl-cover.is-loading .member {
+    .sl-cover.is-loading .wordmark, .sl-cover.is-loading .subtitle, .sl-cover.is-loading .credits,
+    .sl-cover.is-loading .members-head, .sl-cover.is-loading .member {
         opacity: 1 !important;
         filter: none !important;
         transform: none !important;

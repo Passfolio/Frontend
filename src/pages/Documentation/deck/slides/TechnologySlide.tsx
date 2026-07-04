@@ -1,5 +1,7 @@
-import architectureSrc from '@/assets/deck/architecture.webp';
+import { DECK_ASSETS } from '../deckAssets';
 import './technologySlide.css';
+
+const architectureSrc = DECK_ASSETS.architectureSrc;
 
 export function TechnologySlide() {
     return (
@@ -15,7 +17,7 @@ export function TechnologySlide() {
             </div>
 
             <div className="diagram">
-                <img src={architectureSrc} alt="Passfolio infrastructure architecture diagram" loading="lazy" />
+                <img src={architectureSrc} alt="Passfolio infrastructure architecture diagram" />
             </div>
 
             <div className="summary">

@@ -1,6 +1,8 @@
-import crumpledWoodSrc from '@/assets/deck/crumpled-wood.webp';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './purposeDSlide.css';
+
+const crumpledWoodSrc = DECK_ASSETS.crumpledWoodSrc;
 
 const BAR_ITEMS = [
     { label: '내용 · 성과를 논리적으로 정리하기', val: '57.5%', pct: 100, lead: true },

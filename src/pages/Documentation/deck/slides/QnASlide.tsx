@@ -1,6 +1,8 @@
-import logoSrc from '@/assets/deck/passfolio-logo-cropped.svg';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './qnaSlide.css';
+
+const logoSrc = DECK_ASSETS.logoSrc;
 
 export function QnASlide({ isActive }: SlideProps) {
     return (
@@ -8,7 +10,7 @@ export function QnASlide({ isActive }: SlideProps) {
             <div className="glow" />
 
             <div className="corner left">
-                <img className="logo" src={logoSrc} alt="Passfolio" loading="lazy" />
+                <img className="logo" src={logoSrc} alt="Passfolio" />
                 <span>Passfolio</span>
             </div>
             <div className="corner right"><span>Thank You</span></div>

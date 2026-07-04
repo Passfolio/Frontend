@@ -1,6 +1,8 @@
-import logoSrc from '@/assets/deck/passfolio-logo-cropped.svg';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './coverSlide.css';
+
+const logoSrc = DECK_ASSETS.logoSrc;
 
 export function CoverSlide({ isActive }: SlideProps) {
     return (
@@ -23,6 +25,13 @@ export function CoverSlide({ isActive }: SlideProps) {
                     <h1 className="wordmark">Passfolio</h1>
                 </div>
                 <div className="subtitle">Capstone Design Final Presentation</div>
+                <div className="credits">
+                    <span className="crl">PPT</span>
+                    <span className="crn">김태현</span>
+                    <span className="crd">·</span>
+                    <span className="crl">Presenter</span>
+                    <span className="crn">박준우</span>
+                </div>
             </div>
 
             <div className="members">

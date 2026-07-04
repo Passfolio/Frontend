@@ -5,12 +5,13 @@ export function Feedback1Slide({ isActive }: SlideProps) {
     return (
         <div className={`pf-slide sl-feedback-1${isActive ? '' : ' is-loading'}`}>
             <div className="corner left">
-                <span className="num">05</span><span className="sep">•</span><span>Feedback</span>
+                <span className="num">05</span><span className="sep">•</span><span>Performance</span>
             </div>
             <div className="corner right"><span className="pg">15</span></div>
 
             <div className="head">
                 <h1 className="headline">개선 단계별 <span className="accent">포트폴리오 결과 비교</span></h1>
+                <p className="note">* 포트폴리오의 특정 개선 영역만 발췌</p>
             </div>
 
             <div className="cols">

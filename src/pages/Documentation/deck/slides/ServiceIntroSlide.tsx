@@ -1,6 +1,8 @@
-import logoSrc from '@/assets/deck/passfolio-logo-cropped.svg';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './serviceIntroSlide.css';
+
+const logoSrc = DECK_ASSETS.logoSrc;
 
 export function ServiceIntroSlide({ isActive }: SlideProps) {
     return (
@@ -15,7 +17,7 @@ export function ServiceIntroSlide({ isActive }: SlideProps) {
             <div className="brand-col">
                 <div className="intro">
                     <div className="lockup">
-                        <img src={logoSrc} alt="" loading="lazy" />
+                        <img src={logoSrc} alt="" />
                         <span className="wm">Passfolio</span>
                     </div>
                 </div>

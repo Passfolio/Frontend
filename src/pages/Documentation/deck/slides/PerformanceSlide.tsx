@@ -25,7 +25,7 @@ export function PerformanceSlide() {
     return (
         <div className="pf-slide sl-performance">
             <div className="corner left">
-                <span className="num">06</span><span className="sep">•</span><span>Performance</span>
+                <span className="num">05</span><span className="sep">•</span><span>Performance</span>
             </div>
             <div className="corner right"><span className="pg">16</span></div>
 

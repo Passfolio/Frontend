@@ -1,6 +1,8 @@
-import logoSrc from '@/assets/deck/passfolio-logo-cropped.svg';
+import { DECK_ASSETS } from '../deckAssets';
 import type { SlideProps } from './index';
 import './purposeCSlide.css';
+
+const logoSrc = DECK_ASSETS.logoSrc;
 
 export function PurposeCSlide({ isActive }: SlideProps) {
     return (
@@ -38,7 +40,7 @@ export function PurposeCSlide({ isActive }: SlideProps) {
                 <div className="pillar featured">
                     <span className="idx">02</span>
                     <span className="badge">
-                        <img src={logoSrc} alt="" loading="lazy" />
+                        <img src={logoSrc} alt="" />
                         <span className="bt">Passfolio</span>
                     </span>
                     <div className="ptitle">포트폴리오 평가</div>
