@@ -105,7 +105,8 @@ body.reveal-viewport {
         .thinker, .sub, .survey, .subtitle, .members-head, .member,
         .logo-mark, .wordmark, .col, .arrow, .card, .meta,
         .pillar, .takeaway, .photo-wrap, .panel-label, .bitem,
-        .conclusion, .qa, .lockup, .etym, .synth, .feat-strip, .sys
+        .conclusion, .qa, .lockup, .etym, .synth, .feat-strip, .sys,
+        .credits, .note
     ) {
     will-change: opacity, transform, filter;
 }
