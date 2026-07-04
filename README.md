@@ -119,7 +119,7 @@ Frontend 파트가 담당하는 서비스 핵심 기능입니다.
 
 ## Environment
 
-| Category | Stack |
+| **Category** | **Stack** |
 | :--- | :--- |
 | **Frontend** | ![React](https://img.shields.io/badge/React%2019-61DAFB?style=flat&logo=react&logoColor=black) ![TypeScript](https://img.shields.io/badge/TypeScript%205.9-3178C6?style=flat&logo=typescript&logoColor=white) ![Vite](https://img.shields.io/badge/Vite%207-646CFF?style=flat&logo=vite&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/TailwindCSS%204-06B6D4?style=flat&logo=tailwindcss&logoColor=white) ![React Router](https://img.shields.io/badge/React%20Router%207-CA4245?style=flat&logo=reactrouter&logoColor=white) ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=axios&logoColor=white) ![Tiptap](https://img.shields.io/badge/Tiptap-000000?style=flat) ![React Flow](https://img.shields.io/badge/React%20Flow-1A192B?style=flat) ![SSE](https://img.shields.io/badge/SSE%20·%20EventSource-4B5563?style=flat) |
 | **버전 관리** | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white) |
@@ -136,6 +136,8 @@ Frontend 파트가 담당하는 서비스 핵심 기능입니다.
 - **FE Deployment** : [@Notion-Passfolio FE Deployment](https://hooby.notion.site/Cloudflare-FE-Deployment-347f6c063f3e80e682d7ef1ceffa369f?source=copy_link)
 
 💡 Architecture는 PPT 참조
+
+<br>
 
 ### Member's Personal Documentation
 - **Harness Engineering** : [@Notion-Harness Engineering](https://hooby.notion.site/Harness-Engineering-351f6c063f3e80f79dcef01bdaced788?source=copy_link)  
