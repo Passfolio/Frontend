@@ -1,3 +1,5 @@
+import { SERVICE_EMAIL } from '@/constants/service';
+
 /** 개인정보 처리방침 (법무 검토 후 확정 권장) */
 
 export type PrivacySectionType = {
@@ -276,7 +278,7 @@ export const PRIVACY_SECTION_LIST: PrivacySectionType[] = [
       '· 성명: 김태현',
       '· 직책: CTO',
       '· 전화번호: 010-9726-1322',
-      '· 이메일: dev.youcu@gmail.com',
+      `· 이메일: ${SERVICE_EMAIL}`,
     ],
   },
   {

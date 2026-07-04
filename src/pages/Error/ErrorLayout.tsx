@@ -50,7 +50,8 @@ export function ErrorLayout({
                 >
                     <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                     <h2 className="text-xl font-semibold tracking-tight text-white">{title}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-zinc-400">{description}</p>
+                    {/* whitespace-pre-line: description의 \n을 줄바꿈으로 렌더 (기존 문구는 \n이 없어 무영향) */}
+                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-zinc-400">{description}</p>
                 </div>
 
                 <div className="mt-8 flex flex-wrap justify-center gap-3">
