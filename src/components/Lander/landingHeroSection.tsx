@@ -18,20 +18,20 @@ export const LandingHeroSection = () => {
     <section className="hero" aria-labelledby="landing-hero-title">
       <div className="hero-glow" aria-hidden />
 
-      <div className={`hero-content reveal ${isHeroReady ? 'active' : ''}`}>
-        <div className={`hero-badge reveal delay-100 ${isHeroReady ? 'active' : ''}`}>
+      <div className={`hero-content scroll-reveal ${isHeroReady ? 'active' : ''}`}>
+        <div className={`hero-badge scroll-reveal delay-100 ${isHeroReady ? 'active' : ''}`}>
           {LANDING_HERO_SECTION.badge}
         </div>
-        <h1 id="landing-hero-title" className={`reveal delay-200 ${isHeroReady ? 'active' : ''}`}>
+        <h1 id="landing-hero-title" className={`scroll-reveal delay-200 ${isHeroReady ? 'active' : ''}`}>
           {LANDING_HERO_SECTION.titlePrefix}
           <br />
           <span className="text-gradient">{LANDING_HERO_SECTION.titleGradient}</span>
         </h1>
-        <p className={`reveal delay-300 ${isHeroReady ? 'active' : ''}`}>
+        <p className={`scroll-reveal delay-300 ${isHeroReady ? 'active' : ''}`}>
           {LANDING_HERO_SECTION.description}
           <span className="subtitle-block">{LANDING_HERO_SECTION.descriptionSubtext}</span>
         </p>
-        <div className={`btn-group reveal delay-300 ${isHeroReady ? 'active' : ''}`}>
+        <div className={`btn-group scroll-reveal delay-300 ${isHeroReady ? 'active' : ''}`}>
           <a
             href={LANDING_HERO_SECTION.primaryCta.href}
             className="btn btn-primary"

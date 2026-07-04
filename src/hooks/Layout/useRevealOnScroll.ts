@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
-const REVEAL_SELECTOR = '.reveal, .reveal-left, .reveal-left-how, .reveal-up';
+// bare `.reveal`은 reveal.js(덱) 컨테이너 클래스와 충돌해 `.scroll-reveal`로 rename됨
+const REVEAL_SELECTOR = '.scroll-reveal, .reveal-left, .reveal-left-how, .reveal-up';
 
 export function useRevealOnScroll<T extends HTMLElement>(watchKey?: string | number) {
   const rootRef = useRef<T>(null);
