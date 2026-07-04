@@ -1,6 +1,8 @@
 import landingJdAnalysisImageSrc from '@/assets/image/jd-analysis-optimized.png';
 import landingPortfolioImageSrc from '@/assets/image/portfolio-optimized.png';
 import landingProjectReportImageSrc from '@/assets/image/project-report.png';
+import { SERVICE_EMAIL } from '@/constants/service';
+import { guardHrefForMaintenance } from '@/constants/maintenance';
 
 function trimEnv(value: string | undefined): string {
   return value?.trim() ?? '';
@@ -83,12 +85,15 @@ export const LANDING_HERO_SECTION = {
   titleGradient: 'Developer Portfolio',
   description: 'GitHub 연동을 통한 프로젝트 및 기여도 분석, 맞춤형 공고 기반 포트폴리오 생성까지.',
   descriptionSubtext: '당신의 개발자 역량을 증명하는 가장 체계적인 솔루션.',
+  // 두 CTA 모두 최종적으로 서버(OAuth 등)를 경유하므로 점검 모드에서는 /maintenance로 우회
   primaryCta: {
-    href: getOptionalLandingHref(import.meta.env.VITE_LANDING_PRIMARY_CTA_HREF),
+    href: guardHrefForMaintenance(
+      getOptionalLandingHref(import.meta.env.VITE_LANDING_PRIMARY_CTA_HREF),
+    ),
     label: 'Start Free Trial',
   },
   secondaryCta: {
-    href: getLandingGitHubCtaHref(),
+    href: guardHrefForMaintenance(getLandingGitHubCtaHref()),
     label: 'Connect GitHub',
   },
 } as const satisfies {
@@ -275,7 +280,8 @@ export function getLandingFooterInfoSegments(): LandingFooterInfoSegmentsType {
   );
   const address = trimEnv(import.meta.env.VITE_FOOTER_ADDRESS);
   const phone = trimEnv(import.meta.env.VITE_FOOTER_CONTACT_PHONE);
-  const email = trimEnv(import.meta.env.VITE_FOOTER_CONTACT_EMAIL);
+  // 푸터 문의 이메일도 서비스 대표 이메일(VITE_SERVICE_EMAIL)로 일원화
+  const email = SERVICE_EMAIL;
 
   const firstLineList = [
     withRepresentativeLabel(representativeName),

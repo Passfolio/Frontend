@@ -15,6 +15,8 @@ import { TooManyRequestsPage } from '@/pages/Error/TooManyRequestsPage';
 import { ServerErrorPage } from '@/pages/Error/ServerErrorPage';
 import { PrivateRoute } from '@/components/Auth/PrivateRoute';
 import { AdminRoute } from '@/components/Auth/AdminRoute';
+import { MaintenanceRoute } from '@/components/Maintenance/MaintenanceRoute';
+import { MaintenancePage } from '@/pages/Maintenance/MaintenancePage';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { AuthProvider } from '@/context/Auth/AuthContext';
 import { Header } from "@/components/Layout/Header/Header";
@@ -70,15 +72,12 @@ export const App = () => {
                 <ScrollToTopOnPathChange />
                 {!isChromelessRoute && <Header />}
                 <Routes>
-                    {/* --- 공개 라우트 --- */}
+                    {/* --- 공개 라우트 (정적 — 서버 API 미의존, 점검 모드에서도 접근 가능) --- */}
                     <Route path="/" element={<LanderPage />} />
                     <Route path="/announcements" element={<AnnouncementsPage />} />
-                    <Route path="/articles" element={<ArticleListPage />} />
-                    <Route path="/articles/:id" element={<ArticleDetailPage />} />
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/terms" element={<TermsOfServicePage />} />
                     <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                    <Route path="/roadmap" element={<RoadMapPage />} />
                     <Route path="/docs" element={<DocsPage />} />
                     <Route
                         path="/docs/passfolio-deck"
@@ -88,11 +87,7 @@ export const App = () => {
                             </Suspense>
                         }
                     />
-                    <Route path="/oauth/callback" element={<OAuthCallback />} />
-
-                    {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}
-                    <Route path={ADMIN_PORTAL_LOGIN_PATH} element={<AdminLoginPage />} />
-                    <Route path={ADMIN_PORTAL_SIGNUP_PATH} element={<AdminSignupPage />} />
+                    <Route path="/maintenance" element={<MaintenancePage />} />
 
                     {/* --- 에러 페이지 --- */}
                     <Route path="/400" element={<BadRequestPage />} />
@@ -102,27 +97,42 @@ export const App = () => {
                     <Route path="/429" element={<TooManyRequestsPage />} />
                     <Route path="/500" element={<ServerErrorPage />} />
 
-                    {/* --- 비공개 라우트 --- */}
-                    <Route element={<PrivateRoute />}>
-                        <Route path="/profile" element={<UserProfileRoute />} />
-                        <Route path="/analysis/:batchId" element={<AnalysisProgressPage />} />
-                        <Route
-                            path="/analysis/report/:analysisId"
-                            element={
-                                <Suspense fallback={null}>
-                                    <AnalysisReportPage />
-                                </Suspense>
-                            }
-                        />
-                        <Route path="/upload" element={<UploadPage />} />
-                        <Route element={<AdminRoute />}>
-                            <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
-                            <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />
-                            <Route path={ADMIN_PORTAL_ANALYSIS_METRICS_PATH} element={<AdminAnalysisMetricsPage />} />
-                            <Route path={ADMIN_PORTAL_USERS_PATH} element={<AdminUsersPage />} />
-                            <Route path={ADMIN_PORTAL_PRECHECK_TEST_PATH} element={<AdminPrecheckTestPage />} />
-                            <Route path="/articles/create" element={<ArticleCreatePage />} />
-                            <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
+                    {/* ── 서비스 점검 대상 ──────────────────────────────
+                        서버 API를 호출하는 라우트는 전부 이 블록 안에 둔다.
+                        VITE_SERVICE_MAINTENANCE=true면 일괄 /maintenance로 리다이렉트.
+                        새 API 의존 페이지 추가 시 반드시 이 블록 안에 배치할 것. */}
+                    <Route element={<MaintenanceRoute />}>
+                        <Route path="/articles" element={<ArticleListPage />} />
+                        <Route path="/articles/:id" element={<ArticleDetailPage />} />
+                        <Route path="/roadmap" element={<RoadMapPage />} />
+                        <Route path="/oauth/callback" element={<OAuthCallback />} />
+
+                        {/* Hidden: 관리자 포털(네비에 링크 없음, URL 직접 입력) */}
+                        <Route path={ADMIN_PORTAL_LOGIN_PATH} element={<AdminLoginPage />} />
+                        <Route path={ADMIN_PORTAL_SIGNUP_PATH} element={<AdminSignupPage />} />
+
+                        {/* --- 비공개 라우트 --- */}
+                        <Route element={<PrivateRoute />}>
+                            <Route path="/profile" element={<UserProfileRoute />} />
+                            <Route path="/analysis/:batchId" element={<AnalysisProgressPage />} />
+                            <Route
+                                path="/analysis/report/:analysisId"
+                                element={
+                                    <Suspense fallback={null}>
+                                        <AnalysisReportPage />
+                                    </Suspense>
+                                }
+                            />
+                            <Route path="/upload" element={<UploadPage />} />
+                            <Route element={<AdminRoute />}>
+                                <Route path={ADMIN_PORTAL_PROFILE_PATH} element={<AdminProfilePage />} />
+                                <Route path={ADMIN_PORTAL_TEST_PATH} element={<AdminTestPage />} />
+                                <Route path={ADMIN_PORTAL_ANALYSIS_METRICS_PATH} element={<AdminAnalysisMetricsPage />} />
+                                <Route path={ADMIN_PORTAL_USERS_PATH} element={<AdminUsersPage />} />
+                                <Route path={ADMIN_PORTAL_PRECHECK_TEST_PATH} element={<AdminPrecheckTestPage />} />
+                                <Route path="/articles/create" element={<ArticleCreatePage />} />
+                                <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
+                            </Route>
                         </Route>
                     </Route>
 

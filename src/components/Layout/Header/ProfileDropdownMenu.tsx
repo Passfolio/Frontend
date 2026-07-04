@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import type { UserType } from '@/context/Auth/AuthContext';
 import { ADMIN_PORTAL_PROFILE_PATH } from '@/constants/adminPortal';
+import { SERVICE_EMAIL } from '@/constants/service';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 type ProfileDropdownMenuProps = {
@@ -121,10 +122,10 @@ export const ProfileDropdownMenu = ({
 
             {/* 고객센터 / 의견 보내기 */}
             <div className="px-1.5 py-1">
-                <ExternalLink href="mailto:support@passfolio.kr" onClick={onClose}>
+                <ExternalLink href={`mailto:${SERVICE_EMAIL}`} onClick={onClose}>
                     고객센터
                 </ExternalLink>
-                <ExternalLink href="mailto:feedback@passfolio.kr" onClick={onClose}>
+                <ExternalLink href={`mailto:${SERVICE_EMAIL}`} onClick={onClose}>
                     의견 보내기
                 </ExternalLink>
             </div>
