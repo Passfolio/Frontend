@@ -112,7 +112,9 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    filter: drop-shadow(0 6px 30px rgba(255, 255, 255, 0.07));
+    /* blur(0) 명시: is-loading의 blur(9px)와 filter 함수 리스트를 일치시켜
+       Safari가 discrete 전환에서 blur 상태로 고착되는 문제 방지 */
+    filter: blur(0) drop-shadow(0 6px 30px rgba(255, 255, 255, 0.07));
 }
 
 .sl-cover .subtitle {
@@ -263,7 +265,7 @@
 .sl-cover.is-loading .members-head,
 .sl-cover.is-loading .member { opacity: 0; transform: translateY(22px); }
 .sl-cover.is-loading .logo-mark { opacity: 0; transform: translateY(26px) scale(0.94); filter: blur(9px); }
-.sl-cover.is-loading .wordmark  { opacity: 0; transform: translateY(26px); filter: blur(9px); }
+.sl-cover.is-loading .wordmark  { opacity: 0; transform: translateY(26px); filter: blur(9px) drop-shadow(0 6px 30px rgba(255, 255, 255, 0.07)); }
 
 /* refined light glint sweeping across the wordmark letters, one pass */
 .sl-cover .wordmark { position: relative; }
