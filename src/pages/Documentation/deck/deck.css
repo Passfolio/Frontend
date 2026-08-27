@@ -108,7 +108,7 @@ body.reveal-viewport {
     will-change: opacity, transform, filter;
 }
 /* 무한 keyframe 글로우(정적 blur 위에서 transform/opacity만 애니메이션)는 상시 승격 */
-.pf-deck .sl-cover .hero-glow,
+.pf-deck .sl-cover .pf-hero-glow,
 .pf-deck .sl-qna .glow {
     will-change: transform, opacity;
 }
