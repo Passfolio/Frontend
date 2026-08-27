@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Inter에는 한글 글리프가 없어, 한글은 OS 기본 폰트로 폴백된다
+     (macOS: Apple SD Gothic Neo / Windows: 맑은 고딕). 두 폰트의 자폭이 달라
+     같은 문장의 실제 폭이 OS마다 바뀌고, word-break: keep-all과 겹쳐 줄바꿈이 어긋났다.
+     한글 웹폰트를 스택에 명시해 OS와 무관하게 동일한 메트릭을 갖게 한다. */
+  --font-sans: "Inter", "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --color-passfolio-bg: var(--bg-color);
   --color-passfolio-surface: var(--surface-color);
   --color-passfolio-surface-light: var(--surface-color-light);
