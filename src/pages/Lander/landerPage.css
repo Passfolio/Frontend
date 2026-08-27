@@ -249,8 +249,11 @@
     border-color: var(--accent-border);
   }
 
+  /* 상한 700px: 한글 웹폰트(Noto Sans KR) 기준 설명문 1줄에 652px가 필요하다.
+     기존 650px는 2px 모자라 문장 끝이 홀로 다음 줄로 떨어졌다. 하위 브레이크포인트와
+     같은 수준(약 7%)의 여유를 둬 문구가 조금 바뀌어도 줄 수가 흔들리지 않게 한다. */
   .hero p {
-    @apply mx-auto mb-10 max-w-[650px] text-[1.15rem] leading-[1.7];
+    @apply mx-auto mb-10 max-w-[700px] text-[1.15rem] leading-[1.7];
     color: var(--text-tertiary);
   }
 
