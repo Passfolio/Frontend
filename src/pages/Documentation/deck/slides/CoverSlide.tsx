@@ -7,7 +7,7 @@ const logoSrc = DECK_ASSETS.logoSrc;
 export function CoverSlide({ isActive }: SlideProps) {
     return (
         <div className={`pf-slide sl-cover${isActive ? ' sheen-go' : ' is-loading'}`}>
-            <div className="hero-glow" />
+            <div className="pf-hero-glow" />
             <div className="floor-fade" />
 
             <div className="corner left">
@@ -19,7 +19,7 @@ export function CoverSlide({ isActive }: SlideProps) {
                 </span>
             </div>
 
-            <div className="hero">
+            <div className="pf-hero">
                 <div className="lockup">
                     <img className="logo-mark" src={logoSrc} alt="Passfolio logo" />
                     <h1 className="wordmark">Passfolio</h1>

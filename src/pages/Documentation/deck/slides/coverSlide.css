@@ -12,7 +12,7 @@
 }
 
 /* ---- Background layers ---- */
-.sl-cover .hero-glow {
+.sl-cover .pf-hero-glow {
     position: absolute;
     inset: -15%;
     z-index: 0;
@@ -69,7 +69,7 @@
 }
 
 /* ---- Hero ---- */
-.sl-cover .hero {
+.sl-cover .pf-hero {
     position: absolute;
     inset: 0;
     z-index: 5;
