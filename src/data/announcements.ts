@@ -19,7 +19,7 @@ export const ANNOUNCEMENT_LIST: AnnouncementItemType[] = [
     id: '2026-07-04-service-pause',
     date: '2026-07-04',
     title: 'Passfolio 서비스 일시 중단 및 정식 출시 예고 안내',
-    summary: '서버 운영 비용 이슈로 서비스를 일시 중단하며, 2026년 12월 정식 출시를 목표로 재정비합니다.',
+    summary: '서버 운영 비용 이슈로 서비스를 일시 중단하며, 2027년 03월 정식 출시를 목표로 재정비합니다.',
     pinned: true,
     // 문단 내 줄바꿈(\n)은 AnnouncementsPage의 whitespace-pre-line으로 렌더링된다
     paragraphs: [
